@@ -1,11 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
+
 * {
     margin: 0;
     padding: 0;
-
     box-sizing: border-box;
+    font-family: "Zilla Slab", sans-serif;
+}
 
-    justify-content: center;
-    align-items: center;
-    text-align: center;
+html, body {
+    width: 100%;
+    height: 100%;
+    background-color: #1e1e1e;
 }

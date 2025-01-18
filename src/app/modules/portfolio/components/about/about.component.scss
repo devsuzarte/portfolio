@@ -1,0 +1,92 @@
+@use "../../../../../styles/variables.scss" as s;
+
+
+.about-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 100px 200px;
+
+    & .picture-section {
+
+        & img {
+            border-radius: 50%;
+        }
+    }
+
+    & .info-section {
+        text-align: start;
+        padding: 0px 80px;
+
+        & .text-section {
+            color: s.$white;
+            text-align: left;
+            
+            & h1 {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+
+                display: inline-block;
+                margin-bottom: 16px;
+
+                font-size: 58px;
+                font-weight: bolder;
+
+                & .role {
+                    color: s.$highlight;
+                }
+            }
+
+            & h2 {
+                font-size: 26px;
+                font-weight: lighter;
+
+                text-align: justify;
+
+                height: 6em; /* Altura fixa para 4 linhas (4 * 1.5 * 16px ≈ 6em) */
+                overflow: hidden; /* Esconde qualquer conteúdo que ultrapasse a altura definida */
+                display: -webkit-box;
+                line-clamp: 4; /* Limita a 4 linhas */
+                -webkit-box-orient: vertical;
+            }
+        }
+
+        & .button-section {
+
+            & .contact-link {
+
+                & .contact-button {
+                    color: s.$bg;
+                    background-color: s.$white;
+
+                    border: none;
+                    border-radius: 15px;
+
+                    font-size: 20px;
+
+                    width: 200px;
+                    height: 50px;
+                }
+            }
+
+            & .curriculum-link {
+                & .curriculum-button {
+                    color: s.$white;
+                    background-color: s.$bg;
+
+                    border: 3px solid s.$white;
+                    border-radius: 15px;
+
+                    width: 200px;
+                    height: 50px;
+
+                    font-size: 20px;
+
+                    margin-left: 20px;
+                }
+            }
+        }
+    }
+}
