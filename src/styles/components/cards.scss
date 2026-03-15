@@ -1,0 +1,81 @@
+@use '../tokens' as *;
+
+.card {
+  border-radius: 4px;
+  overflow: hidden;
+  transition: transform $transition-slow, box-shadow $transition-base;
+
+  &:hover {
+    transform: translateY(-6px);
+    @include shadow-lg;
+  }
+
+  &--dark {
+    background: $dark-roast;
+    @include border-dark(0.12);
+
+    .card__title { color: $cream; }
+    .card__meta  { color: $muted; }
+  }
+
+  &--light {
+    background: $fog;
+    @include border-warm(0.2);
+    @include shadow-sm;
+
+    .card__title { color: $ink; }
+    .card__meta  { color: $muted; }
+  }
+
+  &__image {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: $medium-roast;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform $transition-slow;
+    }
+  }
+
+  &:hover &__image img {
+    transform: scale(1.04);
+  }
+
+  &__content {
+    padding: 1.5rem;
+  }
+
+  &__title {
+    font-family: $font-display;
+    font-weight: 600;
+    font-size: 1.375rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+  }
+
+  &__description {
+    font-family: $font-body;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    color: $muted;
+  }
+
+  &__meta {
+    font-family: $font-code;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  &__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+}

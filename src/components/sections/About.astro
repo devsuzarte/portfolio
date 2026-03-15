@@ -1,0 +1,175 @@
+---
+---
+
+<section id="about" class="about section" data-theme="light" data-scroll-section data-reveal-section>
+  <div class="container about__inner">
+    <div class="about__text" data-reveal-item>
+      <p class="about__label badge">Sobre mim</p>
+      <h2 class="about__title heading-underline">
+        Do design ao deploy, com IA, Cloud e foco em resultado.
+      </h2>
+      <p class="about__body">
+        Com mais de 4 anos no mercado, sou desenvolvedor Pleno atuando em empresas de
+        grande porte como Ford e em projetos freelance próprios. Atuo também como professor
+        particular de programação, o que me faz buscar sempre clareza técnica e evolução contínua.
+      </p>
+      <p class="about__body">
+        Programação é tanto minha profissão quanto meu hobby — me aprofundo especialmente
+        em IA, Cloud e arquiteturas modernas. Fora do computador, toco violão, canto e
+        curto andar de bicicleta.
+      </p>
+      <div class="about__stats">
+        <div class="about__stat">
+          <span class="about__stat-number">4+</span>
+          <span class="about__stat-label">Anos de experiência</span>
+        </div>
+        <div class="about__stat">
+          <span class="about__stat-number">8+</span>
+          <span class="about__stat-label">Projetos entregues</span>
+        </div>
+        <div class="about__stat">
+          <span class="about__stat-number">100%</span>
+          <span class="about__stat-label">Comprometimento</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="about__visual" data-reveal-item>
+      <div class="about__photo-frame">
+        <div class="about__photo-wrap">
+          <img
+            src="/assets/images/projects/me.png"
+            alt="Foto de Benjamin Suzarte"
+            class="about__photo"
+            loading="lazy"
+          />
+        </div>
+        <div class="about__photo-accent" aria-hidden="true"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style lang="scss">
+  @use '@/styles/tokens' as *;
+
+  .about {
+    background: var(--bg-primary);
+
+    &__inner {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 4rem;
+      align-items: center;
+
+      @include respond-to(lg) {
+        grid-template-columns: 1fr 1fr;
+        gap: 6rem;
+      }
+    }
+
+    &__label {
+      margin-bottom: 1.5rem;
+    }
+
+    &__title {
+      font-family: $font-display;
+      font-weight: 600;
+      font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+      line-height: 1.2;
+      color: $ink;
+      margin-bottom: 1.75rem;
+    }
+
+    &__body {
+      font-family: $font-body;
+      font-size: 1rem;
+      line-height: 1.8;
+      color: $charcoal;
+      margin-bottom: 1.25rem;
+    }
+
+    &__stats {
+      display: flex;
+      gap: 2.5rem;
+      margin-top: 2.5rem;
+      padding-top: 2.5rem;
+      border-top: 1px solid rgba($sienna, 0.15);
+    }
+
+    &__stat {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    &__stat-number {
+      font-family: $font-display;
+      font-weight: 600;
+      font-size: 2rem;
+      color: $caramel;
+      line-height: 1;
+    }
+
+    &__stat-label {
+      font-family: $font-body;
+      font-size: 0.8125rem;
+      color: $muted;
+    }
+
+    &__visual {
+      display: flex;
+      justify-content: center;
+    }
+
+    &__photo-frame {
+      position: relative;
+      width: 300px;
+      height: 300px;
+
+      @include respond-to(lg) {
+        width: 360px;
+        height: 360px;
+      }
+    }
+
+    &__photo-wrap {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      overflow: hidden;
+      @include shadow-md;
+      isolation: isolate;
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: rgba($caramel, 0.28);
+        mix-blend-mode: color;
+        pointer-events: none;
+      }
+    }
+
+    &__photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+      filter: sepia(0.2) saturate(1.3) brightness(0.95);
+    }
+
+    &__photo-accent {
+      position: absolute;
+      bottom: -1rem;
+      right: -1rem;
+      width: 100%;
+      height: 100%;
+      border: 1px solid rgba($caramel, 0.3);
+      border-radius: 1.5rem;
+      z-index: -1;
+    }
+  }
+</style>

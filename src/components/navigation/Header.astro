@@ -1,0 +1,352 @@
+---
+const navLinks = [
+  { href: '#',  label: 'Sobre',      target: 'about' },
+  { href: '#',  label: 'Stack',      target: 'stack' },
+  { href: '#',  label: 'Experiência', target: 'experience' },
+  { href: '#',  label: 'Projetos',   target: 'projects' },
+];
+---
+
+<header class="header" role="banner">
+  <nav class="header__nav container" aria-label="Navegação principal">
+
+    <!-- Logo -->
+    <a href="/" class="header__logo" aria-label="devsuzarte — início">
+      <span class="header__logo-dev">dev</span><span class="header__logo-suzarte">suzarte</span>
+    </a>
+
+    <!-- Nav links -->
+    <ul class="header__links" role="list">
+      {navLinks.map(link => (
+        <li>
+          <a
+            href={link.href}
+            class="header__link underline-accent"
+            data-nav-target={link.target}
+          >{link.label}</a>
+        </li>
+      ))}
+    </ul>
+
+    <!-- Social icons -->
+    <div class="header__social">
+      <a
+        href="https://github.com/devsuzarte"
+        class="header__social-link"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="GitHub"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+        </svg>
+      </a>
+      <a
+        href="https://linkedin.com/in/benjamin-suzarte"
+        class="header__social-link"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="LinkedIn"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+        </svg>
+      </a>
+    </div>
+
+    <!-- Mobile toggle -->
+    <button
+      class="header__menu-btn"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      aria-label="Abrir menu"
+      id="menu-toggle"
+    >
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile menu overlay -->
+  <div class="header__mobile-menu" id="mobile-menu" aria-hidden="true">
+    <nav class="header__mobile-nav" aria-label="Menu mobile">
+      <ul class="header__mobile-links" role="list">
+        {navLinks.map(link => (
+          <li>
+            <a
+              href={link.href}
+              class="header__mobile-link"
+              data-nav-target={link.target}
+            >{link.label}</a>
+          </li>
+        ))}
+      </ul>
+      <div class="header__mobile-social">
+        <a
+          href="https://github.com/devsuzarte"
+          class="header__mobile-social-link"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="GitHub"
+        >GitHub</a>
+        <a
+          href="https://linkedin.com/in/benjamin-suzarte"
+          class="header__mobile-social-link"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="LinkedIn"
+        >LinkedIn</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<style lang="scss">
+  @use '@/styles/tokens' as *;
+
+  .header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 100;
+    padding: 1.25rem 0;
+    transition: background $transition-base, padding $transition-base, border-color $transition-base;
+    border-bottom: 1px solid transparent;
+
+    &.scrolled {
+      background: rgba($espresso, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      padding: 0.875rem 0;
+      border-bottom-color: rgba($caramel, 0.1);
+    }
+
+    &__nav {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    // Logo
+    &__logo {
+      text-decoration: none;
+      display: flex;
+      align-items: baseline;
+      flex-shrink: 0;
+    }
+
+    &__logo-dev {
+      font-family: $font-sans;
+      font-weight: 700;
+      font-size: 1.125rem;
+      color: $caramel;
+      letter-spacing: -0.04em;
+    }
+
+    &__logo-suzarte {
+      font-family: $font-sans;
+      font-weight: 300;
+      font-size: 1.125rem;
+      color: $cream;
+      letter-spacing: 0.04em;
+    }
+
+    // Nav links
+    &__links {
+      display: none;
+      list-style: none;
+      gap: 2rem;
+      align-items: center;
+      margin-left: auto;
+
+      @include respond-to(lg) { display: flex; }
+    }
+
+    &__link {
+      font-family: $font-sans;
+      font-size: 0.75rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba($cream, 0.65);
+      transition: color $transition-base;
+
+      &:hover { color: $cream; }
+    }
+
+    // Social icons
+    &__social {
+      display: none;
+      align-items: center;
+      gap: 1rem;
+      margin-left: auto;
+
+      @include respond-to(lg) {
+        display: flex;
+        margin-left: 0;
+      }
+    }
+
+    &__social-link {
+      display: flex;
+      color: rgba($cream, 0.45);
+      transition: color $transition-base, transform $transition-base;
+
+      &:hover {
+        color: $caramel;
+        transform: translateY(-1px);
+      }
+    }
+
+    // Mobile hamburger
+    &__menu-btn {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      margin-left: auto;
+
+      @include respond-to(lg) { display: none; }
+
+      span {
+        display: block;
+        width: 22px;
+        height: 1px;
+        background: rgba($cream, 0.7);
+        transition: all $transition-base;
+      }
+
+      &[aria-expanded="true"] {
+        span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+        span:nth-child(2) { opacity: 0; }
+        span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+      }
+    }
+
+    // Mobile menu overlay
+    &__mobile-menu {
+      position: fixed;
+      inset: 0;
+      z-index: 99;
+      background: rgba($espresso, 0.97);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.4s;
+
+      &.open {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      @include respond-to(lg) { display: none; }
+    }
+
+    &__mobile-nav {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3rem;
+    }
+
+    &__mobile-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    &__mobile-link {
+      font-family: $font-display;
+      font-size: clamp(2rem, 6vw, 3rem);
+      font-weight: 300;
+      color: $cream;
+      letter-spacing: -0.02em;
+      padding: 0.5rem 1rem;
+      transition: color $transition-base;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: color $transition-base, opacity 0.4s ease, transform 0.4s ease;
+
+      .open & {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      &:hover { color: $caramel; }
+    }
+
+    // Stagger delay for mobile links
+    &__mobile-links li {
+      @for $i from 1 through 6 {
+        &:nth-child(#{$i}) .header__mobile-link {
+          transition-delay: #{0.05 + $i * 0.06}s;
+        }
+      }
+    }
+
+    &__mobile-social {
+      display: flex;
+      gap: 2rem;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.4s ease 0.4s, transform 0.4s ease 0.4s;
+
+      .open & {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    &__mobile-social-link {
+      font-family: $font-sans;
+      font-size: 0.8125rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba($cream, 0.5);
+      transition: color $transition-base;
+
+      &:hover { color: $caramel; }
+    }
+  }
+</style>
+
+<script>
+  const header = document.querySelector('.header') as HTMLElement;
+  const menuToggle = document.getElementById('menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  window.addEventListener('scroll', () => {
+    header?.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  const toggleMenu = (open?: boolean) => {
+    if (!menuToggle || !mobileMenu) return;
+    const isOpen = open ?? menuToggle.getAttribute('aria-expanded') !== 'true';
+    menuToggle.setAttribute('aria-expanded', String(isOpen));
+    mobileMenu.classList.toggle('open', isOpen);
+    mobileMenu.setAttribute('aria-hidden', String(!isOpen));
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  };
+
+  menuToggle?.addEventListener('click', () => toggleMenu());
+
+  // Close menu when a nav link is clicked
+  mobileMenu?.querySelectorAll('[data-nav-target]').forEach(link => {
+    link.addEventListener('click', () => toggleMenu(false));
+  });
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menuToggle?.getAttribute('aria-expanded') === 'true') {
+      toggleMenu(false);
+      menuToggle.focus();
+    }
+  });
+</script>

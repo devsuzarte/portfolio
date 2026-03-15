@@ -1,0 +1,103 @@
+---
+const currentYear = new Date().getFullYear();
+
+const socialLinks = [
+  { href: 'https://github.com/devsuzarte',   label: 'GitHub',   icon: 'gh' },
+  { href: 'https://linkedin.com/in/benjamin-suzarte', label: 'LinkedIn', icon: 'li' },
+];
+---
+
+<footer class="footer" data-theme="dark">
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <span class="footer__logo">devsuzarte</span>
+      <p class="footer__tagline">Criando experiências web de alto padrão.</p>
+    </div>
+
+    <nav class="footer__social" aria-label="Redes sociais">
+      {socialLinks.map(link => (
+        <a
+          href={link.href}
+          class="footer__social-link underline-accent"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={link.label}
+        >
+          {link.label}
+        </a>
+      ))}
+    </nav>
+
+    <p class="footer__copy">
+      &copy; {currentYear} Juan Benjamin Almeida Suzarte
+    </p>
+  </div>
+</footer>
+
+<style lang="scss">
+  @use '@/styles/tokens' as *;
+
+  .footer {
+    background: $espresso;
+    border-top: 1px solid rgba($caramel, 0.12);
+    padding: 3rem 0;
+
+    &__inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      text-align: center;
+
+      @include respond-to(md) {
+        flex-direction: row;
+        justify-content: space-between;
+        text-align: left;
+      }
+    }
+
+    &__brand {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    &__logo {
+      font-family: $font-display;
+      font-weight: 600;
+      font-size: 1.25rem;
+      font-style: italic;
+      color: $cream;
+    }
+
+    &__tagline {
+      font-family: $font-body;
+      font-size: 0.875rem;
+      color: $muted;
+    }
+
+    &__social {
+      display: flex;
+      gap: 2rem;
+    }
+
+    &__social-link {
+      font-family: $font-sans;
+      font-size: 0.8125rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba($cream, 0.6);
+      transition: color $transition-base;
+
+      &:hover {
+        color: $cream;
+      }
+    }
+
+    &__copy {
+      font-family: $font-body;
+      font-size: 0.8125rem;
+      color: $muted;
+    }
+  }
+</style>

@@ -1,0 +1,22 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Header from '@/components/navigation/Header.astro';
+import Footer from '@/components/navigation/Footer.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  theme?: 'dark' | 'light' | 'warm';
+  barbaNamespace?: string;
+}
+
+const { title, description, theme = 'dark', barbaNamespace = 'page' } = Astro.props;
+---
+
+<BaseLayout title={title} description={description} barbaNamespace={barbaNamespace}>
+  <Header />
+  <main data-theme={theme}>
+    <slot />
+  </main>
+  <Footer />
+</BaseLayout>

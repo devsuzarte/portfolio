@@ -1,0 +1,30 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/navigation/Header.astro';
+import Footer from '@/components/navigation/Footer.astro';
+import Hero from '@/components/sections/Hero.astro';
+import About from '@/components/sections/About.astro';
+import Skills from '@/components/sections/Skills.astro';
+import Experience from '@/components/sections/Experience.astro';
+import Projects from '@/components/sections/Projects.astro';
+import Contact from '@/components/sections/Contact.astro';
+---
+
+<BaseLayout
+  title="Benjamin Suzarte — Dev FullStack + DevOps"
+  description="Portfolio de Juan Benjamin Suzarte, desenvolvedor Fullstack e DevOps especializado em React, NestJS, Google Cloud e IA. Do design ao deploy com foco em resultado."
+  barbaNamespace="home"
+>
+  <Header />
+
+  <main>
+    <Hero />
+    <About />
+    <Skills />
+    <Experience />
+    <Projects />
+    <Contact />
+  </main>
+
+  <Footer />
+</BaseLayout>

@@ -1,0 +1,40 @@
+@use '../tokens' as *;
+
+// === HIGHLIGHT QUENTE ===
+.highlight-warm {
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba($amber, 0.15) 10%,
+    rgba($amber, 0.15) 90%,
+    transparent 100%
+  );
+  padding: 0.1em 0.5em;
+  border-radius: 2px;
+}
+
+// === GRADIENTES ===
+.gradient-hero {
+  background: linear-gradient(160deg, $espresso 0%, $dark-roast 60%, $medium-roast 100%);
+}
+
+.gradient-warm-light {
+  background: linear-gradient(180deg, $fog 0%, $cream 100%);
+}
+
+.gradient-accent {
+  background: linear-gradient(135deg, $caramel 0%, $amber 100%);
+}
+
+// === SECTION TRANSITIONS ===
+[data-theme] {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+// === FOCUS VISIBLE ===
+:focus-visible {
+  outline: 2px solid $caramel;
+  outline-offset: 3px;
+  border-radius: 2px;
+}

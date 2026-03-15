@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assets Library - Portfolio Juan Benjamin</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0a0e27;
+      color: #ffffff;
+      padding: 2rem;
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 4rem;
+      text-align: center;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #b026ff, #ff006e, #00f5ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .subtitle {
+      text-align: center;
+      color: #00f5ff;
+      margin-bottom: 3rem;
+      font-size: 1.2rem;
+    }
+    
+    .section {
+      background: rgba(26, 31, 58, 0.5);
+      border: 2px solid #b026ff;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 3rem;
+    }
+    
+    .section__title {
+      font-size: 2rem;
+      color: #00f5ff;
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid #b026ff;
+      padding-bottom: 0.5rem;
+    }
+    
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    
+    .asset-card {
+      background: rgba(18, 3, 56, 0.8);
+      border: 1px solid #6200ea;
+      border-radius: 8px;
+      padding: 1rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .asset-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(176, 38, 255, 0.4);
+    }
+    
+    .asset-card__preview {
+      width: 100%;
+      height: 200px;
+      background: #0a0e27;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+    
+    .asset-card__preview img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+    
+    .asset-card__preview svg {
+      max-width: 80%;
+      max-height: 80%;
+    }
+    
+    .asset-card__preview video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .asset-card__title {
+      font-size: 0.9rem;
+      color: #bb86fc;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+    
+    .asset-card__info {
+      font-size: 0.75rem;
+      color: #9d9d9d;
+    }
+    
+    .asset-card__path {
+      font-size: 0.7rem;
+      color: #00f5ff;
+      font-family: 'JetBrains Mono', monospace;
+      background: rgba(0, 245, 255, 0.1);
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      margin-top: 0.5rem;
+      word-break: break-all;
+    }
+    
+    .asset-card__actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    
+    .btn {
+      flex: 1;
+      padding: 0.5rem;
+      border: none;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+    }
+    
+    .btn--copy {
+      background: linear-gradient(135deg, #b026ff, #ff006e);
+      color: white;
+    }
+    
+    .btn--copy:hover {
+      box-shadow: 0 0 15px rgba(176, 38, 255, 0.6);
+    }
+    
+    .btn--download {
+      background: #00f5ff;
+      color: #0a0e27;
+    }
+    
+    .btn--download:hover {
+      box-shadow: 0 0 15px rgba(0, 245, 255, 0.6);
+    }
+    
+    .model-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #6200ea;
+    }
+    
+    .model-placeholder svg {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 0.5rem;
+    }
+    
+    .frames-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.5rem;
+    }
+    
+    .frames-grid img {
+      width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+    
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: linear-gradient(135deg, #b026ff, #ff006e);
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 8px 20px rgba(176, 38, 255, 0.6);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+      pointer-events: none;
+      z-index: 1000;
+    }
+    
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.5rem;
+      }
+      
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Assets Library</h1>
+    <p class="subtitle">Portfolio Juan Benjamin - Visual Assets Reference</p>
+    
+    <!-- IMAGES SECTION -->
+    <div class="section">
+      <h2 class="section__title">📸 Images</h2>
+      
+      <h3 style="color: #bb86fc; margin-top: 1.5rem; margin-bottom: 1rem;">Hero Section</h3>
+      <div class="grid" id="hero-images"></div>
+      
+      <h3 style="color: #bb86fc; margin-top: 1.5rem; margin-bottom: 1rem;">About Section</h3>
+      <div class="grid" id="about-images"></div>
+      
+      <h3 style="color: #bb86fc; margin-top: 1.5rem; margin-bottom: 1rem;">Projects</h3>
+      <div class="grid" id="project-images"></div>
+    </div>
+    
+    <!-- VIDEOS SECTION -->
+    <div class="section">
+      <h2 class="section__title">🎬 Videos</h2>
+      <div class="grid" id="videos"></div>
+    </div>
+    
+    <!-- FRAME SEQUENCES SECTION -->
+    <div class="section">
+      <h2 class="section__title">🎞️ Frame Sequences (Scroll Animations)</h2>
+      <div id="frame-sequences"></div>
+    </div>
+    
+    <!-- 3D MODELS SECTION -->
+    <div class="section">
+      <h2 class="section__title">🎭 3D Models (.GLB / .GLTF)</h2>
+      <div class="grid" id="models"></div>
+    </div>
+    
+    <!-- SVG ICONS SECTION -->
+    <div class="section">
+      <h2 class="section__title">🎨 SVG Icons</h2>
+      
+      <h3 style="color: #bb86fc; margin-top: 1.5rem; margin-bottom: 1rem;">Tech Stack</h3>
+      <div class="grid" id="tech-icons"></div>
+      
+      <h3 style="color: #bb86fc; margin-top: 1.5rem; margin-bottom: 1rem;">UI Icons</h3>
+      <div class="grid" id="ui-icons"></div>
+    </div>
+    
+    <!-- PATTERNS SECTION -->
+    <div class="section">
+      <h2 class="section__title">🖼️ SVG Patterns & Backgrounds</h2>
+      <div class="grid" id="patterns"></div>
+    </div>
+  </div>
+  
+  <div class="toast" id="toast">Copied to clipboard!</div>
+  
+  <script>
+    // Asset Registry (EDITE AQUI COM SEUS ASSETS REAIS)
+    const assets = {
+      images: {
+        hero: [
+          { name: 'Hero Background', path: '/assets/images/hero/background.webp', size: '1920x1080' },
+          { name: 'Hero Background Mobile', path: '/assets/images/hero/background-mobile.webp', size: '768x1024' },
+          { name: 'Profile Photo', path: '/assets/images/hero/profile.webp', size: '500x500' },
+        ],
+        about: [
+          { name: 'Halftone Pattern', path: '/assets/images/about/pattern-halftone.svg', size: 'SVG' },
+        ],
+        projects: [
+          { name: 'Project 1 Thumbnail', path: '/assets/images/projects/project-1-thumb.webp', size: '800x600' },
+          { name: 'Project 1 Full', path: '/assets/images/projects/project-1-full.webp', size: '1920x1080' },
+        ],
+      },
+      
+      videos: [
+        { name: 'Hero Particles', path: '/assets/videos/hero-particles.mp4', duration: '10s loop' },
+      ],
+      
+      frameSequences: [
+        { 
+          name: 'Scroll Animation 1', 
+          folder: 'scroll-animation-1',
+          prefix: 'frame',
+          count: 30,
+          extension: 'webp',
+          path: '/assets/frames/scroll-animation-1/',
+        },
+      ],
+      
+      models: [
+        { name: 'Laptop Model', path: '/assets/models/laptop.glb', size: '< 500KB' },
+        { name: 'Particles Sphere', path: '/assets/models/particles-sphere.glb', size: '< 200KB' },
+        { name: 'Logo 3D', path: '/assets/models/logo-3d.gltf', size: '< 300KB' },
+      ],
+      
+      icons: {
+        tech: [
+          { name: 'React', path: '/assets/icons/tech/react.svg' },
+          { name: 'Node.js', path: '/assets/icons/tech/nodejs.svg' },
+          { name: 'TypeScript', path: '/assets/icons/tech/typescript.svg' },
+          { name: 'Astro', path: '/assets/icons/tech/astro.svg' },
+        ],
+        ui: [
+          { name: 'Arrow', path: '/assets/icons/ui/arrow.svg' },
+          { name: 'Close', path: '/assets/icons/ui/close.svg' },
+          { name: 'Menu', path: '/assets/icons/ui/menu.svg' },
+        ],
+      },
+      
+      patterns: [
+        { name: 'Halftone Dots', path: '/assets/patterns/halftone-dots.svg' },
+        { name: 'Neon Grid', path: '/assets/patterns/neon-grid.svg' },
+        { name: 'Comic Lines', path: '/assets/patterns/comic-lines.svg' },
+      ],
+    };
+    
+    // Helper Functions
+    function createAssetCard(asset, type) {
+      const card = document.createElement('div');
+      card.className = 'asset-card';
+      
+      let previewContent = '';
+      
+      if (type === 'image' || type === 'pattern') {
+        previewContent = `<img src="${asset.path}" alt="${asset.name}" loading="lazy">`;
+      } else if (type === 'video') {
+        previewContent = `<video src="${asset.path}" muted loop autoplay></video>`;
+      } else if (type === 'icon') {
+        previewContent = `<img src="${asset.path}" alt="${asset.name}">`;
+      } else if (type === 'model') {
+        previewContent = `
+          <div class="model-placeholder">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
+            </svg>
+            <span>.GLB Model</span>
+          </div>
+        `;
+      }
+      
+      card.innerHTML = `
+        <div class="asset-card__preview">
+          ${previewContent}
+        </div>
+        <div class="asset-card__title">${asset.name}</div>
+        ${asset.size ? `<div class="asset-card__info">Size: ${asset.size}</div>` : ''}
+        ${asset.duration ? `<div class="asset-card__info">Duration: ${asset.duration}</div>` : ''}
+        <div class="asset-card__path">${asset.path}</div>
+        <div class="asset-card__actions">
+          <button class="btn btn--copy" onclick="copyPath('${asset.path}')">Copy Path</button>
+          <button class="btn btn--download" onclick="downloadAsset('${asset.path}', '${asset.name}')">Download</button>
+        </div>
+      `;
+      
+      return card;
+    }
+    
+    function copyPath(path) {
+      navigator.clipboard.writeText(path).then(() => {
+        showToast('Path copied to clipboard!');
+      });
+    }
+    
+    function downloadAsset(path, name) {
+      const a = document.createElement('a');
+      a.href = path;
+      a.download = name;
+      a.click();
+    }
+    
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2000);
+    }
+    
+    // Render Assets
+    function renderAssets() {
+      // Images
+      const heroImagesContainer = document.getElementById('hero-images');
+      assets.images.hero.forEach(asset => {
+        heroImagesContainer.appendChild(createAssetCard(asset, 'image'));
+      });
+      
+      const aboutImagesContainer = document.getElementById('about-images');
+      assets.images.about.forEach(asset => {
+        aboutImagesContainer.appendChild(createAssetCard(asset, 'image'));
+      });
+      
+      const projectImagesContainer = document.getElementById('project-images');
+      assets.images.projects.forEach(asset => {
+        projectImagesContainer.appendChild(createAssetCard(asset, 'image'));
+      });
+      
+      // Videos
+      const videosContainer = document.getElementById('videos');
+      assets.videos.forEach(asset => {
+        videosContainer.appendChild(createAssetCard(asset, 'video'));
+      });
+      
+      // Frame Sequences
+      const frameSequencesContainer = document.getElementById('frame-sequences');
+      assets.frameSequences.forEach(seq => {
+        const seqDiv = document.createElement('div');
+        seqDiv.style.marginBottom = '2rem';
+        
+        seqDiv.innerHTML = `
+          <h3 style="color: #bb86fc; margin-bottom: 1rem;">${seq.name}</h3>
+          <div class="asset-card__info" style="margin-bottom: 1rem;">
+            Folder: ${seq.folder} | Frames: ${seq.count} | Format: ${seq.extension}
+          </div>
+          <div class="asset-card__path" style="margin-bottom: 1rem;">${seq.path}</div>
+          <div class="frames-grid" id="frames-${seq.folder}"></div>
+        `;
+        
+        frameSequencesContainer.appendChild(seqDiv);
+        
+        // Render primeiros 10 frames como preview
+        const framesGrid = document.getElementById(`frames-${seq.folder}`);
+        for (let i = 1; i <= Math.min(10, seq.count); i++) {
+          const frameNum = String(i).padStart(4, '0');
+          const framePath = `${seq.path}${seq.prefix}_${frameNum}.${seq.extension}`;
+          
+          const img = document.createElement('img');
+          img.src = framePath;
+          img.alt = `Frame ${i}`;
+          img.loading = 'lazy';
+          
+          framesGrid.appendChild(img);
+        }
+      });
+      
+      // 3D Models
+      const modelsContainer = document.getElementById('models');
+      assets.models.forEach(asset => {
+        modelsContainer.appendChild(createAssetCard(asset, 'model'));
+      });
+      
+      // Icons
+      const techIconsContainer = document.getElementById('tech-icons');
+      assets.icons.tech.forEach(asset => {
+        techIconsContainer.appendChild(createAssetCard(asset, 'icon'));
+      });
+      
+      const uiIconsContainer = document.getElementById('ui-icons');
+      assets.icons.ui.forEach(asset => {
+        uiIconsContainer.appendChild(createAssetCard(asset, 'icon'));
+      });
+      
+      // Patterns
+      const patternsContainer = document.getElementById('patterns');
+      assets.patterns.forEach(asset => {
+        patternsContainer.appendChild(createAssetCard(asset, 'pattern'));
+      });
+    }
+    
+    // Initialize
+    renderAssets();
+  </script>
+</body>
+</html>

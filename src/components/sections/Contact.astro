@@ -1,0 +1,147 @@
+---
+const email = 'devsuzarte@gmail.com';
+
+const socialLinks = [
+  { label: 'GitHub',    href: 'https://github.com/devsuzarte',          icon: '↗' },
+  { label: 'LinkedIn',  href: 'https://linkedin.com/in/benjamin-suzarte', icon: '↗' },
+];
+---
+
+<section id="contact" class="contact section grain-overlay" data-theme="dark" data-scroll-section data-reveal-section>
+  <div class="container">
+    <div class="contact__inner">
+      <div class="contact__text" data-scroll-reveal data-reveal-item>
+        <p class="badge">Contato</p>
+        <h2 class="contact__title">
+          Vamos construir<br />
+          <em>algo incrível</em> juntos.
+        </h2>
+        <p class="contact__body">
+          Aberto a oportunidades de trabalho, projetos freelance e colaborações.
+          Se você tem uma ideia ou projeto em mente, entre em contato.
+        </p>
+
+        <a
+          href={`mailto:${email}`}
+          class="contact__email underline-accent"
+          aria-label="Enviar email"
+        >
+          {email}
+        </a>
+
+        <nav class="contact__social" aria-label="Redes sociais">
+          {socialLinks.map(link => (
+            <a
+              href={link.href}
+              class="contact__social-link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {link.label} {link.icon}
+            </a>
+          ))}
+        </nav>
+      </div>
+
+      <div class="contact__cta" data-scroll-reveal data-reveal-item>
+        <a href={`mailto:${email}`} class="btn btn-primary contact__btn">
+          Enviar Mensagem
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style lang="scss">
+  @use '@/styles/tokens' as *;
+
+  .contact {
+    background: var(--bg-primary);
+    position: relative;
+
+    &__inner {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 4rem;
+      align-items: center;
+      max-width: 840px;
+      margin: 0 auto;
+      text-align: center;
+
+      @include respond-to(lg) {
+        grid-template-columns: 1fr auto;
+        text-align: left;
+      }
+    }
+
+    &__text {
+      .badge { margin-bottom: 1.5rem; }
+    }
+
+    &__title {
+      font-family: $font-display;
+      font-weight: 300;
+      font-size: clamp(2.25rem, 5vw, 3.75rem);
+      line-height: 1.1;
+      color: $cream;
+      margin-bottom: 1.5rem;
+
+      em {
+        font-style: italic;
+        color: $caramel;
+      }
+    }
+
+    &__body {
+      font-family: $font-body;
+      font-size: 1rem;
+      line-height: 1.75;
+      color: rgba($oat, 0.75);
+      max-width: 480px;
+      margin-bottom: 2rem;
+
+      @include respond-to(lg) {
+        margin-bottom: 2rem;
+      }
+    }
+
+    &__email {
+      display: inline-block;
+      font-family: $font-sans;
+      font-size: 1rem;
+      color: $latte;
+      margin-bottom: 2rem;
+      transition: color $transition-base;
+
+      &:hover { color: $cream; }
+    }
+
+    &__social {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+
+      @include respond-to(lg) { justify-content: flex-start; }
+    }
+
+    &__social-link {
+      font-family: $font-sans;
+      font-size: 0.8125rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba($cream, 0.55);
+      transition: color $transition-base;
+
+      &:hover { color: $cream; }
+    }
+
+    &__btn {
+      white-space: nowrap;
+      font-size: 1rem;
+      padding: 1.125rem 2.5rem;
+    }
+  }
+</style>

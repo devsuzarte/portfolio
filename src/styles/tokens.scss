@@ -1,0 +1,98 @@
+// ☕ Coffee Scale — Design Tokens
+// Este arquivo é importado globalmente via astro.config vite.css.preprocessorOptions
+
+// === CORES ===
+
+// Escuros (fundos, textos primários)
+$espresso:     #1c0f0a;
+$dark-roast:   #2e1a12;
+$medium-roast: #5c3317;
+$sienna:       #8b4513;
+
+// Quentes (acentos, CTAs, destaques)
+$caramel:      #c07840;
+$amber:        #d4922a;
+$latte:        #d4a878;
+
+// Claros (fundos light, textos em dark)
+$oat:          #e8d5ba;
+$cream:        #f5ede0;
+$fog:          #f9f6f1;
+
+// Texto
+$ink:          #1a1410;
+$charcoal:     #3d2b1f;
+$muted:        #8a6d5c;
+
+// Complementares
+$sage:         #6b7c72;
+$slate:        #5a6470;
+
+// === TIPOGRAFIA ===
+$font-display: 'Cormorant Garamond', Georgia, serif;
+$font-sans:    'DM Sans', system-ui, sans-serif;
+$font-body:    'Inter', system-ui, sans-serif;
+$font-code:    'JetBrains Mono', 'Fira Code', monospace;
+
+// === ESPAÇAMENTO (base 8px) ===
+$space-1:  0.25rem;
+$space-2:  0.5rem;
+$space-3:  0.75rem;
+$space-4:  1rem;
+$space-6:  1.5rem;
+$space-8:  2rem;
+$space-10: 2.5rem;
+$space-12: 3rem;
+$space-16: 4rem;
+$space-20: 5rem;
+$space-24: 6rem;
+$space-32: 8rem;
+
+// === BREAKPOINTS ===
+$bp-xs: 480px;
+$bp-sm: 640px;
+$bp-md: 768px;
+$bp-lg: 1024px;
+$bp-xl: 1280px;
+$bp-2xl: 1536px;
+
+// === TRANSIÇÕES ===
+$transition-fast:   0.15s ease;
+$transition-base:   0.3s cubic-bezier(0.25, 1, 0.5, 1);
+$transition-slow:   0.6s cubic-bezier(0.25, 1, 0.5, 1);
+$transition-spring: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+// === MIXINS ===
+
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == xs    { @media (min-width: $bp-xs)  { @content; } }
+  @else if $breakpoint == sm { @media (min-width: $bp-sm) { @content; } }
+  @else if $breakpoint == md { @media (min-width: $bp-md) { @content; } }
+  @else if $breakpoint == lg { @media (min-width: $bp-lg) { @content; } }
+  @else if $breakpoint == xl { @media (min-width: $bp-xl) { @content; } }
+  @else if $breakpoint == 2xl { @media (min-width: $bp-2xl) { @content; } }
+}
+
+@mixin shadow-sm {
+  box-shadow: 0 1px 4px rgba($espresso, 0.08), 0 1px 2px rgba($espresso, 0.06);
+}
+
+@mixin shadow-md {
+  box-shadow: 0 4px 16px rgba($espresso, 0.12), 0 2px 6px rgba($espresso, 0.08);
+}
+
+@mixin shadow-lg {
+  box-shadow: 0 8px 40px rgba($espresso, 0.16), 0 4px 12px rgba($espresso, 0.10);
+}
+
+@mixin shadow-warm {
+  box-shadow: 0 8px 32px rgba($caramel, 0.18), 0 2px 8px rgba($caramel, 0.10);
+}
+
+@mixin border-warm($opacity: 0.25) {
+  border: 1px solid rgba($caramel, $opacity);
+}
+
+@mixin border-dark($opacity: 0.15) {
+  border: 1px solid rgba($oat, $opacity);
+}

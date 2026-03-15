@@ -1,0 +1,17 @@
+company: "EcoX Consultoria"
+position: "Desenvolvedor FullStack"
+location: "Feira de Santana, Bahia"
+type: "freelance"
+startDate: "2023-01"
+current: true
+description: "Desenvolvimento e reformulação completa do site institucional da EcoX Consultoria. Iniciei com WordPress para a landing page e, posteriormente, reestruturai a plataforma com uma nova identidade visual e sistemas integrados de análise de métricas e IA."
+achievements:
+  - "Reformulei o site com nova identidade visual e performance aprimorada"
+  - "Integrei sistema de análise de métricas para o cliente"
+  - "Implementei integração com IA para automação de processos internos"
+technologies:
+  - "React"
+  - "Node.js"
+  - "TypeScript"
+  - "WordPress"
+companyUrl: "https://ecoxconsultoria.com"

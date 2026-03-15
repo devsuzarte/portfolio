@@ -1,0 +1,1112 @@
+---
+import { Icon } from 'astro-icon/components';
+const base = import.meta.env.BASE_URL;
+
+const techCategories = [
+  {
+    label: 'Design',
+    symbol: '✦',
+    items: [
+      { name: 'Figma',  icon: 'simple-icons:figma',  color: '#F24E1E' },
+      { name: 'Framer', icon: 'simple-icons:framer', color: '#0055FF' },
+    ],
+  },
+  {
+    label: 'Frontend',
+    symbol: '◈',
+    items: [
+      { name: 'React',      icon: 'simple-icons:react',       color: '#61DAFB' },
+      { name: 'TypeScript', icon: 'simple-icons:typescript',  color: '#3178C6' },
+      { name: 'Next.js',    icon: 'simple-icons:nextdotjs',   color: '#ffffff' },
+      { name: 'Tailwind',   icon: 'simple-icons:tailwindcss', color: '#06B6D4' },
+    ],
+  },
+  {
+    label: 'Backend',
+    symbol: '⬡',
+    items: [
+      { name: 'Node.js', icon: 'simple-icons:nodedotjs', color: '#5FA04E' },
+      { name: 'Python',  icon: 'simple-icons:python',    color: '#3776AB' },
+      { name: 'NestJS',  icon: 'simple-icons:nestjs',    color: '#E0234E' },
+      { name: 'GraphQL', icon: 'simple-icons:graphql',   color: '#E10098' },
+    ],
+  },
+  {
+    label: 'AI',
+    symbol: '◉',
+    items: [
+      { name: 'Claude',    icon: 'simple-icons:anthropic', color: '#D4A27F' },
+      { name: 'OpenAI',    icon: 'simple-icons:openai',    color: '#ffffff' },
+      { name: 'LangChain', icon: 'simple-icons:langchain', color: '#1C3C3C' },
+      { name: 'Ollama',    icon: 'simple-icons:ollama',    color: '#ffffff' },
+    ],
+  },
+  {
+    label: 'Infra',
+    symbol: '◌',
+    items: [
+      { name: 'Docker',     icon: 'simple-icons:docker',            color: '#2496ED' },
+      { name: 'AWS',        icon: 'simple-icons:amazonwebservices', color: '#FF9900' },
+      { name: 'PostgreSQL', icon: 'simple-icons:postgresql',        color: '#4169E1' },
+      { name: 'Redis',      icon: 'simple-icons:redis',             color: '#FF4438' },
+      { name: 'Git',        icon: 'simple-icons:git',               color: '#F05032' },
+    ],
+  },
+];
+
+const aiStack = [
+  { name: 'Claude API',    icon: 'simple-icons:anthropic',   color: '#D4A27F', desc: 'Anthropic Claude 3.5/4'    },
+  { name: 'OpenAI',        icon: 'simple-icons:openai',       color: '#ffffff', desc: 'GPT-4o, Assistants API'    },
+  { name: 'LangChain',     icon: 'simple-icons:langchain',    color: '#1C3C3C', desc: 'Chains & Agents'            },
+  { name: 'Hugging Face',  icon: 'simple-icons:huggingface',  color: '#FFD21E', desc: 'Transformers & Models'      },
+  { name: 'Ollama',        icon: 'simple-icons:ollama',        color: '#ffffff', desc: 'Local LLM & Inference'      },
+  { name: 'OpenAI Gym',    icon: 'simple-icons:openaigym',    color: '#0081FB', desc: 'RL & Evaluation'            },
+];
+
+const aiSkills = [
+  'Prompt Engineering',
+  'Agent Architecture',
+  'RAG Pipelines',
+  'Tool Use / Function Calling',
+  'Multi-Agent Systems',
+  'Fine-tuning',
+  'Embeddings & Vector Search',
+  'Claude Agent SDK',
+];
+
+---
+
+<!--  HERO SCROLL WRAPPER  -->
+<div class="hero-scroll" data-hero-scroll data-hero>
+
+  <!-- Pinned viewport (100vh, stays in place while user scrolls through the wrapper) -->
+  <!-- style injects CSS var so the background-image path is correct regardless of base URL -->
+  <div
+    class="hero-scroll__viewport"
+    style={`--frame0-url: url('${base}assets/frames/scroll-animation-1/ezgif-frame-001.jpg')`}
+  >
+
+    <!--  Frame canvas background  -->
+    <canvas
+      class="hero-canvas"
+      data-hero-canvas
+      data-frame-base={`${base}assets/frames/scroll-animation-1/`}
+      data-frame-count="240"
+      aria-hidden="true"
+    ></canvas>
+    <!-- Dark gradient overlay for text legibility -->
+    <div class="hero-overlay" aria-hidden="true"></div>
+    <!-- Watermark cover: hides generator branding at bottom corners -->
+    <div class="hero-wm-cover hero-wm-cover--bl" aria-hidden="true"></div>
+    <div class="hero-wm-cover hero-wm-cover--br" aria-hidden="true"></div>
+
+    <!-- """""""""""""""""""""""" SCENE 0  Intro """""""""""""""""""""""" -->
+    <section class="hero-scene hero-scene--0 active" aria-label="Introdução">
+      <div class="hero-scene__inner container">
+
+        <!-- LEFT -->
+        <div class="hero__left">
+          <p class="hero__meta" data-parallax="-0.5">Dev FullStack + DevOps</p>
+
+          <h1 class="hero__title" data-parallax="-0.8">
+            <span class="hero__title-first">Benjamin</span>
+            <span class="hero__title-last">Suzarte</span>
+          </h1>
+
+          <p class="hero__subtitle">
+            Do design ao deploy, entrego soluções completas priorizando o cliente<br />
+            — com IA integrada, foco em resultado e compromisso com prazos.
+          </p>
+
+          <div class="hero__social">
+            <a href="https://github.com/devsuzarte" class="hero__social-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+              </svg>
+              <span>devsuzarte</span>
+            </a>
+            <a href="https://linkedin.com/in/benjamin-suzarte" class="hero__social-link" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>
+              <span>Juan Benjamin</span>
+            </a>
+          </div>
+
+          <div class="hero__actions">
+            <a href="/#projects" class="btn btn-primary">
+              Ver Projetos
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+            <a href="mailto:devsuzarte@gmail.com" class="btn btn-ghost">devsuzarte@gmail.com</a>
+          </div>
+        </div>
+
+        <!-- RIGHT: terminal -->
+        <div class="hero__right" aria-hidden="true" data-parallax="1.2">
+          <div class="hero__terminal">
+            <div class="hero__terminal-header">
+              <span class="hero__terminal-dot" style="background:#ff5f57"></span>
+              <span class="hero__terminal-dot" style="background:#febc2e"></span>
+              <span class="hero__terminal-dot" style="background:#28c840"></span>
+              <span class="hero__terminal-title">devsuzarte.ts</span>
+            </div>
+            <pre class="hero__terminal-body"><code><span class="t-kw">const</span> <span class="t-var">dev</span> <span class="t-op">=</span> <span class="t-punct">&#123;</span>
+  <span class="t-key">name</span><span class="t-punct">:</span>   <span class="t-str">'Juan Benjamin Suzarte'</span><span class="t-punct">,</span>
+  <span class="t-key">alias</span><span class="t-punct">:</span>  <span class="t-str">'devsuzarte'</span><span class="t-punct">,</span>
+  <span class="t-key">role</span><span class="t-punct">:</span>   <span class="t-str">'Fullstack Developer'</span><span class="t-punct">,</span>
+  <span class="t-key">stack</span><span class="t-punct">:</span>  <span class="t-punct">[</span>
+    <span class="t-str">'React'</span><span class="t-punct">,</span> <span class="t-str">'NestJS'</span><span class="t-punct">,</span>
+    <span class="t-str">'Google Cloud'</span><span class="t-punct">,</span> <span class="t-str">'LangChain'</span><span class="t-punct">,</span>
+  <span class="t-punct">]</span><span class="t-punct">,</span>
+  <span class="t-key">status</span><span class="t-punct">:</span> <span class="t-str">'disponível'</span> <span class="t-comment">// ✓</span>
+<span class="t-punct">&#125;</span></code></pre>
+          </div>
+
+          <div class="hero__scroll-hint" aria-hidden="true">
+            <span>scroll para explorar</span>
+            <svg width="12" height="20" viewBox="0 0 12 20" fill="none">
+              <rect x="1" y="1" width="10" height="18" rx="5" stroke="rgba(245,237,224,0.3)" stroke-width="1.5"/>
+              <circle class="scroll-dot" cx="6" cy="5" r="2" fill="rgba(192,120,64,0.8)"/>
+            </svg>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- """""""""""""""""""""""" SCENE 1  Tech Stack """""""""""""""""""""""" -->
+    <section class="hero-scene hero-scene--1" aria-label="Stack tecnológica">
+      <!-- SVG connection web between tech nodes (populated by JS) -->
+      <svg class="tech-web" data-tech-web aria-hidden="true"></svg>
+      <!-- Header: top-left -->
+      <div class="s1-header" data-s1-header>
+        <p class="scene-label">Stack</p>
+        <h2 class="scene-title">Tecnologias<br /><em>que domino</em></h2>
+        <p class="s1-sub">Frontend · Backend · Data · DevOps · AI</p>
+      </div>
+
+      <!-- Tech categories: 5 columns, scattered right side -->
+      <div class="tech-categories" data-tech-grid>
+        {techCategories.map((cat, ci) => (
+          <div class="tech-cat" style={`--ci:${ci}`} data-tech-cat>
+            <div class="tech-cat__head">
+              <span class="tech-cat__sym" aria-hidden="true">{cat.symbol}</span>
+              <p class="tech-cat__label">{cat.label}</p>
+            </div>
+            <div class="tech-cat__items">
+              {cat.items.map((tech) => (
+                <div class="tech-item" style={`--color:${tech.color}`} data-tech-item>
+                  <div class="tech-item__icon">
+                    <Icon name={tech.icon} width={20} height={20} />
+                  </div>
+                  <span class="tech-item__name">{tech.name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <!-- Decorative large label -->
+      <span class="s1-bg-word" aria-hidden="true">STACK</span>
+    </section>
+
+    <!-- """""""""""""""""""""""" SCENE 2  Ofereço para sua empresa """""""""""""""""""""""" -->
+    <section class="hero-scene hero-scene--2" aria-label="O que ofereço à sua empresa">
+
+      <!-- Header: top-left -->
+      <div class="s2-header" data-s2-header>
+        <p class="scene-label">Para sua empresa</p>
+        <h2 class="scene-title">Ofereço para<br /><em>sua empresa</em></h2>
+      </div>
+
+      <!-- Card 1: Automação  upper-left -->
+      <div class="biz-card biz-card--1" data-biz-card>
+        <svg class="biz-card__svg" viewBox="0 0 180 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="2" y="22" width="36" height="20" rx="5" fill="rgba(192,120,64,0.08)" stroke="rgba(192,120,64,0.45)" stroke-width="1.5"/>
+          <text x="20" y="35" text-anchor="middle" font-size="7" fill="rgba(192,120,64,0.7)" font-family="monospace">INPUT</text>
+          <line x1="38" y1="32" x2="64" y2="32" stroke="rgba(192,120,64,0.35)" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <polygon points="61,29 65,32 61,35" fill="rgba(192,120,64,0.5)"/>
+          <rect x="66" y="14" width="48" height="36" rx="5" fill="rgba(192,120,64,0.12)" stroke="rgba(192,120,64,0.55)" stroke-width="1.5"/>
+          <text x="90" y="29" text-anchor="middle" font-size="7" fill="rgba(245,237,224,0.7)" font-family="monospace">PROCESS</text>
+          <text x="90" y="41" text-anchor="middle" font-size="8" fill="rgba(192,120,64,0.9)" font-family="monospace">AUTO</text>
+          <line x1="114" y1="32" x2="140" y2="32" stroke="rgba(192,120,64,0.35)" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <polygon points="137,29 141,32 137,35" fill="rgba(192,120,64,0.5)"/>
+          <rect x="142" y="6" width="36" height="52" rx="5" fill="rgba(192,120,64,0.2)" stroke="#c07840" stroke-width="2"/>
+          <text x="160" y="30" text-anchor="middle" font-size="7" fill="rgba(245,237,224,0.9)" font-family="monospace">OUTPUT</text>
+          <text x="160" y="44" text-anchor="middle" font-size="14" fill="#d4a878" font-family="monospace">✓</text>
+</text>
+        </svg>
+        <p class="biz-card__metric">–65%</p>
+        <p class="biz-card__title">Tempo Operacional</p>
+        <p class="biz-card__desc">Automação de fluxos repetitivos de ponta a ponta</p>
+      </div>
+
+      <!-- Card 2: API Integration  upper-right -->
+      <div class="biz-card biz-card--2" data-biz-card>
+        <svg class="biz-card__svg" viewBox="0 0 160 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="80" cy="40" r="18" fill="rgba(192,120,64,0.15)" stroke="#c07840" stroke-width="2"/>
+          <text x="80" y="44" text-anchor="middle" font-size="9" fill="#c07840" font-family="monospace">API</text>
+          <circle cx="22" cy="18" r="9" fill="rgba(192,120,64,0.08)" stroke="rgba(192,120,64,0.5)" stroke-width="1.5"/>
+          <circle cx="138" cy="18" r="9" fill="rgba(192,120,64,0.08)" stroke="rgba(192,120,64,0.5)" stroke-width="1.5"/>
+          <circle cx="22" cy="62" r="9" fill="rgba(192,120,64,0.08)" stroke="rgba(192,120,64,0.5)" stroke-width="1.5"/>
+          <circle cx="138" cy="62" r="9" fill="rgba(192,120,64,0.08)" stroke="rgba(192,120,64,0.5)" stroke-width="1.5"/>
+          <circle cx="80" cy="8" r="6" fill="rgba(192,120,64,0.1)" stroke="rgba(192,120,64,0.4)" stroke-width="1.5"/>
+          <circle cx="80" cy="72" r="6" fill="rgba(192,120,64,0.1)" stroke="rgba(192,120,64,0.4)" stroke-width="1.5"/>
+          <line x1="31" y1="22" x2="63" y2="35" stroke="rgba(192,120,64,0.3)" stroke-width="1" stroke-dasharray="3,2"/>
+          <line x1="129" y1="22" x2="97" y2="35" stroke="rgba(192,120,64,0.3)" stroke-width="1" stroke-dasharray="3,2"/>
+          <line x1="31" y1="58" x2="63" y2="45" stroke="rgba(192,120,64,0.3)" stroke-width="1" stroke-dasharray="3,2"/>
+          <line x1="129" y1="58" x2="97" y2="45" stroke="rgba(192,120,64,0.3)" stroke-width="1" stroke-dasharray="3,2"/>
+          <line x1="80" y1="14" x2="80" y2="22" stroke="rgba(192,120,64,0.3)" stroke-width="1" stroke-dasharray="3,2"/>
+          <line x1="80" y1="58" x2="80" y2="66" stroke="rgba(192,120,64,0.3)" stroke-width="1" stroke-dasharray="3,2"/>
+        </svg>
+        <p class="biz-card__metric">+40%</p>
+        <p class="biz-card__title">Eficiência de Sistemas</p>
+        <p class="biz-card__desc">Integrações de API, webhooks e sincronização de dados</p>
+      </div>
+
+      <!-- Card 3: Deploy speed  lower-center-left -->
+      <div class="biz-card biz-card--3" data-biz-card>
+        <svg class="biz-card__svg" viewBox="0 0 180 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="tg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="rgba(192,120,64,0.18)"/>
+              <stop offset="100%" stop-color="rgba(192,120,64,0)"/>
+            </linearGradient>
+          </defs>
+          <polygon points="10,52 40,44 70,40 100,30 130,18 155,8 168,4 168,54 10,54" fill="url(#tg)"/>
+          <polyline points="10,52 40,44 70,40 100,30 130,18 155,8 168,4" stroke="#c07840" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="100" cy="30" r="3.5" fill="rgba(192,120,64,0.6)" stroke="#c07840" stroke-width="1"/>
+          <circle cx="168" cy="4" r="5" fill="#d4a878"/>
+          <line x1="8" y1="54" x2="174" y2="54" stroke="rgba(192,120,64,0.2)" stroke-width="1"/>
+          <text x="8" y="59" font-size="6" fill="rgba(192,120,64,0.4)" font-family="monospace">JAN</text>
+          <text x="160" y="59" font-size="6" fill="rgba(192,120,64,0.7)" font-family="monospace">NOW</text>
+        </svg>
+        <p class="biz-card__metric">3× faster</p>
+        <p class="biz-card__title">Deploy Contínuo</p>
+        <p class="biz-card__desc">CI/CD, zero downtime, rollback automático</p>
+      </div>
+
+      <!-- Card 4: Monitoring  lower-right -->
+      <div class="biz-card biz-card--4" data-biz-card>
+        <svg class="biz-card__svg" viewBox="0 0 140 72" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M 14 58 A 56 56 0 0 1 126 58" stroke="rgba(192,120,64,0.15)" stroke-width="10" stroke-linecap="round"/>
+          <path d="M 14 58 A 56 56 0 0 1 99 21" stroke="#c07840" stroke-width="10" stroke-linecap="round"/>
+          <line x1="70" y1="58" x2="96" y2="26" stroke="#d4a878" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="70" cy="58" r="6" fill="#c07840"/>
+          <circle cx="70" cy="58" r="3" fill="#d4a878"/>
+          <text x="12" y="70" font-size="7" fill="rgba(192,120,64,0.4)" font-family="monospace">0%</text>
+          <text x="118" y="70" font-size="7" fill="rgba(192,120,64,0.4)" font-family="monospace">100%</text>
+          <text x="70" y="46" text-anchor="middle" font-size="8" fill="rgba(245,237,224,0.5)" font-family="monospace">KPI</text>
+          <!-- small bars on the side -->
+          <rect x="2" y="28" width="6" height="28" rx="2" fill="rgba(192,120,64,0.15)"/>
+          <rect x="132" y="36" width="6" height="20" rx="2" fill="rgba(192,120,64,0.15)"/>
+        </svg>
+        <p class="biz-card__metric">360°</p>
+        <p class="biz-card__title">Visibilidade Total</p>
+        <p class="biz-card__desc">Dashboards, alertas e monitoramento em tempo real</p>
+      </div>
+
+    </section>
+
+    <!-- """""""""""""""""""""""" SCENE 3  AI Experience """""""""""""""""""""""" -->
+    <section class="hero-scene hero-scene--3" aria-label="Experiência com IA">
+
+      <!-- Header: top-right -->
+      <div class="s3-header" data-s3-header>
+        <p class="scene-label">IA & Automação</p>
+        <h2 class="scene-title">Experiência com<br /><em>inteligência artificial</em></h2>
+      </div>
+
+      <!-- AI tools: left column -->
+      <div class="ai-tools" data-ai-tools>
+        {aiStack.map((ai, i) => (
+          <div class="ai-tool" style={`--i:${i}; --color:${ai.color}`} data-ai-item>
+            <div class="ai-tool__icon">
+              <Icon name={ai.icon} width={24} height={24} />
+            </div>
+            <div class="ai-tool__text">
+              <span class="ai-tool__name">{ai.name}</span>
+              <span class="ai-tool__desc">{ai.desc}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <!-- Skills: right column, offset down -->
+      <div class="ai-skills" data-ai-skills>
+        <p class="ai-skills__heading">Competências</p>
+        <ul class="ai-skills__list" role="list">
+          {aiSkills.map((skill, i) => (
+            <li class="ai-skills__item" style={`--i:${i}`} data-ai-skill>
+              <span class="ai-skills__dot" aria-hidden="true"></span>
+              {skill}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Decorative large word -->
+      <span class="s3-bg-word" aria-hidden="true">AI</span>
+
+    </section>
+
+    <!-- Progress dots -->
+    <nav class="scene-nav" aria-label="Cenas do hero">
+      {[0,1,2,3].map(i => (
+        <button class={`scene-nav__dot ${i === 0 ? 'active' : ''}`} data-scene-dot={i} aria-label={`Cena ${i+1}`}></button>
+      ))}
+    </nav>
+
+  </div><!-- /viewport -->
+</div><!-- /hero-scroll -->
+
+<style lang="scss">
+  @use '@/styles/tokens' as *;
+
+  /*  Scroll wrapper  */
+  .hero-scroll {
+    position: relative;
+    height: 600vh; // 5 VH hero scroll + 1 VH sticky viewport
+    background: $espresso;
+  }
+
+  .hero-scroll__viewport {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: $espresso var(--frame0-url, none) center / cover no-repeat;
+  }
+
+  /*  Frame canvas + overlay  */
+  .hero-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    z-index: 0;
+  }
+
+  // Three.js canvas is injected by JS at z-index: 1 (pointer-events: none)
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background:
+      linear-gradient(to right, rgba($espresso, 0.88) 0%, rgba($espresso, 0.55) 60%, rgba($espresso, 0.30) 100%),
+      linear-gradient(to bottom, rgba($espresso, 0.40) 0%, transparent 30%, transparent 70%, rgba($espresso, 0.60) 100%);
+  }
+
+  /*  Scenes  */
+  .hero-scene {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    z-index: 5;
+    // opacity set by GSAP  scene 0 starts at 1, rest at 0
+    pointer-events: none;
+
+    &--0 {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    &--1, &--2, &--3 {
+      opacity: 0;
+    }
+  }
+
+  .hero-scene__inner {
+    width: 100%;
+    padding-top: 5rem; // below header
+  }
+
+  /*  Scene 0: Intro  */
+  .hero-scene--0 .hero-scene__inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: center;
+
+    @include respond-to(lg) {
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+    }
+  }
+
+  .hero__meta {
+    font-family: $font-sans;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: $caramel;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    &::before {
+      content: '';
+      display: inline-block;
+      width: 2rem;
+      height: 1px;
+      background: $caramel;
+    }
+  }
+
+  .hero__title {
+    line-height: 1;
+    margin-bottom: 1.75rem;
+    overflow: hidden; // clip for word-reveal animation
+  }
+
+  .hero__title-first {
+    display: block;
+    font-family: $font-sans;
+    font-weight: 300;
+    font-size: clamp(0.875rem, 1.6vw, 1.1rem);
+    letter-spacing: 0.38em;
+    color: rgba($oat, 0.5);
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+
+  .hero__title-last {
+    display: block;
+    font-family: $font-sans;
+    font-weight: 900;
+    font-size: clamp(3.5rem, 9vw, 7.5rem);
+    line-height: 0.88;
+    letter-spacing: 0.06em;
+    color: $cream;
+  }
+
+  .hero__subtitle {
+    font-family: $font-body;
+    font-size: clamp(0.9375rem, 1.5vw, 1.0625rem);
+    line-height: 1.8;
+    color: rgba($oat, 0.72);
+    max-width: 440px;
+    margin-bottom: 2rem;
+  }
+
+  .hero__social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    margin-bottom: 2.25rem;
+  }
+
+  .hero__social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: $font-sans;
+    font-size: 0.8125rem;
+    color: rgba($cream, 0.6);
+    transition: color $transition-base;
+    text-decoration: none;
+
+    svg { flex-shrink: 0; }
+
+    span {
+      position: relative;
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -1px; left: 0;
+        width: 0; height: 1px;
+        background: $caramel;
+        transition: width $transition-base;
+      }
+    }
+
+    &:hover {
+      color: $cream;
+      span::after { width: 100%; }
+    }
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .hero__right {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .hero__terminal {
+    background: rgba($dark-roast, 0.8);
+    border: 1px solid rgba($caramel, 0.15);
+    border-radius: 8px;
+    overflow: hidden;
+    backdrop-filter: blur(8px);
+  }
+
+  .hero__terminal-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: rgba($oat, 0.04);
+    border-bottom: 1px solid rgba($caramel, 0.1);
+  }
+
+  .hero__terminal-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .hero__terminal-title {
+    font-family: $font-code;
+    font-size: 0.6875rem;
+    color: $muted;
+    margin-left: 0.5rem;
+    letter-spacing: 0.04em;
+  }
+
+  .hero__terminal-body {
+    padding: 1.25rem 1.5rem;
+    margin: 0;
+    overflow: hidden;
+
+    code {
+      font-family: $font-code;
+      font-size: clamp(0.75rem, 1.2vw, 0.875rem);
+      line-height: 1.9;
+      display: block;
+      white-space: pre;
+    }
+  }
+
+  // Syntax colors
+  :global(.t-kw)      { color: #c792ea; }
+  :global(.t-var)     { color: $latte; }
+  :global(.t-str)     { color: #c3e88d; }
+  :global(.t-key)     { color: #82aaff; }
+  :global(.t-op)      { color: rgba($oat, 0.6); }
+  :global(.t-punct)   { color: rgba($oat, 0.5); }
+  :global(.t-comment) { color: rgba($muted, 0.8); font-style: italic; }
+
+  .hero__scroll-hint {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: $font-code;
+    font-size: 0.625rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba($muted, 0.5);
+
+    @include respond-to(lg) { justify-content: flex-end; }
+  }
+
+  .scroll-dot {
+    animation: scroll-bounce 1.8s ease-in-out infinite;
+  }
+
+  @keyframes scroll-bounce {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(8px); }
+  }
+
+  /*  Watermark covers  */
+  .hero-wm-cover {
+    position: absolute;
+    bottom: 0;
+    width: 220px;
+    height: 72px;
+    z-index: 4;
+    pointer-events: none;
+
+    &--bl {
+      left: 0;
+      background: linear-gradient(to top right, rgba($espresso, 0.95) 40%, transparent 100%);
+    }
+
+    &--br {
+      right: 0;
+      background: linear-gradient(to top left, rgba($espresso, 0.95) 40%, transparent 100%);
+    }
+  }
+
+  /*  Scene label / title (shared)  */
+  .scene-label {
+    font-family: $font-sans;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: $caramel;
+    margin-bottom: 0.75rem;
+
+    &::before {
+      content: ' ';
+      opacity: 0.5;
+    }
+  }
+
+  .scene-title {
+    font-family: $font-display;
+    font-weight: 300;
+    font-size: clamp(2rem, 4.5vw, 3.5rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: $cream;
+    margin-bottom: 2.5rem;
+
+    em {
+      font-style: italic;
+      color: $latte;
+    }
+  }
+
+  /*  Scene 1: Tech  scattered absolute layout  */
+  .hero-scene--1 {
+    @media (max-width: #{$bp-lg - 1}) {
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+      overflow-y: auto;
+    }
+  }
+
+  .s1-header {
+    position: relative;
+    padding: 6rem 5vw 1.5rem;
+    z-index: 2;
+    max-width: 280px;
+
+    @include respond-to(lg) {
+      position: absolute;
+      padding: 0;
+      top: 12vh;
+      left: 5vw;
+    }
+  }
+
+  .s1-sub {
+    font-family: $font-code;
+    font-size: 0.625rem;
+    letter-spacing: 0.15em;
+    color: rgba($muted, 0.7);
+    margin-top: 0.75rem;
+    text-transform: uppercase;
+  }
+
+  /*  Tech categories: scattered across full screen  */
+  .tech-categories {
+    position: relative;
+    padding: 1rem 5vw 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    pointer-events: auto;
+
+    @include respond-to(lg) {
+      position: absolute;
+      inset: 0;
+      display: block;
+      padding: 0;
+      pointer-events: none;
+    }
+  }
+
+  .tech-cat {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 0;
+    pointer-events: auto;
+
+    // Mobile: grid-based, no absolute positioning needed
+    &:last-child {
+      grid-column: 1 / -1;
+    }
+
+    @include respond-to(lg) {
+      position: absolute;
+
+      // Each category at a unique screen position  spread to avoid overlap
+      &:nth-child(1) { top: 16vh;    right: 28vw; }  // Design  upper centre
+      &:nth-child(2) { top: 12vh;    right: 4vw;  }  // Frontend  upper right
+      &:nth-child(3) { top: 50vh;    right: 4vw;  }  // Backend  right mid
+      &:nth-child(4) { bottom: 14vh; left: 30vw;  }  // AI  lower centre
+      &:nth-child(5) { bottom: 14vh; left: 4vw;   }  // Infra  lower left
+    }
+  }
+
+  .tech-cat__head {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba($caramel, 0.18);
+    margin-bottom: 0.125rem;
+  }
+
+  .tech-cat__sym {
+    font-size: 0.75rem;
+    color: $caramel;
+    flex-shrink: 0;
+  }
+
+  .tech-cat__label {
+    font-family: $font-code;
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba($muted, 0.8);
+    white-space: nowrap;
+  }
+
+  .tech-cat__items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .s1-bg-word {
+    position: absolute;
+    bottom: 8vh;
+    left: 3vw;
+    font-family: $font-sans;
+    font-weight: 900;
+    font-size: clamp(4rem, 12vw, 10rem);
+    color: rgba($caramel, 0.03);
+    user-select: none;
+    letter-spacing: -0.05em;
+    pointer-events: none;
+    line-height: 1;
+  }
+
+  .tech-web {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: visible;
+  }
+
+  .tech-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.55rem 0.9rem;
+    background: rgba($dark-roast, 0.55);
+    border: 1px solid rgba($caramel, 0.12);
+    border-radius: 6px;
+    cursor: default;
+    transition: border-color $transition-base, background $transition-base;
+    white-space: nowrap;
+
+    &:hover {
+      border-color: rgba($caramel, 0.35);
+      background: rgba($dark-roast, 0.85);
+    }
+
+    svg, :global(svg) { color: var(--color, $latte); opacity: 0.9; flex-shrink: 0; }
+  }
+
+  .tech-item__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+  }
+
+  .tech-item__name {
+    font-family: $font-sans;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: rgba($cream, 0.88);
+    letter-spacing: 0.02em;
+  }
+
+  /*  Scene 2: Business metrics  scattered cards  */
+  .hero-scene--2 {
+    // On mobile, switch to scrollable flex layout
+    @media (max-width: #{$bp-lg - 1}) {
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+      padding: 6rem 5vw 2rem;
+      gap: 1rem;
+      overflow-y: auto;
+    }
+  }
+
+  .s2-header {
+    position: relative;
+    z-index: 2;
+    max-width: 340px;
+    margin-bottom: 1rem;
+
+    @include respond-to(lg) {
+      position: absolute;
+      top: 9vh;
+      left: 5vw;
+      margin-bottom: 0;
+    }
+  }
+
+  // Biz cards base
+  .biz-card {
+    position: relative;
+    background: rgba($dark-roast, 0.75);
+    border: 1px solid rgba($caramel, 0.18);
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem 1.25rem;
+    backdrop-filter: blur(10px);
+    width: 100%;
+    transition: border-color $transition-base;
+
+    &:hover { border-color: rgba($caramel, 0.4); }
+
+    @include respond-to(lg) {
+      position: absolute;
+      width: clamp(220px, 22vw, 300px);
+
+      // Scattered positions
+      &--1 { top: 32vh; left: 4vw; }
+      &--2 { top: 14vh; right: 5vw; }
+      &--3 { bottom: 14vh; left: 28vw; }
+      &--4 { bottom: 12vh; right: 4vw; }
+    }
+  }
+
+  .biz-card__svg {
+    width: 100%;
+    height: auto;
+    max-height: 68px;
+    display: block;
+    margin-bottom: 0.875rem;
+  }
+
+  .biz-card__metric {
+    font-family: $font-sans;
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    font-weight: 800;
+    color: $caramel;
+    line-height: 1;
+    margin-bottom: 0.2rem;
+    letter-spacing: -0.03em;
+  }
+
+  .biz-card__title {
+    font-family: $font-sans;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: $cream;
+    margin-bottom: 0.375rem;
+    letter-spacing: 0.01em;
+  }
+
+  .biz-card__desc {
+    font-family: $font-body;
+    font-size: 0.6875rem;
+    color: rgba($oat, 0.55);
+    line-height: 1.5;
+  }
+
+  /*  Scene 3: AI  scattered absolute layout  */
+  .hero-scene--3 {
+    @media (max-width: #{$bp-lg - 1}) {
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+      padding: 6rem 5vw 2rem;
+      gap: 1.5rem;
+      overflow-y: auto;
+    }
+  }
+
+  .s3-header {
+    position: relative;
+    text-align: left;
+    z-index: 2;
+    max-width: 380px;
+
+    @include respond-to(lg) {
+      position: absolute;
+      top: 9vh;
+      right: 5vw;
+      text-align: right;
+    }
+  }
+
+  .ai-tools {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    @include respond-to(lg) {
+      position: absolute;
+      top: 30vh;
+      left: 4vw;
+      width: min(42%, 440px);
+    }
+  }
+
+  .s3-bg-word {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: $font-sans;
+    font-weight: 900;
+    font-size: clamp(8rem, 22vw, 18rem);
+    color: rgba($caramel, 0.025);
+    user-select: none;
+    pointer-events: none;
+    letter-spacing: -0.08em;
+    line-height: 1;
+  }
+
+  .ai-tool {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 0.875rem 1rem;
+    background: rgba($dark-roast, 0.5);
+    border: 1px solid rgba($caramel, 0.1);
+    border-radius: 6px;
+    transition: border-color $transition-base;
+
+    &:hover { border-color: rgba($caramel, 0.3); }
+
+    svg, :global(svg) { color: var(--color, $latte); flex-shrink: 0; }
+  }
+
+  .ai-tool__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: rgba($caramel, 0.08);
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+
+  .ai-tool__text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .ai-tool__name {
+    font-family: $font-sans;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: $cream;
+  }
+
+  .ai-tool__desc {
+    font-family: $font-code;
+    font-size: 0.625rem;
+    color: $muted;
+    letter-spacing: 0.04em;
+  }
+
+  .ai-skills {
+    position: relative;
+    width: 100%;
+
+    @include respond-to(lg) {
+      position: absolute;
+      top: 36vh;
+      right: 4vw;
+      width: min(42%, 420px);
+    }
+  }
+
+  .ai-skills__heading {
+    font-family: $font-sans;
+    font-size: 0.6875rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: $caramel;
+    margin-bottom: 1.25rem;
+  }
+
+  .ai-skills__list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.625rem;
+
+    @include respond-to(md) { grid-template-columns: 1fr 1fr; }
+  }
+
+  .ai-skills__item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: $font-sans;
+    font-size: 0.9375rem;
+    color: rgba($cream, 0.85);
+    padding: 0.75rem 1rem;
+    background: rgba($dark-roast, 0.4);
+    border: 1px solid rgba($caramel, 0.08);
+    border-radius: 4px;
+  }
+
+  .ai-skills__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: $caramel;
+    flex-shrink: 0;
+    box-shadow: 0 0 6px rgba($caramel, 0.6);
+  }
+
+  /*  Scene nav dots  */
+  .scene-nav {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.5rem;
+    z-index: 30;
+  }
+
+  .scene-nav__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    border: none;
+    background: rgba($cream, 0.25);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+
+    &.active {
+      background: $caramel;
+      width: 20px;
+      border-radius: 3px;
+    }
+  }
+</style>

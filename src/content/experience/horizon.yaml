@@ -1,0 +1,17 @@
+company: "Horizon"
+position: "Desenvolvedor (Estágio)"
+location: "Salvador, Bahia"
+type: "full-time"
+startDate: "2025-03"
+endDate: "2025-05"
+current: false
+description: "Primeiro estágio formal, onde me desenvolvi significativamente nas soft skills e fui iniciado no mundo de inteligência artificial. Trabalhei com desenvolvimento Maker, banco de dados e gerenciamento do sistema de saúde Health+, produto principal da empresa."
+achievements:
+  - "Evolução expressiva em soft skills e trabalho em equipe profissional"
+  - "Iniciação em IA aplicada a sistemas de saúde"
+  - "Manutenção e desenvolvimento de funcionalidades no sistema Health+"
+technologies:
+  - "SQL Server"
+  - "Banco de Dados"
+  - "Maker"
+  - "Inteligência Artificial"

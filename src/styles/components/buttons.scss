@@ -1,0 +1,71 @@
+@use '../tokens' as *;
+
+.btn {
+  font-family: $font-sans;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.875rem 2rem;
+  border-radius: 2px;
+  border: none;
+  cursor: pointer;
+  transition: all $transition-base;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+
+  &-primary {
+    background: $caramel;
+    color: $cream;
+
+    &:hover {
+      background: $amber;
+      transform: translateY(-2px);
+      @include shadow-warm;
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  &-outline {
+    background: transparent;
+    color: $caramel;
+    border: 1px solid $caramel;
+
+    &:hover {
+      background: rgba($caramel, 0.08);
+      transform: translateY(-2px);
+    }
+  }
+
+  &-ghost {
+    background: transparent;
+    color: $cream;
+    padding-left: 0;
+    padding-right: 0;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: $caramel;
+      transition: width $transition-base;
+    }
+
+    &:hover {
+      color: $latte;
+
+      &::after {
+        width: 100%;
+      }
+    }
+  }
+}

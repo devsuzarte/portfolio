@@ -1,0 +1,191 @@
+---
+import { getCollection } from 'astro:content';
+
+const experiences = await getCollection('experience');
+const sorted = experiences.sort((a, b) => {
+  if (a.data.current) return -1;
+  if (b.data.current) return 1;
+  return 0;
+});
+---
+
+<section id="experience" class="experience section" data-theme="warm" data-scroll-section data-reveal-section>
+  <div class="container">
+    <header class="experience__header" data-scroll-reveal data-reveal-item>
+      <p class="badge">Trajetória</p>
+      <h2 class="experience__title heading-underline">Experiência Profissional</h2>
+    </header>
+
+    <div class="experience__timeline" data-reveal-item>
+      {sorted.map((exp, i) => (
+        <article class="experience__item" data-scroll-reveal>
+          <div class="experience__marker" aria-hidden="true">
+            <div class="experience__dot"></div>
+            {i < sorted.length - 1 && <div class="experience__line"></div>}
+          </div>
+
+          <div class="experience__content">
+            <div class="experience__meta">
+              <span class="experience__date">
+                {exp.data.startDate} — {exp.data.current ? 'Presente' : exp.data.endDate}
+              </span>
+              <span class="badge">{exp.data.type}</span>
+            </div>
+
+            <h3 class="experience__position">{exp.data.position}</h3>
+            <p class="experience__company">
+              {exp.data.company} · {exp.data.location}
+            </p>
+
+            <p class="experience__description">{exp.data.description}</p>
+
+            <ul class="experience__achievements" role="list">
+              {exp.data.achievements.map(achievement => (
+                <li class="experience__achievement">
+                  <span aria-hidden="true">→</span>
+                  {achievement}
+                </li>
+              ))}
+            </ul>
+
+            <div class="experience__tech">
+              {exp.data.technologies.map(tech => (
+                <span class="badge">{tech}</span>
+              ))}
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style lang="scss">
+  @use '@/styles/tokens' as *;
+
+  .experience {
+    background: var(--bg-primary);
+
+    &__header {
+      margin-bottom: 4rem;
+
+      .badge {
+        margin-bottom: 1rem;
+      }
+    }
+
+    &__title {
+      font-family: $font-display;
+      font-weight: 600;
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: $oat;
+    }
+
+    &__timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      max-width: 760px;
+    }
+
+    &__item {
+      display: grid;
+      grid-template-columns: 2rem 1fr;
+      gap: 1.5rem;
+      padding-bottom: 3rem;
+    }
+
+    &__marker {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      padding-top: 0.375rem;
+    }
+
+    &__dot {
+      width: 10px;
+      height: 10px;
+      background: $amber;
+      border-radius: 50%;
+      border: 2px solid $dark-roast;
+      flex-shrink: 0;
+    }
+
+    &__line {
+      flex: 1;
+      width: 1px;
+      background: rgba($caramel, 0.25);
+      margin-top: 0.5rem;
+    }
+
+    &__content {
+      padding-bottom: 0.5rem;
+    }
+
+    &__meta {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    &__date {
+      font-family: $font-code;
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      color: $muted;
+    }
+
+    &__position {
+      font-family: $font-display;
+      font-weight: 600;
+      font-size: 1.375rem;
+      color: $oat;
+      margin-bottom: 0.375rem;
+    }
+
+    &__company {
+      font-family: $font-sans;
+      font-size: 0.875rem;
+      color: $caramel;
+      margin-bottom: 1rem;
+    }
+
+    &__description {
+      font-family: $font-body;
+      font-size: 0.9375rem;
+      line-height: 1.7;
+      color: rgba($oat, 0.75);
+      margin-bottom: 1.25rem;
+    }
+
+    &__achievements {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    &__achievement {
+      font-family: $font-body;
+      font-size: 0.875rem;
+      color: rgba($oat, 0.7);
+      display: flex;
+      gap: 0.75rem;
+
+      span {
+        color: $amber;
+        flex-shrink: 0;
+      }
+    }
+
+    &__tech {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+  }
+</style>

@@ -1,0 +1,12 @@
+// ☕ Portfolio Juan Benjamin — Global Stylesheet Entry Point
+
+// 1. Tokens (variáveis SCSS — deve ser primeiro)
+@use 'tokens' as *;
+
+// 2. Custom properties CSS + reset + base
+@use 'global';
+
+// 3. Componentes base
+@use 'components/buttons';
+@use 'components/cards';
+@use 'components/effects';

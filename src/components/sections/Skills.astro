@@ -1,0 +1,181 @@
+---
+import { getCollection } from 'astro:content';
+
+const allSkills = await getCollection('skills');
+
+const categories = {
+  frontend:    { label: 'Frontend',    skills: [] as typeof allSkills },
+  backend:     { label: 'Backend',     skills: [] as typeof allSkills },
+  database:    { label: 'Database',    skills: [] as typeof allSkills },
+  devops:      { label: 'DevOps',      skills: [] as typeof allSkills },
+  tools:       { label: 'Ferramentas', skills: [] as typeof allSkills },
+};
+
+allSkills.forEach(skill => {
+  const cat = skill.data.category as keyof typeof categories;
+  if (categories[cat]) {
+    categories[cat].skills.push(skill);
+  }
+});
+---
+
+<section id="skills" class="skills section" data-theme="dark" data-scroll-section data-reveal-section>
+  <div class="container">
+    <header class="skills__header" data-scroll-reveal data-reveal-item>
+      <p class="badge">Tecnologias</p>
+      <h2 class="skills__title heading-underline">Stack & Ferramentas</h2>
+      <p class="skills__subtitle">
+        Tecnologias que uso no dia-a-dia para construir produtos escaláveis e performáticos.
+      </p>
+    </header>
+
+    <div class="skills__grid" data-reveal-item>
+      {Object.entries(categories).map(([key, { label, skills }]) =>
+        skills.length > 0 && (
+          <div class="skills__category" data-scroll-reveal>
+            <h3 class="skills__category-title">{label}</h3>
+            <ul class="skills__list" role="list">
+              {skills.map(skill => (
+                <li class="skills__item">
+                  <span class="skills__item-name">{skill.data.name}</span>
+                  <div
+                    class="skills__bar"
+                    role="progressbar"
+                    aria-valuenow={skill.data.proficiency}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-label={`${skill.data.name}: ${skill.data.proficiency}%`}
+                  >
+                    <div
+                      class="skills__bar-fill"
+                      style={`--proficiency: ${skill.data.proficiency}%`}
+                    ></div>
+                  </div>
+                  <span class="skills__item-years">
+                    {skill.data.yearsOfExperience && `${skill.data.yearsOfExperience}a`}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      )}
+    </div>
+  </div>
+</section>
+
+<style lang="scss">
+  @use '@/styles/tokens' as *;
+
+  .skills {
+    background: var(--bg-primary);
+
+    &__header {
+      text-align: center;
+      max-width: 560px;
+      margin: 0 auto 4rem;
+
+      .badge {
+        margin-bottom: 1rem;
+      }
+    }
+
+    &__title {
+      font-family: $font-display;
+      font-weight: 600;
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: $cream;
+      margin-bottom: 1.25rem;
+
+      &::after {
+        margin: 1rem auto 0;
+      }
+    }
+
+    &__subtitle {
+      font-family: $font-body;
+      font-size: 1rem;
+      color: rgba($oat, 0.7);
+      line-height: 1.7;
+    }
+
+    &__grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+
+      @include respond-to(md) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      @include respond-to(xl) {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    &__category {
+      background: rgba($oat, 0.03);
+      border: 1px solid rgba($oat, 0.08);
+      border-radius: 4px;
+      padding: 1.75rem;
+    }
+
+    &__category-title {
+      font-family: $font-sans;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: $caramel;
+      margin-bottom: 1.5rem;
+    }
+
+    &__list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    &__item {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    &__item-name {
+      font-family: $font-body;
+      font-size: 0.9375rem;
+      color: $oat;
+    }
+
+    &__bar {
+      height: 2px;
+      background: rgba($oat, 0.1);
+      border-radius: 1px;
+      overflow: hidden;
+      width: 80px;
+
+      @include respond-to(lg) {
+        width: 100px;
+      }
+    }
+
+    &__bar-fill {
+      height: 100%;
+      width: var(--proficiency);
+      background: linear-gradient(90deg, $caramel, $amber);
+      border-radius: 1px;
+      transition: width 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    &__item-years {
+      font-family: $font-code;
+      font-size: 0.6875rem;
+      color: $muted;
+      min-width: 2rem;
+      text-align: right;
+    }
+  }
+</style>

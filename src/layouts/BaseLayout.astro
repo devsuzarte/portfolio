@@ -1,0 +1,122 @@
+---
+import '../styles/main.scss';
+
+interface Props {
+  title: string;
+  description?: string;
+  barbaNamespace?: string;
+}
+
+const {
+  title,
+  description = 'Portfolio de Benjamin Suzarte — Desenvolvedor Full Stack especializado em React, Node.js e TypeScript.',
+  barbaNamespace = 'page',
+} = Astro.props;
+
+const base = import.meta.env.BASE_URL;
+const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : Astro.url;
+---
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="generator" content={Astro.generator} />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonicalURL} />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet"
+  />
+</head>
+
+<body data-barba="wrapper">
+
+  <!-- ░░ ENTRANCE LOADER ░░ -->
+  <div id="entrance-loader" class="e-loader" aria-hidden="true">
+    <div class="e-loader__logo">
+      <span class="e-loader__dev">dev</span><span class="e-loader__suzarte">suzarte</span>
+    </div>
+    <div class="e-loader__line"></div>
+    <div class="e-loader__tag">&lt;/&gt;</div>
+  </div>
+
+  <div data-barba="container" data-barba-namespace={barbaNamespace}>
+    <slot />
+  </div>
+
+  <script>
+    import '@/scripts/app.ts';
+  </script>
+</body>
+</html>
+
+<style is:global>
+  .word-wrap { display: inline-block; overflow: hidden; vertical-align: bottom; }
+  .word      { display: inline-block; }
+
+  /* ── Entrance Loader ── */
+  .e-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: #1c0f0a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    pointer-events: none;
+  }
+
+  .e-loader__logo {
+    display: flex;
+    align-items: baseline;
+    gap: 0;
+    overflow: hidden;
+  }
+
+  .e-loader__dev {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    color: #c07840;
+    letter-spacing: -0.03em;
+    transform: translateY(100%);
+    display: inline-block;
+  }
+
+  .e-loader__suzarte {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-weight: 300;
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    color: #f5ede0;
+    letter-spacing: 0.04em;
+    transform: translateY(100%);
+    display: inline-block;
+  }
+
+  .e-loader__line {
+    width: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #c07840, transparent);
+    max-width: 340px;
+  }
+
+  .e-loader__tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: rgba(212, 168, 120, 0.4);
+    letter-spacing: 0.1em;
+    opacity: 0;
+  }
+</style>

@@ -1,0 +1,231 @@
+@use './tokens' as *;
+
+// === CSS CUSTOM PROPERTIES ===
+:root {
+  --espresso:      #{$espresso};
+  --dark-roast:    #{$dark-roast};
+  --medium-roast:  #{$medium-roast};
+  --sienna:        #{$sienna};
+  --caramel:       #{$caramel};
+  --amber:         #{$amber};
+  --latte:         #{$latte};
+  --oat:           #{$oat};
+  --cream:         #{$cream};
+  --fog:           #{$fog};
+  --ink:           #{$ink};
+  --charcoal:      #{$charcoal};
+  --muted:         #{$muted};
+  --sage:          #{$sage};
+  --slate:         #{$slate};
+
+  --font-display:  #{$font-display};
+  --font-sans:     #{$font-sans};
+  --font-body:     #{$font-body};
+  --font-code:     #{$font-code};
+}
+
+// === TEMA VARIABLES ===
+[data-theme="dark"] {
+  --bg-primary:    #{$espresso};
+  --bg-secondary:  #{$dark-roast};
+  --text-primary:  #{$cream};
+  --text-secondary:#{$latte};
+  --text-muted:    #{$muted};
+  --accent:        #{$caramel};
+  --accent-alt:    #{$amber};
+  --border:        rgba(#{$oat}, 0.1);
+}
+
+[data-theme="light"] {
+  --bg-primary:    #{$fog};
+  --bg-secondary:  #{$cream};
+  --text-primary:  #{$ink};
+  --text-secondary:#{$charcoal};
+  --text-muted:    #{$muted};
+  --accent:        #{$caramel};
+  --accent-alt:    #{$medium-roast};
+  --border:        rgba(#{$sienna}, 0.15);
+}
+
+[data-theme="warm"] {
+  --bg-primary:    #{$dark-roast};
+  --bg-secondary:  #{$medium-roast};
+  --text-primary:  #{$oat};
+  --text-secondary:#{$latte};
+  --text-muted:    #{$muted};
+  --accent:        #{$amber};
+  --accent-alt:    #{$caramel};
+  --border:        rgba(#{$caramel}, 0.2);
+}
+
+// === RESET ===
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: $font-body;
+  font-weight: 400;
+  line-height: 1.7;
+  color: $cream;
+  background: $espresso;
+  // overflow-x: hidden trava o scroll context do Lenis — usar clip em vez disso
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// === SCROLLBAR ===
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: $espresso;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $caramel;
+  border-radius: 3px;
+}
+
+// === TIPOGRAFIA BASE ===
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-display;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img, video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+// === UTILITÁRIOS ===
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem;
+
+  @include respond-to(lg) {
+    padding: 0 3rem;
+  }
+}
+
+.section {
+  padding: 6rem 0;
+
+  @include respond-to(lg) {
+    padding: 8rem 0;
+  }
+}
+
+// === GRAIN OVERLAY ===
+.grain-overlay {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    opacity: 0.35;
+    mix-blend-mode: overlay;
+    z-index: 0;
+  }
+}
+
+// === DIVIDER ===
+.divider {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba($caramel, 0.4) 30%,
+    rgba($caramel, 0.4) 70%,
+    transparent
+  );
+  margin: 3rem 0;
+}
+
+// === UNDERLINE ACENTO ===
+.underline-accent {
+  position: relative;
+  display: inline-block;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: $caramel;
+    transition: width $transition-base;
+  }
+
+  &:hover::after {
+    width: 100%;
+  }
+}
+
+// === HEADING UNDERLINE ===
+.heading-underline::after {
+  content: '';
+  display: block;
+  width: 3rem;
+  height: 1px;
+  background: $caramel;
+  margin-top: 1rem;
+}
+
+// === BADGE ===
+.badge {
+  font-family: $font-code;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.3em 0.8em;
+  border-radius: 2px;
+  background: rgba($caramel, 0.1);
+  color: $caramel;
+  border: 1px solid rgba($caramel, 0.2);
+  display: inline-block;
+}
+
+// === ACCESSIBILITY ===
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

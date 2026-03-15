@@ -1,0 +1,59 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/navigation/Header.astro';
+---
+
+<BaseLayout title="404 — Página Não Encontrada" description="Esta página não existe.">
+  <Header />
+  <main class="not-found" data-theme="dark">
+    <div class="container not-found__inner">
+      <span class="not-found__code">404</span>
+      <h1 class="not-found__title">Página não encontrada</h1>
+      <p class="not-found__body">
+        A página que você procura não existe ou foi movida.
+      </p>
+      <a href="/" class="btn btn-primary">← Voltar ao início</a>
+    </div>
+  </main>
+</BaseLayout>
+
+<style lang="scss">
+  @use '@/styles/tokens' as *;
+
+  .not-found {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    background: $espresso;
+
+    &__inner {
+      text-align: center;
+      padding: 4rem 0;
+    }
+
+    &__code {
+      display: block;
+      font-family: $font-display;
+      font-size: 8rem;
+      font-weight: 300;
+      font-style: italic;
+      color: rgba($caramel, 0.2);
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+
+    &__title {
+      font-family: $font-display;
+      font-size: 2.5rem;
+      font-weight: 600;
+      color: $cream;
+      margin-bottom: 1rem;
+    }
+
+    &__body {
+      font-family: $font-body;
+      color: $muted;
+      margin-bottom: 2.5rem;
+    }
+  }
+</style>
