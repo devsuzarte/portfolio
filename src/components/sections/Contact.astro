@@ -1,21 +1,27 @@
 ---
 const email = 'devsuzarte@gmail.com';
-
 const socialLinks = [
-  { label: 'GitHub',    href: 'https://github.com/devsuzarte',          icon: '↗' },
-  { label: 'LinkedIn',  href: 'https://linkedin.com/in/benjamin-suzarte', icon: '↗' },
+  { label: 'GitHub',    href: 'https://github.com/devsuzarte',           icon: 'github' },
+  { label: 'LinkedIn',  href: 'https://linkedin.com/in/benjamin-suzarte', icon: 'linkedin' },
 ];
 ---
 
-<section id="contact" class="contact section grain-overlay" data-theme="dark" data-scroll-section data-reveal-section>
+<section id="contact" class="contact section" data-theme="dark" data-scroll-section data-reveal-section>
   <!-- Ambient orbs -->
   <div class="contact__orb contact__orb--1" aria-hidden="true"></div>
   <div class="contact__orb contact__orb--2" aria-hidden="true"></div>
   <div class="contact__orb contact__orb--3" aria-hidden="true"></div>
+
   <div class="container">
     <div class="contact__inner">
+
+      <!-- Left: text content -->
       <div class="contact__text" data-scroll-reveal data-reveal-item>
-        <p class="badge">Contato</p>
+        <div class="contact__avail">
+          <span class="contact__avail-dot" aria-hidden="true"></span>
+          <span>Disponível para novos projetos</span>
+        </div>
+        <p class="badge" style="margin-bottom:1.5rem">Contato</p>
         <h2 class="contact__title">
           Vamos construir<br />
           <em>algo incrível</em> juntos.
@@ -25,36 +31,37 @@ const socialLinks = [
           Se você tem uma ideia ou projeto em mente, entre em contato.
         </p>
 
-        <a
-          href={`mailto:${email}`}
-          class="contact__email underline-accent"
-          aria-label="Enviar email"
-        >
+        <a href={`mailto:${email}`} class="contact__email" aria-label="Enviar email">
           {email}
         </a>
 
         <nav class="contact__social" aria-label="Redes sociais">
           {socialLinks.map(link => (
-            <a
-              href={link.href}
-              class="contact__social-link"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {link.label} {link.icon}
+            <a href={link.href} class="contact__social-card" target="_blank" rel="noopener noreferrer">
+              <span class="contact__social-label">{link.label}</span>
+              <span class="contact__social-arrow">↗</span>
             </a>
           ))}
         </nav>
       </div>
 
-      <div class="contact__cta" data-scroll-reveal data-reveal-item>
-        <a href={`mailto:${email}`} class="btn btn-primary contact__btn">
-          Enviar Mensagem
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </a>
+      <!-- Right: CTA card -->
+      <div class="contact__cta-wrap" data-scroll-reveal data-reveal-item>
+        <div class="contact__card">
+          <p class="contact__card-meta">Tempo médio de resposta</p>
+          <p class="contact__card-value">&lt; 24h</p>
+          <p class="contact__card-sub">Geralmente respondo no mesmo dia.</p>
+
+          <a href={`mailto:${email}`} class="contact__btn">
+            <span>Enviar Mensagem</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <p class="contact__card-hint">Sem spam. Apenas projetos.</p>
+        </div>
       </div>
+
     </div>
   </div>
 </section>
@@ -100,18 +107,34 @@ const socialLinks = [
       grid-template-columns: 1fr;
       gap: 4rem;
       align-items: center;
-      max-width: 840px;
-      margin: 0 auto;
-      text-align: center;
 
       @include respond-to(lg) {
-        grid-template-columns: 1fr auto;
-        text-align: left;
+        grid-template-columns: 1fr 1fr;
+        gap: 5rem;
       }
     }
 
-    &__text {
-      .badge { margin-bottom: 1.5rem; }
+    &__avail {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: $font-body;
+      font-size: 0.8125rem;
+      color: rgba($oat, 0.7);
+      margin-bottom: 1.5rem;
+      padding: 0.375rem 0.875rem;
+      border: 1px solid rgba($amber, 0.25);
+      border-radius: 2rem;
+      background: rgba($amber, 0.06);
+    }
+
+    &__avail-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #4ade80;
+      box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.4);
+      animation: avail-pulse 2s ease-out infinite;
+      flex-shrink: 0;
     }
 
     &__title {
@@ -132,54 +155,161 @@ const socialLinks = [
       font-family: $font-body;
       font-size: 1rem;
       line-height: 1.75;
-      color: rgba($oat, 0.75);
-      max-width: 480px;
+      color: rgba($oat, 0.72);
+      max-width: 460px;
       margin-bottom: 2rem;
-
-      @include respond-to(lg) {
-        margin-bottom: 2rem;
-      }
     }
 
     &__email {
-      display: inline-block;
-      font-family: $font-sans;
-      font-size: 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: $font-code;
+      font-size: 0.9375rem;
       color: $latte;
-      margin-bottom: 2rem;
+      margin-bottom: 2.5rem;
       transition: color $transition-base;
+      text-decoration: none;
+      border-bottom: 1px dashed rgba($caramel, 0.35);
+      padding-bottom: 2px;
 
-      &:hover { color: $cream; }
+      &:hover { color: $cream; border-bottom-color: $caramel; }
     }
 
     &__social {
       display: flex;
-      gap: 2rem;
-      justify-content: center;
-
-      @include respond-to(lg) { justify-content: flex-start; }
+      gap: 1rem;
+      flex-wrap: wrap;
     }
 
-    &__social-link {
+    &__social-card {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border: 1px solid rgba($oat, 0.12);
+      border-radius: 0.5rem;
+      background: rgba($oat, 0.04);
+      color: rgba($oat, 0.7);
       font-family: $font-sans;
       font-size: 0.8125rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: rgba($cream, 0.55);
-      transition: color $transition-base;
+      text-decoration: none;
+      transition: all $transition-base;
 
-      &:hover { color: $cream; }
+      &:hover {
+        border-color: rgba($caramel, 0.4);
+        color: $oat;
+        background: rgba($caramel, 0.08);
+      }
+    }
+
+    &__social-label { font-weight: 500; }
+    &__social-arrow { font-size: 0.75rem; opacity: 0.6; }
+
+    &__cta-wrap {
+      display: flex;
+      justify-content: center;
+
+      @include respond-to(lg) { justify-content: flex-end; }
+    }
+
+    &__card {
+      background: rgba($oat, 0.04);
+      border: 1px solid rgba($oat, 0.1);
+      border-radius: 1.25rem;
+      padding: 2.5rem;
+      max-width: 380px;
+      width: 100%;
+      text-align: center;
+      backdrop-filter: blur(12px);
+    }
+
+    &__card-meta {
+      font-family: $font-sans;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba($oat, 0.4);
+      margin-bottom: 0.5rem;
+    }
+
+    &__card-value {
+      font-family: $font-display;
+      font-size: 3rem;
+      font-weight: 600;
+      color: $caramel;
+      line-height: 1;
+      margin-bottom: 0.75rem;
+    }
+
+    &__card-sub {
+      font-family: $font-body;
+      font-size: 0.875rem;
+      color: rgba($oat, 0.5);
+      margin-bottom: 2rem;
     }
 
     &__btn {
-      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      width: 100%;
+      padding: 1rem 2rem;
+      background: $caramel;
+      color: $espresso;
+      border-radius: 0.75rem;
+      font-family: $font-sans;
       font-size: 1rem;
-      padding: 1.125rem 2.5rem;
+      font-weight: 600;
+      text-decoration: none;
+      margin-bottom: 1rem;
+      position: relative;
+      overflow: hidden;
+      animation: btn-attention 4s ease-in-out 2s infinite;
+
+      &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+
+      &:hover {
+        background: $amber;
+        animation-play-state: paused;
+        &::before { opacity: 1; }
+      }
+
+      svg { transition: transform 0.2s; }
+      &:hover svg { transform: translate(3px, -3px); }
+    }
+
+    &__card-hint {
+      font-family: $font-body;
+      font-size: 0.75rem;
+      color: rgba($oat, 0.35);
     }
   }
 
   @keyframes contact-drift {
     from { transform: translate(0, 0) scale(1); }
     to   { transform: translate(40px, 30px) scale(1.15); }
+  }
+
+  @keyframes avail-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.4); }
+    70%  { box-shadow: 0 0 0 8px rgba(74, 222, 128, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
+  }
+
+  @keyframes btn-attention {
+    0%, 85%, 100% { transform: translateY(0) scale(1); box-shadow: 0 0 0 0 rgba($caramel, 0); }
+    88%  { transform: translateY(-3px) scale(1.02); box-shadow: 0 8px 24px rgba($caramel, 0.35); }
+    91%  { transform: translateY(0) scale(1); }
+    94%  { transform: translateY(-2px) scale(1.01); box-shadow: 0 6px 18px rgba($caramel, 0.25); }
+    97%  { transform: translateY(0) scale(1); }
   }
 </style>

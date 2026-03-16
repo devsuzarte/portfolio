@@ -193,14 +193,14 @@ const aiSkills = [
       <!-- SVG connection web between tech nodes (populated by JS) -->
       <svg class="tech-web" data-tech-web aria-hidden="true"></svg>
       <!-- Header: top-left -->
-      <div class="s1-header" data-s1-header>
+      <div class="s1-header" data-s1-header data-parallax="-0.4">
         <p class="scene-label">Stack</p>
         <h2 class="scene-title">Tecnologias<br /><em>que domino</em></h2>
         <p class="s1-sub">Frontend · Backend · Data · DevOps · AI</p>
       </div>
 
       <!-- Tech categories: 5 columns, scattered right side -->
-      <div class="tech-categories" data-tech-grid>
+      <div class="tech-categories" data-tech-grid data-parallax="0.35">
         {techCategories.map((cat, ci) => (
           <div class="tech-cat" style={`--ci:${ci}`} data-tech-cat>
             <div class="tech-cat__head">
@@ -222,20 +222,20 @@ const aiSkills = [
       </div>
 
       <!-- Decorative large label -->
-      <span class="s1-bg-word" aria-hidden="true">STACK</span>
+      <span class="s1-bg-word" aria-hidden="true" data-parallax="-0.2">STACK</span>
     </section>
 
     <!-- """""""""""""""""""""""" SCENE 2  Ofereço para sua empresa """""""""""""""""""""""" -->
     <section class="hero-scene hero-scene--2" aria-label="O que ofereço à sua empresa">
 
       <!-- Header: top-left -->
-      <div class="s2-header" data-s2-header>
+      <div class="s2-header" data-s2-header data-parallax="-0.35">
         <p class="scene-label">Para sua empresa</p>
         <h2 class="scene-title">Ofereço para<br /><em>sua empresa</em></h2>
       </div>
 
       <!-- Card 1: Automação  upper-left -->
-      <div class="biz-card biz-card--1" data-biz-card>
+      <div class="biz-card biz-card--1" data-biz-card data-parallax="0.5">
         <svg class="biz-card__svg" viewBox="0 0 180 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <rect x="2" y="22" width="36" height="20" rx="5" fill="rgba(192,120,64,0.08)" stroke="rgba(192,120,64,0.45)" stroke-width="1.5"/>
           <text x="20" y="35" text-anchor="middle" font-size="7" fill="rgba(192,120,64,0.7)" font-family="monospace">INPUT</text>
@@ -257,7 +257,7 @@ const aiSkills = [
       </div>
 
       <!-- Card 2: API Integration  upper-right -->
-      <div class="biz-card biz-card--2" data-biz-card>
+      <div class="biz-card biz-card--2" data-biz-card data-parallax="-0.4">
         <svg class="biz-card__svg" viewBox="0 0 160 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <circle cx="80" cy="40" r="18" fill="rgba(192,120,64,0.15)" stroke="#c07840" stroke-width="2"/>
           <text x="80" y="44" text-anchor="middle" font-size="9" fill="#c07840" font-family="monospace">API</text>
@@ -280,7 +280,7 @@ const aiSkills = [
       </div>
 
       <!-- Card 3: Deploy speed  lower-center-left -->
-      <div class="biz-card biz-card--3" data-biz-card>
+      <div class="biz-card biz-card--3" data-biz-card data-parallax="0.6">
         <svg class="biz-card__svg" viewBox="0 0 180 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <defs>
             <linearGradient id="tg" x1="0" y1="0" x2="0" y2="1">
@@ -302,7 +302,7 @@ const aiSkills = [
       </div>
 
       <!-- Card 4: Monitoring  lower-right -->
-      <div class="biz-card biz-card--4" data-biz-card>
+      <div class="biz-card biz-card--4" data-biz-card data-parallax="-0.3">
         <svg class="biz-card__svg" viewBox="0 0 140 72" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path d="M 14 58 A 56 56 0 0 1 126 58" stroke="rgba(192,120,64,0.15)" stroke-width="10" stroke-linecap="round"/>
           <path d="M 14 58 A 56 56 0 0 1 99 21" stroke="#c07840" stroke-width="10" stroke-linecap="round"/>
@@ -327,13 +327,13 @@ const aiSkills = [
     <section class="hero-scene hero-scene--3" aria-label="Experiência com IA">
 
       <!-- Header: top-right -->
-      <div class="s3-header" data-s3-header>
+      <div class="s3-header" data-s3-header data-parallax="-0.3">
         <p class="scene-label">IA & Automação</p>
         <h2 class="scene-title">Experiência com<br /><em>inteligência artificial</em></h2>
       </div>
 
       <!-- AI tools: left column -->
-      <div class="ai-tools" data-ai-tools>
+      <div class="ai-tools" data-ai-tools data-parallax="0.45">
         {aiStack.map((ai, i) => (
           <div class="ai-tool" style={`--i:${i}; --color:${ai.color}`} data-ai-item>
             <div class="ai-tool__icon">
@@ -348,7 +348,7 @@ const aiSkills = [
       </div>
 
       <!-- Skills: right column, offset down -->
-      <div class="ai-skills" data-ai-skills>
+      <div class="ai-skills" data-ai-skills data-parallax="-0.4">
         <p class="ai-skills__heading">Competências</p>
         <ul class="ai-skills__list" role="list">
           {aiSkills.map((skill, i) => (
@@ -361,7 +361,7 @@ const aiSkills = [
       </div>
 
       <!-- Decorative large word -->
-      <span class="s3-bg-word" aria-hidden="true">AI</span>
+      <span class="s3-bg-word" aria-hidden="true" data-parallax="-0.15">AI</span>
 
     </section>
 

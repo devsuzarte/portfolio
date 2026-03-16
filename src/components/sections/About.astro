@@ -13,17 +13,17 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
       <h2 class="about__title heading-underline">
         Do design ao deploy, com IA, Cloud e foco em resultado.
       </h2>
-      <p class="about__body">
+      <p class="about__body" data-typewriter="1">
         Com mais de 4 anos no mercado, sou desenvolvedor Pleno atuando em empresas de
         grande porte como Ford e em projetos freelance próprios. Atuo também como professor
         particular de programação, o que me faz buscar sempre clareza técnica e evolução contínua.
-      </p>
-      <p class="about__body">
+      </p><span class="about__cursor" aria-hidden="true">|</span>
+      <p class="about__body" data-typewriter="2">
         Programação é tanto minha profissão quanto meu hobby — me aprofundo especialmente
         em IA, Cloud e arquiteturas modernas. Tenho inglês intermediário-avançado, o que me
         permite trabalhar com documentações, equipes e clientes internacionais sem barreiras.
         Fora do computador, toco violão, canto e curto andar de bicicleta.
-      </p>
+      </p><span class="about__cursor" aria-hidden="true">|</span>
       <div class="about__stats">
         <div class="about__stat">
           <span class="about__stat-number">4+</span>
@@ -41,20 +41,51 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
     </div>
 
     <div class="about__visual" data-reveal-item>
-      <div class="about__photo-frame">
-        <div class="about__photo-wrap">
-          <img
-            src={`${base}assets/images/projects/me.png`}
-            alt="Foto de Benjamin Suzarte"
-            class="about__photo"
-            loading="lazy"
-          />
+      <div class="about__photo-perspective">
+        <div class="about__photo-frame">
+          <div class="about__photo-wrap">
+            <img
+              src={`${base}assets/images/projects/me.png`}
+              alt="Foto de Benjamin Suzarte"
+              class="about__photo"
+              loading="lazy"
+            />
+          </div>
+          <div class="about__photo-accent" aria-hidden="true"></div>
         </div>
-        <div class="about__photo-accent" aria-hidden="true"></div>
       </div>
     </div>
   </div>
 </section>
+
+<script>
+  const typewriterEls = document.querySelectorAll<HTMLElement>('[data-typewriter]');
+
+  typewriterEls.forEach(el => {
+    const cursor = el.nextElementSibling as HTMLElement | null;
+    const fullText = el.textContent ?? '';
+    el.textContent = '';
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        observer.disconnect();
+
+        let i = 0;
+        const interval = setInterval(() => {
+          el.textContent += fullText[i];
+          i++;
+          if (i >= fullText.length) {
+            clearInterval(interval);
+            if (cursor) cursor.classList.add('about__cursor--done');
+          }
+        }, 18);
+      });
+    }, { threshold: 0.4 });
+
+    observer.observe(el);
+  });
+</script>
 
 <style lang="scss">
   @use '@/styles/tokens' as *;
@@ -126,6 +157,19 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
       margin-bottom: 1.25rem;
     }
 
+    &__cursor {
+      display: inline-block;
+      color: $caramel;
+      animation: cursor-blink 0.8s step-end infinite;
+      margin-left: 1px;
+      font-weight: 300;
+
+      &--done {
+        animation: none;
+        opacity: 0;
+      }
+    }
+
     &__stats {
       display: flex;
       gap: 2.5rem;
@@ -159,10 +203,16 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
       justify-content: center;
     }
 
+    &__photo-perspective {
+      perspective: 800px;
+      perspective-origin: 50% 50%;
+    }
+
     &__photo-frame {
       position: relative;
       width: 300px;
       height: 300px;
+      animation: coin-flip 1.4s ease-out forwards, levitate 4s ease-in-out 1.4s infinite;
 
       @include respond-to(lg) {
         width: 360px;
@@ -207,7 +257,6 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
       border: 1px solid rgba($caramel, 0.3);
       border-radius: 50%;
       z-index: -1;
-      animation: accent-spin 20s linear infinite;
     }
   }
 
@@ -216,8 +265,18 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
     to   { transform: translate(30px, 20px) scale(1.1); }
   }
 
-  @keyframes accent-spin {
-    from { transform: rotate(0deg) scale(1.05); }
-    to   { transform: rotate(360deg) scale(1.05); }
+  @keyframes coin-flip {
+    from { transform: rotateY(0); }
+    to   { transform: rotateY(720deg); }
+  }
+
+  @keyframes levitate {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-14px); }
+  }
+
+  @keyframes cursor-blink {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0; }
   }
 </style>

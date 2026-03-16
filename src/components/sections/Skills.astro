@@ -69,6 +69,17 @@ const rows = [
     </p>
   </div>
 
+  <div class="skills__filter" data-reveal-item>
+    <button class="skills__filter-btn active" data-filter="all">Todos</button>
+    <button class="skills__filter-btn" data-filter="design">Design</button>
+    <button class="skills__filter-btn" data-filter="frontend">Frontend</button>
+    <button class="skills__filter-btn" data-filter="backend">Backend</button>
+    <button class="skills__filter-btn" data-filter="ai">AI</button>
+    <button class="skills__filter-btn" data-filter="devops">DevOps</button>
+    <button class="skills__filter-btn" data-filter="database">Database</button>
+    <button class="skills__filter-btn" data-filter="tools">Ferramentas</button>
+  </div>
+
   <div class="skills__ticker-wrap" data-reveal-item>
     {rows.map(({ skills: rowSkills, dir, speed }) => (
       rowSkills.length > 0 && (
@@ -94,7 +105,45 @@ const rows = [
       )
     ))}
   </div>
+
+  <div class="skills__grid" id="skills-grid"></div>
 </section>
+
+<script is:inline define:vars={{ skillsData: allSkills.map(s => ({ name: s.data.name, category: s.data.category })), iconColors: Object.fromEntries(Object.entries(ICON_MAP).map(([k,v]) => [k, v.color])) }}>
+  const filterBtns = document.querySelectorAll('.skills__filter-btn');
+  const tickerWrap = document.querySelector('.skills__ticker-wrap');
+  const grid = document.getElementById('skills-grid');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const filter = btn.getAttribute('data-filter');
+
+      if (filter === 'all') {
+        tickerWrap.style.display = '';
+        grid.classList.remove('visible');
+        grid.innerHTML = '';
+      } else {
+        tickerWrap.style.display = 'none';
+        grid.innerHTML = '';
+
+        const matched = skillsData.filter(s => s.category === filter);
+        matched.forEach(s => {
+          const color = iconColors[s.name] || '#C0783F';
+          const card = document.createElement('div');
+          card.className = 'skill-card';
+          card.style.setProperty('--chip-color', color);
+          card.innerHTML = `<span class="skill-card__name">${s.name}</span>`;
+          grid.appendChild(card);
+        });
+
+        grid.classList.add('visible');
+      }
+    });
+  });
+</script>
 
 <style lang="scss">
   @use '@/styles/tokens' as *;
@@ -126,6 +175,37 @@ const rows = [
       font-size: 1rem;
       color: rgba($oat, 0.7);
       line-height: 1.7;
+    }
+
+    &__filter {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    &__filter-btn {
+      padding: 0.5rem 1.25rem;
+      border: 1px solid rgba($oat, 0.15);
+      border-radius: 2rem;
+      background: transparent;
+      color: rgba($oat, 0.55);
+      font-family: $font-body;
+      font-size: 0.8125rem;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &:hover {
+        border-color: rgba($caramel, 0.4);
+        color: $oat;
+      }
+
+      &.active {
+        background: rgba($caramel, 0.12);
+        border-color: $caramel;
+        color: $oat;
+      }
     }
 
     &__ticker-wrap {
@@ -161,6 +241,20 @@ const rows = [
 
       &--right {
         animation: ticker-right var(--speed, 55s) linear infinite;
+      }
+    }
+
+    &__grid {
+      display: none;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      padding: 0 1rem 1rem;
+      max-width: 900px;
+      margin: 0 auto;
+
+      &.visible {
+        display: flex;
       }
     }
   }
@@ -212,6 +306,25 @@ const rows = [
     }
   }
 
+  .skill-card {
+    padding: 0.625rem 1.25rem;
+    border: 1px solid rgba(var(--chip-color, #C0783F), 0.25);
+    border-radius: 0.5rem;
+    background: rgba(var(--chip-color, #C0783F), 0.06);
+    color: rgba($oat, 0.88);
+    font-family: $font-body;
+    font-size: 0.875rem;
+    cursor: default;
+    transition: all 0.15s;
+    animation: card-pop 0.25s ease-out both;
+
+    &:hover {
+      background: rgba(var(--chip-color, #C0783F), 0.14);
+      border-color: rgba(var(--chip-color, #C0783F), 0.5);
+      transform: translateY(-2px);
+    }
+  }
+
   @keyframes ticker-left {
     from { transform: translateX(0); }
     to   { transform: translateX(-50%); }
@@ -220,5 +333,10 @@ const rows = [
   @keyframes ticker-right {
     from { transform: translateX(-50%); }
     to   { transform: translateX(0); }
+  }
+
+  @keyframes card-pop {
+    from { opacity: 0; transform: scale(0.88) translateY(8px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
   }
 </style>
