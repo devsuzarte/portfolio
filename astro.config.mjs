@@ -8,7 +8,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   site: 'https://devsuzarte.github.io',
-  base: '/',
+  base: '/portfolio',
   integrations: [
     tailwind(),
     icon({
