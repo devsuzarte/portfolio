@@ -1,7 +1,7 @@
 ---
 title: "EcoX Consultoria"
 description: "Site institucional reformulado com nova identidade visual, análise de métricas integrada e automação via IA para consultoria ambiental."
-thumbnail: "https://image.thum.io/get/width/800/crop/450/https://ecoxconsultoria.com"
+thumbnail: "/portfolio/assets/images/projects/ecox-thumb.png"
 tags: ["React", "TypeScript", "IA"]
 tech: ["React", "Node.js", "TypeScript", "WordPress"]
 demo: "https://ecoxconsultoria.com"
