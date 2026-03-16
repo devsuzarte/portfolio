@@ -17,7 +17,6 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
       <div class="about__body-block">
         <p class="about__body" data-typewriter="1">Com mais de 4 anos no mercado, sou desenvolvedor Pleno atuando em empresas de grande porte como Ford e em projetos freelance próprios. Atuo também como professor particular de programação, o que me faz buscar sempre clareza técnica e evolução contínua.</p>
         <p class="about__body" data-typewriter="2">Programação é tanto minha profissão quanto meu hobby — me aprofundo especialmente em IA, Cloud e arquiteturas modernas. Tenho inglês intermediário-avançado, o que me permite trabalhar com documentações, equipes e clientes internacionais sem barreiras. Fora do computador, toco violão, canto e curto andar de bicicleta.</p>
-        <span class="about__cursor" aria-hidden="true">|</span>
       </div>
 
       <div class="about__stats">
@@ -59,27 +58,27 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
     const els = Array.from(document.querySelectorAll<HTMLElement>('[data-typewriter]'));
     if (els.length === 0) return;
 
-    const cursor = document.querySelector<HTMLElement>('.about__cursor');
-
     // Store trimmed texts and reserve natural height BEFORE clearing
     const texts = els.map(el => {
       const text = (el.textContent ?? '').trim().replace(/\s+/g, ' ');
-      // Reserve height so layout doesn't jump
       const h = el.getBoundingClientRect().height || el.scrollHeight;
       if (h > 0) el.style.minHeight = h + 'px';
       el.textContent = '';
       return text;
     });
 
-    // Cursor hidden until typing starts
-    if (cursor) cursor.style.opacity = '0';
-
+    // Cursor is a CSS ::after on .about__body--typing / --done
     const typeEl = (el: HTMLElement, text: string, cb: () => void) => {
+      el.classList.add('about__body--typing');
       let i = 0;
       const tick = () => {
         el.textContent += text[i++];
-        if (i < text.length) setTimeout(tick, 10);
-        else cb();
+        if (i < text.length) {
+          setTimeout(tick, 10);
+        } else {
+          el.classList.remove('about__body--typing');
+          cb();
+        }
       };
       setTimeout(tick, 10);
     };
@@ -90,10 +89,12 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
       started = true;
       obs.disconnect();
 
-      if (cursor) cursor.style.opacity = '1';
-
       const runSeq = (idx: number) => {
-        if (idx >= els.length) return; // all done, cursor stays blinking
+        if (idx >= els.length) {
+          // All done — keep cursor blinking on last paragraph
+          els[els.length - 1].classList.add('about__body--done');
+          return;
+        }
         typeEl(els[idx], texts[idx], () => runSeq(idx + 1));
       };
       runSeq(0);
@@ -184,15 +185,14 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
       margin-bottom: 1.25rem;
     }
 
-    &__cursor {
-      display: inline-block;
+    // Cursor follows the text via CSS ::after on the active paragraph
+    &__body--typing::after,
+    &__body--done::after {
+      content: '|';
       color: $caramel;
-      animation: cursor-blink 0.7s step-end infinite;
       font-weight: 300;
-      font-size: 1.1rem;
-      line-height: 1;
-      vertical-align: middle;
       margin-left: 1px;
+      animation: cursor-blink 0.7s step-end infinite;
     }
 
     &__stats {

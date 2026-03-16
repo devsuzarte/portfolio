@@ -4,7 +4,6 @@ import { getCollection } from 'astro:content';
 
 const allSkills = await getCollection('skills');
 
-// Icon + color mapping (only slugs known to exist in simple-icons)
 const ICON_MAP: Record<string, { icon: string; color: string }> = {
   'Figma':          { icon: 'simple-icons:figma',               color: '#F24E1E' },
   'Photoshop':      { icon: 'simple-icons:adobephotoshop',      color: '#31A8FF' },
@@ -17,6 +16,8 @@ const ICON_MAP: Record<string, { icon: string; color: string }> = {
   'Three.js':       { icon: 'simple-icons:threedotjs',          color: '#ffffff' },
   'GSAP':           { icon: 'simple-icons:greensock',           color: '#88CE02' },
   'Leaflet':        { icon: 'simple-icons:leaflet',             color: '#199900' },
+  'Astro':          { icon: 'simple-icons:astro',               color: '#FF5D01' },
+  'Barba.js':       { icon: 'simple-icons:javascript',          color: '#B04020' },
   'Node.js':        { icon: 'simple-icons:nodedotjs',           color: '#5FA04E' },
   'Python':         { icon: 'simple-icons:python',              color: '#3776AB' },
   'NestJS':         { icon: 'simple-icons:nestjs',              color: '#E0234E' },
@@ -42,21 +43,22 @@ const ICON_MAP: Record<string, { icon: string; color: string }> = {
   'Cloudflare':     { icon: 'simple-icons:cloudflare',          color: '#F48120' },
   'SonarQube':      { icon: 'simple-icons:sonarqube',           color: '#4E9BCD' },
   'Git':            { icon: 'simple-icons:git',                 color: '#F05032' },
+  'GitHub':         { icon: 'simple-icons:github',              color: '#e0d7ce' },
   'Linux':          { icon: 'simple-icons:linux',               color: '#FCC624' },
+  'VS Code':        { icon: 'simple-icons:visualstudiocode',    color: '#007ACC' },
   'Notion':         { icon: 'simple-icons:notion',              color: '#ffffff' },
   'Obsidian':       { icon: 'simple-icons:obsidian',            color: '#7C3AED' },
   'HuggingFace':    { icon: 'simple-icons:huggingface',         color: '#FFD21E' },
 };
 
-// Organize skills into 4 marquee rows
 const byCategory = (cats: string[]) =>
   allSkills.filter(s => cats.includes(s.data.category));
 
 const rows = [
-  { skills: byCategory(['design', 'frontend']),          dir: 'left',  speed: 55 },
-  { skills: byCategory(['backend', 'ai']),               dir: 'right', speed: 45 },
-  { skills: byCategory(['devops']),                      dir: 'left',  speed: 65 },
-  { skills: byCategory(['database', 'tools']),           dir: 'right', speed: 50 },
+  { skills: byCategory(['design', 'frontend']),       dir: 'left',  speed: 55 },
+  { skills: byCategory(['backend', 'ai']),            dir: 'right', speed: 45 },
+  { skills: byCategory(['devops']),                   dir: 'left',  speed: 65 },
+  { skills: byCategory(['database', 'tools']),        dir: 'right', speed: 50 },
 ];
 ---
 
@@ -69,7 +71,7 @@ const rows = [
     </p>
   </div>
 
-  <div class="skills__filter" data-reveal-item>
+  <div class="skills__filter container" data-reveal-item>
     <button class="skills__filter-btn active" data-filter="all">Todos</button>
     <button class="skills__filter-btn" data-filter="design">Design</button>
     <button class="skills__filter-btn" data-filter="frontend">Frontend</button>
@@ -80,21 +82,18 @@ const rows = [
     <button class="skills__filter-btn" data-filter="tools">Ferramentas</button>
   </div>
 
-  <div class="skills__ticker-wrap" data-reveal-item>
+  <!-- Ticker (shown when filter = all) -->
+  <div class="skills__ticker-wrap" data-reveal-item id="skills-ticker">
     {rows.map(({ skills: rowSkills, dir, speed }) => (
       rowSkills.length > 0 && (
         <div class="skills__row" style={`--speed: ${speed}s`}>
           <div class={`skills__track skills__track--${dir}`} aria-hidden="true">
-            {/* Duplicate for seamless loop */}
             {[...rowSkills, ...rowSkills].map(skill => {
               const ic = ICON_MAP[skill.data.name];
               return (
                 <div class="skill-chip" style={ic ? `--chip-color: ${ic.color}` : '--chip-color: #C0783F'}>
                   <span class="skill-chip__icon">
-                    {ic
-                      ? <Icon name={ic.icon} />
-                      : <span class="skill-chip__dot" />
-                    }
+                    {ic ? <Icon name={ic.icon} /> : <span class="skill-chip__dot" />}
                   </span>
                   <span class="skill-chip__name">{skill.data.name}</span>
                 </div>
@@ -106,79 +105,63 @@ const rows = [
     ))}
   </div>
 
-  <div class="skills__grid" id="skills-grid"></div>
+  <!-- Grid (SSR cards with icons, shown when filter ≠ all) -->
+  <div class="skills__grid container" id="skills-grid" aria-hidden="true">
+    {allSkills.map(skill => {
+      const ic = ICON_MAP[skill.data.name];
+      return (
+        <div
+          class="skill-card"
+          data-category={skill.data.category}
+          style={ic ? `--chip-color: ${ic.color}` : '--chip-color: #C0783F'}
+        >
+          <span class="skill-card__icon">
+            {ic ? <Icon name={ic.icon} /> : <span class="skill-card__dot" />}
+          </span>
+          <span class="skill-card__name">{skill.data.name}</span>
+        </div>
+      );
+    })}
+  </div>
 </section>
 
-<script is:inline define:vars={{ skillsData: allSkills.map(s => ({ name: s.data.name, category: s.data.category })), iconColors: Object.fromEntries(Object.entries(ICON_MAP).map(([k,v]) => [k, v.color])) }}>
-  // Convert #RRGGBB → rgba(r,g,b,a) for inline styles (bypasses Astro CSS scoping)
-  function hexRgba(hex, a) {
-    const h = hex.replace('#', '');
-    const r = parseInt(h.slice(0, 2), 16);
-    const g = parseInt(h.slice(2, 4), 16);
-    const b = parseInt(h.slice(4, 6), 16);
-    return 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
-  }
-
-  const filterBtns = document.querySelectorAll('.skills__filter-btn');
-  const tickerWrap = document.querySelector('.skills__ticker-wrap');
-  const grid = document.getElementById('skills-grid');
+<script>
+  const filterBtns = document.querySelectorAll<HTMLButtonElement>('.skills__filter-btn');
+  const ticker = document.getElementById('skills-ticker') as HTMLElement;
+  const grid   = document.getElementById('skills-grid')  as HTMLElement;
+  const cards  = Array.from(grid.querySelectorAll<HTMLElement>('.skill-card'));
 
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       filterBtns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
 
-      const filter = btn.getAttribute('data-filter');
+      const filter = btn.dataset.filter ?? 'all';
 
       if (filter === 'all') {
-        tickerWrap.style.display = '';
-        grid.classList.remove('visible');
-        grid.innerHTML = '';
+        ticker.style.display = '';
+        grid.style.display = 'none';
+        grid.setAttribute('aria-hidden', 'true');
       } else {
-        tickerWrap.style.display = 'none';
-        grid.innerHTML = '';
+        ticker.style.display = 'none';
+        grid.style.display = 'flex';
+        grid.removeAttribute('aria-hidden');
 
-        const matched = skillsData.filter(s => s.category === filter);
-        matched.forEach((s, i) => {
-          const color = iconColors[s.name] || '#C0783F';
-          const card = document.createElement('div');
-          // Full inline styles — not dependent on Astro scoped CSS
-          card.style.cssText = [
-            'display:inline-flex',
-            'align-items:center',
-            'gap:0.5rem',
-            'padding:0.625rem 1.25rem',
-            'border:1px solid ' + hexRgba(color, 0.3),
-            'border-radius:0.5rem',
-            'background:' + hexRgba(color, 0.08),
-            'font-family:Inter,system-ui,sans-serif',
-            'font-size:0.875rem',
-            'color:rgba(232,213,186,0.9)',
-            'cursor:default',
-            'transition:all 0.15s',
-            'animation:card-pop 0.2s ease-out ' + (i * 30) + 'ms both',
-          ].join(';');
-
-          card.onmouseenter = () => {
-            card.style.background = hexRgba(color, 0.18);
-            card.style.borderColor = hexRgba(color, 0.55);
-            card.style.transform = 'translateY(-2px)';
-          };
-          card.onmouseleave = () => {
-            card.style.background = hexRgba(color, 0.08);
-            card.style.borderColor = hexRgba(color, 0.3);
-            card.style.transform = '';
-          };
-
-          // Colored dot + name
-          card.innerHTML =
-            '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:' + color + ';flex-shrink:0"></span>' +
-            '<span>' + s.name + '</span>';
-
-          grid.appendChild(card);
+        let visIdx = 0;
+        cards.forEach(card => {
+          const match = card.dataset.category === filter;
+          card.style.display = match ? '' : 'none';
+          if (match) {
+            // Re-trigger staggered pop animation
+            card.style.animation = 'none';
+            card.style.animationDelay = '';
+            // Force reflow then restore
+            void card.offsetWidth;
+            card.style.animation = '';
+            card.style.animationDelay = (visIdx * 35) + 'ms';
+            visIdx++;
+          }
         });
-
-        grid.classList.add('visible');
       }
     });
   });
@@ -194,7 +177,7 @@ const rows = [
     &__header {
       text-align: center;
       max-width: 560px;
-      margin: 0 auto 3.5rem;
+      margin: 0 auto 3rem;
 
       .badge { margin-bottom: 1rem; }
     }
@@ -252,8 +235,6 @@ const rows = [
       flex-direction: column;
       gap: 1.25rem;
       padding: 0.5rem 0 1rem;
-
-      /* Fade edges */
       mask-image: linear-gradient(
         to right,
         transparent 0%,
@@ -265,7 +246,6 @@ const rows = [
 
     &__row {
       overflow: hidden;
-
       &:hover .skills__track { animation-play-state: paused; }
     }
 
@@ -274,13 +254,8 @@ const rows = [
       gap: 0.75rem;
       width: max-content;
 
-      &--left {
-        animation: ticker-left var(--speed, 55s) linear infinite;
-      }
-
-      &--right {
-        animation: ticker-right var(--speed, 55s) linear infinite;
-      }
+      &--left  { animation: ticker-left  var(--speed, 55s) linear infinite; }
+      &--right { animation: ticker-right var(--speed, 55s) linear infinite; }
     }
 
     &__grid {
@@ -288,31 +263,28 @@ const rows = [
       flex-wrap: wrap;
       justify-content: center;
       gap: 0.75rem;
-      padding: 0 1rem 1rem;
-      max-width: 900px;
+      padding: 1rem 1rem 2rem;
+      max-width: 1000px;
       margin: 0 auto;
-
-      &.visible {
-        display: flex;
-      }
     }
   }
 
+  /* ── Ticker chip ── */
   .skill-chip {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     padding: 0.5rem 1rem 0.5rem 0.75rem;
     background: rgba($oat, 0.04);
-    border: 1px solid rgba(var(--chip-color, #C0783F), 0.2);
+    border: 1px solid rgba($oat, 0.1);
     border-radius: 2rem;
     white-space: nowrap;
     transition: background 0.2s, border-color 0.2s;
     cursor: default;
 
     &:hover {
-      background: rgba(var(--chip-color, #C0783F), 0.08);
-      border-color: rgba(var(--chip-color, #C0783F), 0.45);
+      background: rgba($oat, 0.08);
+      border-color: rgba($oat, 0.2);
     }
 
     &__icon {
@@ -323,14 +295,12 @@ const rows = [
       height: 1.125rem;
       color: var(--chip-color, #C0783F);
       flex-shrink: 0;
-
       svg { width: 100%; height: 100%; }
     }
 
     &__dot {
       display: block;
-      width: 0.5rem;
-      height: 0.5rem;
+      width: 0.5rem; height: 0.5rem;
       border-radius: 50%;
       background: var(--chip-color, #C0783F);
       margin: auto;
@@ -345,22 +315,49 @@ const rows = [
     }
   }
 
+  /* ── Filter grid card ── */
   .skill-card {
-    padding: 0.625rem 1.25rem;
-    border: 1px solid rgba(var(--chip-color, #C0783F), 0.25);
-    border-radius: 0.5rem;
-    background: rgba(var(--chip-color, #C0783F), 0.06);
-    color: rgba($oat, 0.88);
-    font-family: $font-body;
-    font-size: 0.875rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.625rem 1.125rem 0.625rem 0.875rem;
+    border: 1px solid rgba($oat, 0.1);
+    border-radius: 0.625rem;
+    background: rgba($oat, 0.04);
     cursor: default;
-    transition: all 0.15s;
-    animation: card-pop 0.25s ease-out both;
+    transition: background 0.15s, border-color 0.15s, transform 0.15s;
+    animation: card-pop 0.22s ease-out both;
 
     &:hover {
-      background: rgba(var(--chip-color, #C0783F), 0.14);
-      border-color: rgba(var(--chip-color, #C0783F), 0.5);
+      background: rgba($oat, 0.09);
+      border-color: var(--chip-color, #C0783F);
       transform: translateY(-2px);
+    }
+
+    &__icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.25rem;
+      height: 1.25rem;
+      color: var(--chip-color, #C0783F);
+      flex-shrink: 0;
+      svg { width: 100%; height: 100%; }
+    }
+
+    &__dot {
+      display: block;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--chip-color, #C0783F);
+      flex-shrink: 0;
+    }
+
+    &__name {
+      font-family: $font-body;
+      font-size: 0.875rem;
+      color: rgba($oat, 0.88);
+      white-space: nowrap;
     }
   }
 
@@ -375,15 +372,7 @@ const rows = [
   }
 
   @keyframes card-pop {
-    from { opacity: 0; transform: scale(0.88) translateY(8px); }
-    to   { opacity: 1; transform: scale(1) translateY(0); }
-  }
-</style>
-
-<style is:global>
-  /* card-pop must be global — used in dynamically-created elements */
-  @keyframes card-pop {
-    from { opacity: 0; transform: scale(0.88) translateY(8px); }
+    from { opacity: 0; transform: scale(0.85) translateY(10px); }
     to   { opacity: 1; transform: scale(1) translateY(0); }
   }
 </style>
