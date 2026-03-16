@@ -62,7 +62,7 @@ const skills = defineCollection({
   type: 'data',
   schema: z.object({
     name:               z.string(),
-    category:           z.enum(['frontend', 'backend', 'database', 'devops', 'tools', 'soft-skills']),
+    category:           z.enum(['frontend', 'backend', 'database', 'devops', 'tools', 'soft-skills', 'design', 'ai']),
     proficiency:        z.number().min(0).max(100),
     icon:               z.string().optional(),
     yearsOfExperience:  z.number().optional(),

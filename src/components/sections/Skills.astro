@@ -4,8 +4,10 @@ import { getCollection } from 'astro:content';
 const allSkills = await getCollection('skills');
 
 const categories = {
+  design:      { label: 'Design',      skills: [] as typeof allSkills },
   frontend:    { label: 'Frontend',    skills: [] as typeof allSkills },
   backend:     { label: 'Backend',     skills: [] as typeof allSkills },
+  ai:          { label: 'AI & ML',     skills: [] as typeof allSkills },
   database:    { label: 'Database',    skills: [] as typeof allSkills },
   devops:      { label: 'DevOps',      skills: [] as typeof allSkills },
   tools:       { label: 'Ferramentas', skills: [] as typeof allSkills },
