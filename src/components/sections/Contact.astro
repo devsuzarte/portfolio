@@ -1,21 +1,23 @@
 ---
 const email = 'devsuzarte@gmail.com';
 const socialLinks = [
-  { label: 'GitHub',    href: 'https://github.com/devsuzarte',           icon: 'github' },
-  { label: 'LinkedIn',  href: 'https://linkedin.com/in/benjamin-suzarte', icon: 'linkedin' },
+  { label: 'GitHub',    href: 'https://github.com/devsuzarte'            },
+  { label: 'LinkedIn',  href: 'https://linkedin.com/in/benjamin-suzarte'  },
 ];
 ---
 
 <section id="contact" class="contact section" data-theme="dark" data-scroll-section data-reveal-section>
+  <!-- Dot-grid background -->
+  <div class="contact__dot-grid" aria-hidden="true"></div>
+
   <!-- Ambient orbs -->
   <div class="contact__orb contact__orb--1" aria-hidden="true"></div>
   <div class="contact__orb contact__orb--2" aria-hidden="true"></div>
-  <div class="contact__orb contact__orb--3" aria-hidden="true"></div>
 
   <div class="container">
     <div class="contact__inner">
 
-      <!-- Left: text content -->
+      <!-- Left: text -->
       <div class="contact__text" data-scroll-reveal data-reveal-item>
         <div class="contact__avail">
           <span class="contact__avail-dot" aria-hidden="true"></span>
@@ -43,28 +45,80 @@ const socialLinks = [
             </a>
           ))}
         </nav>
+
+        <a href={`mailto:${email}`} class="contact__btn" aria-label="Enviar mensagem">
+          <span>Enviar Mensagem</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
       </div>
 
-      <!-- Right: CTA card -->
-      <div class="contact__cta-wrap" data-scroll-reveal data-reveal-item>
-        <div class="contact__card">
-          <p class="contact__card-meta">Tempo médio de resposta</p>
-          <p class="contact__card-value">&lt; 24h</p>
-          <p class="contact__card-sub">Geralmente respondo no mesmo dia.</p>
-
-          <a href={`mailto:${email}`} class="contact__btn">
-            <span>Enviar Mensagem</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </a>
-          <p class="contact__card-hint">Sem spam. Apenas projetos.</p>
+      <!-- Right: 3D CSS cube with mouse parallax -->
+      <div class="contact__scene-wrap" data-reveal-item aria-hidden="true">
+        <div class="contact__scene" id="contact-scene">
+          <div class="contact__cube" id="contact-cube">
+            <div class="contact__face contact__face--front"></div>
+            <div class="contact__face contact__face--back"></div>
+            <div class="contact__face contact__face--right"></div>
+            <div class="contact__face contact__face--left"></div>
+            <div class="contact__face contact__face--top"></div>
+            <div class="contact__face contact__face--bottom"></div>
+          </div>
+          <!-- Glow rings -->
+          <div class="contact__ring contact__ring--1"></div>
+          <div class="contact__ring contact__ring--2"></div>
         </div>
       </div>
 
     </div>
   </div>
 </section>
+
+<script>
+  (() => {
+    const section = document.getElementById('contact') as HTMLElement | null;
+    const cube    = document.getElementById('contact-cube') as HTMLElement | null;
+    if (!section || !cube) return;
+
+    let baseX = -15;
+    let baseY = 20;
+    let curX  = baseX;
+    let curY  = baseY;
+    let tarX  = baseX;
+    let tarY  = baseY;
+    let rafId = 0;
+
+    const onMove = (e: MouseEvent) => {
+      const rect = section.getBoundingClientRect();
+      // Normalised [-1, 1] relative to section centre
+      const nx = ((e.clientX - rect.left)  / rect.width  - 0.5) * 2;
+      const ny = ((e.clientY - rect.top)   / rect.height - 0.5) * 2;
+      tarX = baseX + ny * -22;
+      tarY = baseY + nx *  28;
+    };
+
+    const tick = () => {
+      curX += (tarX - curX) * 0.06;
+      curY += (tarY - curY) * 0.06;
+      cube.style.transform = `rotateX(${curX}deg) rotateY(${curY}deg)`;
+      rafId = requestAnimationFrame(tick);
+    };
+
+    section.addEventListener('mousemove', onMove, { passive: true });
+    section.addEventListener('mouseleave', () => { tarX = baseX; tarY = baseY; });
+
+    // Only run animation when section is visible
+    const obs = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) {
+        rafId = requestAnimationFrame(tick);
+      } else {
+        cancelAnimationFrame(rafId);
+      }
+    }, { threshold: 0.1 });
+    obs.observe(section);
+  })();
+</script>
 
 <style lang="scss">
   @use '@/styles/tokens' as *;
@@ -74,35 +128,41 @@ const socialLinks = [
     position: relative;
     overflow: hidden;
 
+    // Dot-grid pattern at low opacity
+    &__dot-grid {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba($caramel, 0.09) 1.5px, transparent 1.5px);
+      background-size: 28px 28px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
     &__orb {
       position: absolute;
       border-radius: 50%;
       filter: blur(90px);
       pointer-events: none;
+      z-index: 1;
     }
 
     &__orb--1 {
       width: 500px; height: 500px;
-      background: radial-gradient(circle, rgba($caramel, 0.18), transparent 70%);
+      background: radial-gradient(circle, rgba($caramel, 0.16), transparent 70%);
       top: -20%; left: -10%;
       animation: contact-drift 18s ease-in-out infinite alternate;
     }
 
     &__orb--2 {
       width: 350px; height: 350px;
-      background: radial-gradient(circle, rgba($sienna, 0.15), transparent 70%);
+      background: radial-gradient(circle, rgba($sienna, 0.14), transparent 70%);
       bottom: -10%; right: -5%;
       animation: contact-drift 22s ease-in-out infinite alternate-reverse;
     }
 
-    &__orb--3 {
-      width: 200px; height: 200px;
-      background: radial-gradient(circle, rgba($amber, 0.12), transparent 70%);
-      top: 50%; left: 50%;
-      animation: contact-drift 14s ease-in-out infinite alternate;
-    }
-
     &__inner {
+      position: relative;
+      z-index: 2;
       display: grid;
       grid-template-columns: 1fr;
       gap: 4rem;
@@ -172,7 +232,7 @@ const socialLinks = [
       font-family: $font-code;
       font-size: 0.9375rem;
       color: $latte;
-      margin-bottom: 2.5rem;
+      margin-bottom: 2rem;
       transition: color $transition-base;
       text-decoration: none;
       border-bottom: 1px dashed rgba($caramel, 0.35);
@@ -185,6 +245,7 @@ const socialLinks = [
       display: flex;
       gap: 1rem;
       flex-wrap: wrap;
+      margin-bottom: 2.5rem;
     }
 
     &__social-card {
@@ -211,58 +272,11 @@ const socialLinks = [
     &__social-label { font-weight: 500; }
     &__social-arrow { font-size: 0.75rem; opacity: 0.6; }
 
-    &__cta-wrap {
-      display: flex;
-      justify-content: center;
-
-      @include respond-to(lg) { justify-content: flex-end; }
-    }
-
-    &__card {
-      background: rgba($oat, 0.04);
-      border: 1px solid rgba($caramel, 0.18);
-      border-top: 1px solid rgba($caramel, 0.35);
-      border-radius: 1.25rem;
-      padding: 2.5rem;
-      max-width: 380px;
-      width: 100%;
-      text-align: center;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 0 40px rgba($caramel, 0.06), inset 0 1px 0 rgba($caramel, 0.15);
-    }
-
-    &__card-meta {
-      font-family: $font-sans;
-      font-size: 0.75rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: rgba($oat, 0.4);
-      margin-bottom: 0.5rem;
-    }
-
-    &__card-value {
-      font-family: $font-display;
-      font-size: 3rem;
-      font-weight: 600;
-      color: $caramel;
-      line-height: 1;
-      margin-bottom: 0.75rem;
-    }
-
-    &__card-sub {
-      font-family: $font-body;
-      font-size: 0.875rem;
-      color: rgba($oat, 0.5);
-      margin-bottom: 2rem;
-    }
-
     &__btn {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
       gap: 0.75rem;
-      width: 100%;
-      padding: 1rem 2rem;
+      padding: 0.875rem 2rem;
       background: $caramel;
       color: $espresso;
       border-radius: 0.75rem;
@@ -270,16 +284,15 @@ const socialLinks = [
       font-size: 1rem;
       font-weight: 600;
       text-decoration: none;
-      margin-bottom: 1rem;
       position: relative;
       overflow: hidden;
-      animation: btn-attention 4s ease-in-out 2s infinite;
+      animation: btn-attention 4s ease-in-out 3s infinite;
 
       &::before {
         content: '';
         position: absolute;
         inset: 0;
-        background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+        background: linear-gradient(135deg, rgba(255,255,255,0.18), transparent);
         opacity: 0;
         transition: opacity 0.2s;
       }
@@ -294,10 +307,76 @@ const socialLinks = [
       &:hover svg { transform: translate(3px, -3px); }
     }
 
-    &__card-hint {
+    // ── 3D cube scene ─────────────────────────────────────────────────────────
+    &__scene-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    &__scene {
+      position: relative;
+      width: 260px;
+      height: 260px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      perspective: 700px;
+    }
+
+    &__cube {
+      width: 140px;
+      height: 140px;
+      position: relative;
+      transform-style: preserve-3d;
+      transform: rotateX(-15deg) rotateY(20deg);
+      // JS drives the transform; CSS provides a gentle auto-spin fallback
+      // when no mouse interaction is happening
+    }
+
+    &__face {
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      border: 1.5px solid rgba($caramel, 0.45);
+      background: rgba($caramel, 0.03);
+      backdrop-filter: blur(1px);
+
+      &--front  { transform: translateZ(70px); }
+      &--back   { transform: translateZ(-70px) rotateY(180deg); }
+      &--right  { transform: translateX(70px)  rotateY(90deg); }
+      &--left   { transform: translateX(-70px) rotateY(-90deg); }
+      &--top    { transform: translateY(-70px) rotateX(90deg); }
+      &--bottom { transform: translateY(70px)  rotateX(-90deg); }
+    }
+
+    &__ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba($caramel, 0.18);
+      pointer-events: none;
+
+      &--1 {
+        width: 200px; height: 200px;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        animation: ring-pulse 4s ease-in-out infinite;
+      }
+
+      &--2 {
+        width: 240px; height: 240px;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        animation: ring-pulse 4s ease-in-out 1s infinite;
+      }
+    }
+
+    &__scene-hint {
       font-family: $font-body;
       font-size: 0.75rem;
-      color: rgba($oat, 0.35);
+      color: rgba($oat, 0.3);
+      letter-spacing: 0.06em;
     }
   }
 
@@ -312,11 +391,16 @@ const socialLinks = [
     100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
   }
 
+  @keyframes ring-pulse {
+    0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+    50%       { opacity: 1;   transform: translate(-50%, -50%) scale(1.06); }
+  }
+
   @keyframes btn-attention {
-    0%, 85%, 100% { transform: translateY(0) scale(1); box-shadow: 0 0 0 0 rgba($caramel, 0); }
-    88%  { transform: translateY(-3px) scale(1.02); box-shadow: 0 8px 24px rgba($caramel, 0.35); }
-    91%  { transform: translateY(0) scale(1); }
-    94%  { transform: translateY(-2px) scale(1.01); box-shadow: 0 6px 18px rgba($caramel, 0.25); }
-    97%  { transform: translateY(0) scale(1); }
+    0%, 85%, 100% { transform: translateY(0) scale(1);    box-shadow: none; }
+    88%           { transform: translateY(-3px) scale(1.02); box-shadow: 0 8px 24px rgba($caramel, 0.4); }
+    91%           { transform: translateY(0)    scale(1); }
+    94%           { transform: translateY(-2px) scale(1.01); box-shadow: 0 6px 18px rgba($caramel, 0.28); }
+    97%           { transform: translateY(0)    scale(1); }
   }
 </style>

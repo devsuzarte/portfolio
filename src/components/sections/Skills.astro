@@ -82,13 +82,14 @@ const rows = [
     <button class="skills__filter-btn" data-filter="tools">Ferramentas</button>
   </div>
 
-  <!-- Ticker (shown when filter = all) -->
+  <!-- Ticker (shown when filter = all) — 6 copies so no gaps on wide screens -->
   <div class="skills__ticker-wrap" data-reveal-item id="skills-ticker">
     {rows.map(({ skills: rowSkills, dir, speed }) => (
       rowSkills.length > 0 && (
         <div class="skills__row" style={`--speed: ${speed}s`}>
           <div class={`skills__track skills__track--${dir}`} aria-hidden="true">
-            {[...rowSkills, ...rowSkills].map(skill => {
+            {/* 6 identical copies → animate -16.667% per cycle, seamless on any screen */}
+            {[...rowSkills,...rowSkills,...rowSkills,...rowSkills,...rowSkills,...rowSkills].map(skill => {
               const ic = ICON_MAP[skill.data.name];
               return (
                 <div class="skill-chip" style={ic ? `--chip-color: ${ic.color}` : '--chip-color: #C0783F'}>
@@ -361,13 +362,14 @@ const rows = [
     }
   }
 
+  /* 6 copies → one cycle = 1/6 of total = 16.667% */
   @keyframes ticker-left {
     from { transform: translateX(0); }
-    to   { transform: translateX(-50%); }
+    to   { transform: translateX(-16.6667%); }
   }
 
   @keyframes ticker-right {
-    from { transform: translateX(-50%); }
+    from { transform: translateX(-16.6667%); }
     to   { transform: translateX(0); }
   }
 
