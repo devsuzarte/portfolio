@@ -3,7 +3,6 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 ---
 
 <section id="about" class="about section" data-theme="light" data-scroll-section data-reveal-section>
-  <!-- Floating ambient orbs -->
   <div class="about__orb about__orb--1" aria-hidden="true"></div>
   <div class="about__orb about__orb--2" aria-hidden="true"></div>
   <div class="about__orb about__orb--3" aria-hidden="true"></div>
@@ -11,19 +10,16 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
     <div class="about__text" data-reveal-item>
       <p class="about__label badge">Sobre mim</p>
       <h2 class="about__title heading-underline">
-        Do design ao deploy, com IA, Cloud e foco em resultado.
+        Do design ao deploy,<br/>
+        <em>com IA, Cloud e foco em resultado.</em>
       </h2>
-      <p class="about__body" data-typewriter="1">
-        Com mais de 4 anos no mercado, sou desenvolvedor Pleno atuando em empresas de
-        grande porte como Ford e em projetos freelance próprios. Atuo também como professor
-        particular de programação, o que me faz buscar sempre clareza técnica e evolução contínua.
-      </p><span class="about__cursor" aria-hidden="true">|</span>
-      <p class="about__body" data-typewriter="2">
-        Programação é tanto minha profissão quanto meu hobby — me aprofundo especialmente
-        em IA, Cloud e arquiteturas modernas. Tenho inglês intermediário-avançado, o que me
-        permite trabalhar com documentações, equipes e clientes internacionais sem barreiras.
-        Fora do computador, toco violão, canto e curto andar de bicicleta.
-      </p><span class="about__cursor" aria-hidden="true">|</span>
+
+      <div class="about__body-block">
+        <p class="about__body" data-typewriter="1">Com mais de 4 anos no mercado, sou desenvolvedor Pleno atuando em empresas de grande porte como Ford e em projetos freelance próprios. Atuo também como professor particular de programação, o que me faz buscar sempre clareza técnica e evolução contínua.</p>
+        <p class="about__body" data-typewriter="2">Programação é tanto minha profissão quanto meu hobby — me aprofundo especialmente em IA, Cloud e arquiteturas modernas. Tenho inglês intermediário-avançado, o que me permite trabalhar com documentações, equipes e clientes internacionais sem barreiras. Fora do computador, toco violão, canto e curto andar de bicicleta.</p>
+        <span class="about__cursor" aria-hidden="true">|</span>
+      </div>
+
       <div class="about__stats">
         <div class="about__stat">
           <span class="about__stat-number">4+</span>
@@ -59,32 +55,52 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 </section>
 
 <script>
-  const typewriterEls = document.querySelectorAll<HTMLElement>('[data-typewriter]');
+  (() => {
+    const els = Array.from(document.querySelectorAll<HTMLElement>('[data-typewriter]'));
+    if (els.length === 0) return;
 
-  typewriterEls.forEach(el => {
-    const cursor = el.nextElementSibling as HTMLElement | null;
-    const fullText = el.textContent ?? '';
-    el.textContent = '';
+    const cursor = document.querySelector<HTMLElement>('.about__cursor');
 
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        observer.disconnect();
+    // Store trimmed texts and reserve natural height BEFORE clearing
+    const texts = els.map(el => {
+      const text = (el.textContent ?? '').trim().replace(/\s+/g, ' ');
+      // Reserve height so layout doesn't jump
+      const h = el.getBoundingClientRect().height || el.scrollHeight;
+      if (h > 0) el.style.minHeight = h + 'px';
+      el.textContent = '';
+      return text;
+    });
 
-        let i = 0;
-        const interval = setInterval(() => {
-          el.textContent += fullText[i];
-          i++;
-          if (i >= fullText.length) {
-            clearInterval(interval);
-            if (cursor) cursor.classList.add('about__cursor--done');
-          }
-        }, 18);
-      });
-    }, { threshold: 0.4 });
+    // Cursor hidden until typing starts
+    if (cursor) cursor.style.opacity = '0';
 
-    observer.observe(el);
-  });
+    const typeEl = (el: HTMLElement, text: string, cb: () => void) => {
+      let i = 0;
+      const tick = () => {
+        el.textContent += text[i++];
+        if (i < text.length) setTimeout(tick, 10);
+        else cb();
+      };
+      setTimeout(tick, 10);
+    };
+
+    let started = false;
+    const obs = new IntersectionObserver(entries => {
+      if (started || !entries[0].isIntersecting) return;
+      started = true;
+      obs.disconnect();
+
+      if (cursor) cursor.style.opacity = '1';
+
+      const runSeq = (idx: number) => {
+        if (idx >= els.length) return; // all done, cursor stays blinking
+        typeEl(els[idx], texts[idx], () => runSeq(idx + 1));
+      };
+      runSeq(0);
+    }, { threshold: 0.15 });
+
+    obs.observe(els[0]);
+  })();
 </script>
 
 <style lang="scss">
@@ -132,7 +148,7 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 
       @include respond-to(lg) {
         grid-template-columns: 1fr 1fr;
-        gap: 6rem;
+        gap: 5rem;
       }
     }
 
@@ -142,11 +158,22 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 
     &__title {
       font-family: $font-display;
-      font-weight: 600;
-      font-size: clamp(1.75rem, 3.5vw, 2.75rem);
-      line-height: 1.2;
+      font-weight: 300;
+      font-size: clamp(2.25rem, 4.5vw, 3.75rem);
+      line-height: 1.15;
       color: $ink;
       margin-bottom: 1.75rem;
+      letter-spacing: -0.01em;
+
+      em {
+        font-style: italic;
+        color: $caramel;
+        font-weight: 400;
+      }
+    }
+
+    &__body-block {
+      position: relative;
     }
 
     &__body {
@@ -160,14 +187,12 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
     &__cursor {
       display: inline-block;
       color: $caramel;
-      animation: cursor-blink 0.8s step-end infinite;
-      margin-left: 1px;
+      animation: cursor-blink 0.7s step-end infinite;
       font-weight: 300;
-
-      &--done {
-        animation: none;
-        opacity: 0;
-      }
+      font-size: 1.1rem;
+      line-height: 1;
+      vertical-align: middle;
+      margin-left: 1px;
     }
 
     &__stats {
@@ -204,19 +229,20 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
     }
 
     &__photo-perspective {
-      perspective: 800px;
-      perspective-origin: 50% 50%;
+      perspective: 900px;
+      perspective-origin: 50% 40%;
     }
 
     &__photo-frame {
       position: relative;
-      width: 300px;
-      height: 300px;
-      animation: coin-flip 1.4s ease-out forwards, levitate 4s ease-in-out 1.4s infinite;
+      width: 360px;
+      height: 360px;
+      animation: coin-flip 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards,
+                 levitate 4s ease-in-out 1.5s infinite;
 
       @include respond-to(lg) {
-        width: 360px;
-        height: 360px;
+        width: 460px;
+        height: 460px;
       }
     }
 
@@ -233,7 +259,7 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
         content: '';
         position: absolute;
         inset: 0;
-        background: rgba($caramel, 0.28);
+        background: rgba($caramel, 0.22);
         mix-blend-mode: color;
         pointer-events: none;
       }
@@ -245,16 +271,16 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
       object-fit: cover;
       object-position: top center;
       display: block;
-      filter: sepia(0.2) saturate(1.3) brightness(0.95);
+      filter: sepia(0.15) saturate(1.25) brightness(0.97);
     }
 
     &__photo-accent {
       position: absolute;
-      bottom: -1rem;
-      right: -1rem;
+      bottom: -1.25rem;
+      right: -1.25rem;
       width: 100%;
       height: 100%;
-      border: 1px solid rgba($caramel, 0.3);
+      border: 1.5px solid rgba($caramel, 0.25);
       border-radius: 50%;
       z-index: -1;
     }
@@ -266,13 +292,13 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
   }
 
   @keyframes coin-flip {
-    from { transform: rotateY(0); }
-    to   { transform: rotateY(720deg); }
+    0%   { transform: rotateY(0deg); }
+    100% { transform: rotateY(720deg); }
   }
 
   @keyframes levitate {
-    0%, 100% { transform: translateY(0); }
-    50%      { transform: translateY(-14px); }
+    0%, 100% { transform: translateY(0px); }
+    50%      { transform: translateY(-16px); }
   }
 
   @keyframes cursor-blink {

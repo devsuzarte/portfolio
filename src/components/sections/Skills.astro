@@ -110,6 +110,15 @@ const rows = [
 </section>
 
 <script is:inline define:vars={{ skillsData: allSkills.map(s => ({ name: s.data.name, category: s.data.category })), iconColors: Object.fromEntries(Object.entries(ICON_MAP).map(([k,v]) => [k, v.color])) }}>
+  // Convert #RRGGBB → rgba(r,g,b,a) for inline styles (bypasses Astro CSS scoping)
+  function hexRgba(hex, a) {
+    const h = hex.replace('#', '');
+    const r = parseInt(h.slice(0, 2), 16);
+    const g = parseInt(h.slice(2, 4), 16);
+    const b = parseInt(h.slice(4, 6), 16);
+    return 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
+  }
+
   const filterBtns = document.querySelectorAll('.skills__filter-btn');
   const tickerWrap = document.querySelector('.skills__ticker-wrap');
   const grid = document.getElementById('skills-grid');
@@ -130,12 +139,42 @@ const rows = [
         grid.innerHTML = '';
 
         const matched = skillsData.filter(s => s.category === filter);
-        matched.forEach(s => {
+        matched.forEach((s, i) => {
           const color = iconColors[s.name] || '#C0783F';
           const card = document.createElement('div');
-          card.className = 'skill-card';
-          card.style.setProperty('--chip-color', color);
-          card.innerHTML = `<span class="skill-card__name">${s.name}</span>`;
+          // Full inline styles — not dependent on Astro scoped CSS
+          card.style.cssText = [
+            'display:inline-flex',
+            'align-items:center',
+            'gap:0.5rem',
+            'padding:0.625rem 1.25rem',
+            'border:1px solid ' + hexRgba(color, 0.3),
+            'border-radius:0.5rem',
+            'background:' + hexRgba(color, 0.08),
+            'font-family:Inter,system-ui,sans-serif',
+            'font-size:0.875rem',
+            'color:rgba(232,213,186,0.9)',
+            'cursor:default',
+            'transition:all 0.15s',
+            'animation:card-pop 0.2s ease-out ' + (i * 30) + 'ms both',
+          ].join(';');
+
+          card.onmouseenter = () => {
+            card.style.background = hexRgba(color, 0.18);
+            card.style.borderColor = hexRgba(color, 0.55);
+            card.style.transform = 'translateY(-2px)';
+          };
+          card.onmouseleave = () => {
+            card.style.background = hexRgba(color, 0.08);
+            card.style.borderColor = hexRgba(color, 0.3);
+            card.style.transform = '';
+          };
+
+          // Colored dot + name
+          card.innerHTML =
+            '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:' + color + ';flex-shrink:0"></span>' +
+            '<span>' + s.name + '</span>';
+
           grid.appendChild(card);
         });
 
@@ -335,6 +374,14 @@ const rows = [
     to   { transform: translateX(0); }
   }
 
+  @keyframes card-pop {
+    from { opacity: 0; transform: scale(0.88) translateY(8px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+</style>
+
+<style is:global>
+  /* card-pop must be global — used in dynamically-created elements */
   @keyframes card-pop {
     from { opacity: 0; transform: scale(0.88) translateY(8px); }
     to   { opacity: 1; transform: scale(1) translateY(0); }

@@ -21,7 +21,7 @@ const socialLinks = [
           <span class="contact__avail-dot" aria-hidden="true"></span>
           <span>Disponível para novos projetos</span>
         </div>
-        <p class="badge" style="margin-bottom:1.5rem">Contato</p>
+        <p class="badge contact__badge">Contato</p>
         <h2 class="contact__title">
           Vamos construir<br />
           <em>algo incrível</em> juntos.
@@ -112,6 +112,11 @@ const socialLinks = [
         grid-template-columns: 1fr 1fr;
         gap: 5rem;
       }
+    }
+
+    &__badge {
+      margin-bottom: 1.25rem;
+      display: block;
     }
 
     &__avail {
@@ -215,13 +220,15 @@ const socialLinks = [
 
     &__card {
       background: rgba($oat, 0.04);
-      border: 1px solid rgba($oat, 0.1);
+      border: 1px solid rgba($caramel, 0.18);
+      border-top: 1px solid rgba($caramel, 0.35);
       border-radius: 1.25rem;
       padding: 2.5rem;
       max-width: 380px;
       width: 100%;
       text-align: center;
       backdrop-filter: blur(12px);
+      box-shadow: 0 0 40px rgba($caramel, 0.06), inset 0 1px 0 rgba($caramel, 0.15);
     }
 
     &__card-meta {
