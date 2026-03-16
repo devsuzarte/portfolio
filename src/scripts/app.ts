@@ -77,7 +77,22 @@ const init = async () => {
     } catch (_) {}
   }
 
-  // ── STEP 5: Barba page transitions ───────────────────────────────────
+  // ── STEP 5: Nav smooth scroll ─────────────────────────────────────────
+  const NAV_ID_MAP: Record<string, string> = { stack: 'skills' };
+  const HEADER_OFFSET = 80;
+  document.querySelectorAll<HTMLAnchorElement>('[data-nav-target]').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = link.dataset.navTarget ?? '';
+      const id = NAV_ID_MAP[target] ?? target;
+      const el = document.getElementById(id);
+      if (!el) return;
+      const top = el.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET;
+      window.scrollTo({ top, behavior: 'smooth' });
+    });
+  });
+
+  // ── STEP 6: Barba page transitions ───────────────────────────────────
   try { initBarba(); } catch (err) { console.warn('[Barba]', err); }
 };
 
