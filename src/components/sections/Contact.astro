@@ -8,6 +8,10 @@ const socialLinks = [
 ---
 
 <section id="contact" class="contact section grain-overlay" data-theme="dark" data-scroll-section data-reveal-section>
+  <!-- Ambient orbs -->
+  <div class="contact__orb contact__orb--1" aria-hidden="true"></div>
+  <div class="contact__orb contact__orb--2" aria-hidden="true"></div>
+  <div class="contact__orb contact__orb--3" aria-hidden="true"></div>
   <div class="container">
     <div class="contact__inner">
       <div class="contact__text" data-scroll-reveal data-reveal-item>
@@ -61,6 +65,35 @@ const socialLinks = [
   .contact {
     background: var(--bg-primary);
     position: relative;
+    overflow: hidden;
+
+    &__orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      pointer-events: none;
+    }
+
+    &__orb--1 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba($caramel, 0.18), transparent 70%);
+      top: -20%; left: -10%;
+      animation: contact-drift 18s ease-in-out infinite alternate;
+    }
+
+    &__orb--2 {
+      width: 350px; height: 350px;
+      background: radial-gradient(circle, rgba($sienna, 0.15), transparent 70%);
+      bottom: -10%; right: -5%;
+      animation: contact-drift 22s ease-in-out infinite alternate-reverse;
+    }
+
+    &__orb--3 {
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba($amber, 0.12), transparent 70%);
+      top: 50%; left: 50%;
+      animation: contact-drift 14s ease-in-out infinite alternate;
+    }
 
     &__inner {
       display: grid;
@@ -143,5 +176,10 @@ const socialLinks = [
       font-size: 1rem;
       padding: 1.125rem 2.5rem;
     }
+  }
+
+  @keyframes contact-drift {
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(40px, 30px) scale(1.15); }
   }
 </style>

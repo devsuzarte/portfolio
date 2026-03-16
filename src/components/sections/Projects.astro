@@ -11,6 +11,11 @@ const rest = allProjects
 ---
 
 <section id="projects" class="projects section" data-theme="light" data-scroll-section data-reveal-section>
+  <!-- Floating geometric shapes -->
+  <div class="projects__shape projects__shape--1" aria-hidden="true"></div>
+  <div class="projects__shape projects__shape--2" aria-hidden="true"></div>
+  <div class="projects__shape projects__shape--3" aria-hidden="true"></div>
+  <div class="projects__shape projects__shape--4" aria-hidden="true"></div>
   <div class="container">
     <header class="projects__header" data-scroll-reveal data-reveal-item>
       <p class="badge">Portfólio</p>
@@ -127,6 +132,46 @@ const rest = allProjects
 
   .projects {
     background: var(--bg-primary);
+    position: relative;
+    overflow: hidden;
+
+    &__shape {
+      position: absolute;
+      pointer-events: none;
+      opacity: 0.12;
+    }
+
+    &__shape--1 {
+      width: 120px; height: 120px;
+      border: 1.5px solid $caramel;
+      border-radius: 50%;
+      top: 8%; left: 3%;
+      animation: shape-float 12s ease-in-out infinite alternate;
+    }
+
+    &__shape--2 {
+      width: 60px; height: 60px;
+      background: rgba($sienna, 0.3);
+      border-radius: 4px;
+      top: 20%; right: 6%;
+      animation: shape-spin 20s linear infinite;
+    }
+
+    &__shape--3 {
+      width: 80px; height: 80px;
+      border: 1px solid $sienna;
+      border-radius: 50%;
+      bottom: 15%; left: 8%;
+      animation: shape-float 16s ease-in-out infinite alternate-reverse;
+    }
+
+    &__shape--4 {
+      width: 40px; height: 40px;
+      background: rgba($caramel, 0.25);
+      border-radius: 50%;
+      bottom: 30%; right: 10%;
+      animation: shape-float 9s ease-in-out infinite alternate;
+    }
 
     &__header {
       text-align: center;
@@ -260,6 +305,16 @@ const rest = allProjects
       flex-wrap: wrap;
       gap: 1rem;
     }
+  }
+
+  @keyframes shape-float {
+    from { transform: translate(0, 0) rotate(0deg); }
+    to   { transform: translate(15px, -20px) rotate(45deg); }
+  }
+
+  @keyframes shape-spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
   }
 
   .project-card {

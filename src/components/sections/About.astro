@@ -3,6 +3,10 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 ---
 
 <section id="about" class="about section" data-theme="light" data-scroll-section data-reveal-section>
+  <!-- Floating ambient orbs -->
+  <div class="about__orb about__orb--1" aria-hidden="true"></div>
+  <div class="about__orb about__orb--2" aria-hidden="true"></div>
+  <div class="about__orb about__orb--3" aria-hidden="true"></div>
   <div class="container about__inner">
     <div class="about__text" data-reveal-item>
       <p class="about__label badge">Sobre mim</p>
@@ -57,6 +61,37 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 
   .about {
     background: var(--bg-primary);
+    position: relative;
+    overflow: hidden;
+
+    &__orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      opacity: 0.35;
+    }
+
+    &__orb--1 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba($caramel, 0.5), transparent 70%);
+      top: -10%;  left: -8%;
+      animation: orb-drift 14s ease-in-out infinite alternate;
+    }
+
+    &__orb--2 {
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba($sienna, 0.4), transparent 70%);
+      bottom: 5%;  right: 5%;
+      animation: orb-drift 18s ease-in-out infinite alternate-reverse;
+    }
+
+    &__orb--3 {
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba($amber, 0.35), transparent 70%);
+      top: 50%;  left: 55%;
+      animation: orb-drift 11s ease-in-out infinite alternate;
+    }
 
     &__inner {
       display: grid;
@@ -170,8 +205,19 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
       width: 100%;
       height: 100%;
       border: 1px solid rgba($caramel, 0.3);
-      border-radius: 1.5rem;
+      border-radius: 50%;
       z-index: -1;
+      animation: accent-spin 20s linear infinite;
     }
+  }
+
+  @keyframes orb-drift {
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(30px, 20px) scale(1.1); }
+  }
+
+  @keyframes accent-spin {
+    from { transform: rotate(0deg) scale(1.05); }
+    to   { transform: rotate(360deg) scale(1.05); }
   }
 </style>
