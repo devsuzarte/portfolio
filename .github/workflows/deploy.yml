@@ -1,9 +1,7 @@
-name: Deploy to GitHub Pages
+name: Deploy to GitHub Pages (desativado — usando Vercel)
 
 on:
-  push:
-    branches: [main]
-  workflow_dispatch:
+  workflow_dispatch: # somente manual; Vercel faz o deploy automático no push
 
 permissions:
   contents: read
