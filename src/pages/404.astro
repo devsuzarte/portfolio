@@ -22,11 +22,16 @@ import Header from '@/components/navigation/Header.astro';
         O caminho que você seguiu levou ao vazio.<br>
         Mas sempre há um jeito de voltar.
       </p>
-      <a href="/" class="btn btn-primary nf__cta">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <a href="/" class="nf__btn" id="nf-btn">
+        <!-- Border SVG traçado animado -->
+        <svg class="nf__btn-svg" aria-hidden="true">
+          <rect class="nf__btn-rect" x="0.5" y="0.5" rx="2"/>
+        </svg>
+        <!-- Seta -->
+        <svg class="nf__btn-arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M19 12H5M12 5l-7 7 7 7"/>
         </svg>
-        Voltar ao início
+        <span>Voltar</span>
       </a>
     </div>
 
@@ -49,7 +54,27 @@ import Header from '@/components/navigation/Header.astro';
       .from('.nf__tag',   { opacity: 0, x: -30, duration: 0.6 }, '-=0.7')
       .from('.nf__title', { opacity: 0, y: 40,  duration: 0.7 }, '-=0.4')
       .from('.nf__body',  { opacity: 0, y: 20,  duration: 0.5 }, '-=0.3')
-      .from('.nf__cta',   { opacity: 0, y: 16,  duration: 0.5, ease: 'back.out(1.6)' }, '-=0.2');
+      .from('#nf-btn',    { opacity: 0, scale: 0.72, duration: 0.6, ease: 'back.out(1.8)' }, '-=0.15')
+      .call(() => {
+        // Border charge animation after button grows in
+        const btn  = document.getElementById('nf-btn');
+        const rect = btn?.querySelector<SVGRectElement>('.nf__btn-rect');
+        if (!btn || !rect) return;
+
+        const w = btn.offsetWidth;
+        const h = btn.offsetHeight;
+        rect.setAttribute('width',  String(w - 1));
+        rect.setAttribute('height', String(h - 1));
+
+        const perimeter = 2 * (w + h);
+        rect.style.strokeDasharray  = String(perimeter);
+        rect.style.strokeDashoffset = String(perimeter);
+
+        // Force reflow, then trigger CSS transition
+        rect.getBoundingClientRect();
+        rect.style.transition = 'stroke-dashoffset 1.6s cubic-bezier(0.25, 1, 0.5, 1)';
+        rect.style.strokeDashoffset = '0';
+      });
   }
 </script>
 
@@ -233,15 +258,55 @@ import Header from '@/components/navigation/Header.astro';
     margin-bottom: 2.5rem;
   }
 
-  .nf__cta {
+  /* ── CTA button ──────────────────────────────────── */
+  .nf__btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
     gap: 0.6rem;
+    font-family: $font-sans;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $caramel;
+    text-decoration: none;
+    padding: 0.875rem 2rem;
+    cursor: pointer;
 
-    svg {
-      transition: transform $transition-base;
+    &:hover {
+      color: $amber;
+
+      .nf__btn-rect {
+        stroke: rgba($amber, 0.7);
+      }
     }
+  }
 
-    &:hover svg {
-      transform: translateX(-4px);
+  /* SVG overlay que cobre todo o botão */
+  .nf__btn-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .nf__btn-rect {
+    fill: none;
+    stroke: rgba($caramel, 0.55);
+    stroke-width: 1.5;
+    transition: stroke $transition-base;
+    /* stroke-dasharray e stroke-dashoffset definidos via JS */
+  }
+
+  .nf__btn-arrow {
+    flex-shrink: 0;
+    transition: transform $transition-base;
+
+    .nf__btn:hover & {
+      transform: translateX(-5px);
     }
   }
 </style>

@@ -50,21 +50,23 @@ const init = async () => {
   try { initScrollReveal(); initSkillBars(); }
   catch (err) { console.warn('[GSAP] Scroll reveal failed:', err); }
 
-  // ── STEP 4: Hero entrance → scroll scenes ───────────────────────────────
-  if (document.querySelector('[data-hero-scroll]')) {
-    try {
-      initEntranceAnimation(() => {
-        // initHeroScroll first: makes scene 0 opacity:1 via gsap.set
-        try { initHeroScroll(); }    catch (e) { console.warn('[HeroScroll]', e); }
-        // Then hero animation: elements are already at opacity 0 from STEP 1
-        try { initHeroAnimation(); } catch (_) { /* silent */ }
-      });
-    } catch (err) {
-      console.warn('[Entrance] failed:', err);
+  // ── STEP 4: Entrance loader → then hero if present ──────────────────────
+  const hasHero = !!document.querySelector('[data-hero-scroll]');
+  try {
+    initEntranceAnimation(() => {
+      if (!hasHero) return;
+      try { initHeroScroll(); }    catch (e) { console.warn('[HeroScroll]', e); }
+      try { initHeroAnimation(); } catch (_) { /* silent */ }
+    });
+  } catch (err) {
+    console.warn('[Entrance] failed:', err);
+    if (hasHero) {
       try { initHeroScroll(); }    catch (_) {}
       try { initHeroAnimation(); } catch (_) {}
     }
+  }
 
+  if (hasHero) {
     // Mouse parallax + Three.js overlay
     try { initMouseParallax(); } catch (_) {}
     try {
