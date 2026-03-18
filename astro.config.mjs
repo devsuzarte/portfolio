@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 import icon from 'astro-icon';
+import sitemap from '@astrojs/sitemap';
 import { fileURLToPath } from 'url';
 import path from 'path';
 
@@ -13,6 +14,7 @@ export default defineConfig({
     icon({
       include: { 'simple-icons': ['*'] },
     }),
+    sitemap(),
   ],
   vite: {
     resolve: {

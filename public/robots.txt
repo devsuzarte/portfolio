@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://devsuzarte.github.io/portfolio/sitemap-index.xml
+Sitemap: https://devsuzarte.com/sitemap-index.xml

@@ -4,17 +4,19 @@ import '../styles/main.scss';
 interface Props {
   title: string;
   description?: string;
+  ogImage?: string;
   barbaNamespace?: string;
 }
 
 const {
   title,
   description = 'Portfolio de Benjamin Suzarte — Desenvolvedor Full Stack especializado em React, Node.js e TypeScript.',
+  ogImage = '/assets/images/og-image.jpg',
   barbaNamespace = 'page',
 } = Astro.props;
 
-const base = import.meta.env.BASE_URL;
 const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : Astro.url;
+const ogImageURL = Astro.site ? new URL(ogImage, Astro.site).href : ogImage;
 ---
 
 <!DOCTYPE html>
@@ -26,11 +28,20 @@ const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : Astr
   <title>{title}</title>
   <meta name="description" content={description} />
   <link rel="canonical" href={canonicalURL} />
+  <!-- Open Graph -->
   <meta property="og:type" content="website" />
+  <meta property="og:url" content={canonicalURL} />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
+  <meta property="og:image" content={ogImageURL} />
+  <meta property="og:locale" content="pt_BR" />
+  <meta property="og:site_name" content="devsuzarte" />
+  <!-- Twitter / X -->
   <meta name="twitter:card" content="summary_large_image" />
-  <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImageURL} />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
