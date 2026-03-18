@@ -46,6 +46,11 @@ export const initBarba = () => {
         afterEnter() { reinitPage(); },
         afterLeave: killAllTriggers,
       },
+      {
+        namespace: 'not-found',
+        afterEnter() { reinitPage(); },
+        afterLeave: killAllTriggers,
+      },
     ],
   });
 };

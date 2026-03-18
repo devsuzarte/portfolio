@@ -3,57 +3,245 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import Header from '@/components/navigation/Header.astro';
 ---
 
-<BaseLayout title="404 — Página Não Encontrada" description="Esta página não existe.">
+<BaseLayout title="404 — Página Não Encontrada" description="Esta página não existe." barbaNamespace="not-found">
   <Header />
-  <main class="not-found" data-theme="dark">
-    <div class="container not-found__inner">
-      <span class="not-found__code">404</span>
-      <h1 class="not-found__title">Página não encontrada</h1>
-      <p class="not-found__body">
-        A página que você procura não existe ou foi movida.
+
+  <main class="nf" data-theme="dark">
+
+    <!-- Decorative bg number with glitch -->
+    <span class="nf__bg" aria-hidden="true" data-text="404">404</span>
+
+    <!-- Scan-line overlay -->
+    <div class="nf__scanlines" aria-hidden="true"></div>
+
+    <!-- Main content -->
+    <div class="nf__content">
+      <p class="nf__tag"><span class="nf__prompt">~/portfolio</span><span class="nf__cursor"> ▌</span></p>
+      <h1 class="nf__title">Página não<br>encontrada</h1>
+      <p class="nf__body">
+        O caminho que você seguiu levou ao vazio.<br>
+        Mas sempre há um jeito de voltar.
       </p>
-      <a href="/" class="btn btn-primary">← Voltar ao início</a>
+      <a href="/" class="btn btn-primary nf__cta">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5M12 5l-7 7 7 7"/>
+        </svg>
+        Voltar ao início
+      </a>
     </div>
+
+    <!-- Decorative drifting lines -->
+    <div class="nf__lines" aria-hidden="true">
+      <span></span><span></span><span></span><span></span>
+    </div>
+
   </main>
 </BaseLayout>
+
+<script>
+  import { gsap } from '@/scripts/gsap/index';
+
+  const nf = document.querySelector('.nf');
+  if (nf) {
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    tl
+      .from('.nf__bg',    { opacity: 0, scale: 0.85, duration: 1.2, ease: 'power2.out' })
+      .from('.nf__tag',   { opacity: 0, x: -30, duration: 0.6 }, '-=0.7')
+      .from('.nf__title', { opacity: 0, y: 40,  duration: 0.7 }, '-=0.4')
+      .from('.nf__body',  { opacity: 0, y: 20,  duration: 0.5 }, '-=0.3')
+      .from('.nf__cta',   { opacity: 0, y: 16,  duration: 0.5, ease: 'back.out(1.6)' }, '-=0.2');
+  }
+</script>
 
 <style lang="scss">
   @use '@/styles/tokens' as *;
 
-  .not-found {
+  /* ── Layout ─────────────────────────────────────── */
+  .nf {
+    position: relative;
     min-height: 100vh;
     display: flex;
     align-items: center;
+    justify-content: center;
     background: $espresso;
+    overflow: hidden;
+  }
 
-    &__inner {
-      text-align: center;
-      padding: 4rem 0;
+  /* ── Decorative glitching "404" ─────────────────── */
+  .nf__bg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: $font-display;
+    font-size: clamp(14rem, 30vw, 28rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1;
+    color: rgba($caramel, 0.06);
+    user-select: none;
+    white-space: nowrap;
+    animation: glitch-base 8s ease-in-out infinite;
+
+    /* Glitch layers */
+    &::before,
+    &::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      font-size: inherit;
+      font-style: inherit;
+      font-weight: inherit;
+      line-height: inherit;
     }
 
-    &__code {
-      display: block;
-      font-family: $font-display;
-      font-size: 8rem;
-      font-weight: 300;
-      font-style: italic;
-      color: rgba($caramel, 0.2);
-      line-height: 1;
-      margin-bottom: 1rem;
+    &::before {
+      color: rgba($caramel, 0.08);
+      clip-path: polygon(0 15%, 100% 15%, 100% 35%, 0 35%);
+      animation: glitch-top 8s ease-in-out infinite;
     }
 
-    &__title {
-      font-family: $font-display;
-      font-size: 2.5rem;
-      font-weight: 600;
-      color: $cream;
-      margin-bottom: 1rem;
+    &::after {
+      color: rgba($amber, 0.05);
+      clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%);
+      animation: glitch-bot 8s ease-in-out infinite;
+    }
+  }
+
+  @keyframes glitch-base {
+    0%, 85%, 100% { transform: translate(-50%, -50%) skewX(0deg); }
+    87%           { transform: translate(calc(-50% + 4px), -50%) skewX(-1deg); }
+    89%           { transform: translate(calc(-50% - 3px), -50%) skewX(0.5deg); }
+    91%           { transform: translate(-50%, -50%) skewX(0deg); }
+  }
+
+  @keyframes glitch-top {
+    0%, 85%, 100% { transform: none; opacity: 1; }
+    87%           { transform: translateX(-6px); opacity: 0.9; }
+    89%           { transform: translateX(4px);  opacity: 0.7; }
+    90%           { transform: none; opacity: 1; }
+  }
+
+  @keyframes glitch-bot {
+    0%, 85%, 100% { transform: none; opacity: 1; }
+    87%           { transform: translateX(8px);  opacity: 0.8; }
+    89%           { transform: translateX(-5px); opacity: 0.6; }
+    90%           { transform: none; opacity: 1; }
+  }
+
+  /* ── Scan-lines overlay ──────────────────────────── */
+  .nf__scanlines {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent 0px,
+      transparent 3px,
+      rgba($espresso, 0.08) 3px,
+      rgba($espresso, 0.08) 4px
+    );
+    animation: scanlines-drift 12s linear infinite;
+    opacity: 0.35;
+  }
+
+  @keyframes scanlines-drift {
+    from { background-position-y: 0; }
+    to   { background-position-y: 80px; }
+  }
+
+  /* ── Drifting lines ──────────────────────────────── */
+  .nf__lines {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+
+    span {
+      position: absolute;
+      bottom: -100%;
+      width: 1px;
+      background: linear-gradient(to top, transparent, rgba($caramel, 0.25), transparent);
+      animation: line-rise 10s ease-in-out infinite;
+
+      &:nth-child(1) { left: 18%;  height: 45vh; animation-delay: 0s;    animation-duration: 9s; }
+      &:nth-child(2) { left: 42%;  height: 30vh; animation-delay: 2.5s;  animation-duration: 11s; }
+      &:nth-child(3) { left: 68%;  height: 55vh; animation-delay: 5s;    animation-duration: 8s; }
+      &:nth-child(4) { left: 85%;  height: 35vh; animation-delay: 7.5s;  animation-duration: 12s; }
+    }
+  }
+
+  @keyframes line-rise {
+    0%   { transform: translateY(0);     opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 0.6; }
+    100% { transform: translateY(-120vh); opacity: 0; }
+  }
+
+  /* ── Content ─────────────────────────────────────── */
+  .nf__content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 4rem 1.5rem;
+    max-width: 560px;
+  }
+
+  .nf__tag {
+    font-family: $font-code;
+    font-size: 0.8rem;
+    color: rgba($caramel, 0.6);
+    letter-spacing: 0.06em;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+  }
+
+  .nf__prompt {
+    color: rgba($caramel, 0.5);
+  }
+
+  .nf__cursor {
+    color: $caramel;
+    animation: blink 1.1s step-end infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+  }
+
+  .nf__title {
+    font-family: $font-display;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 600;
+    font-style: italic;
+    color: $cream;
+    line-height: 1.1;
+    margin-bottom: 1.25rem;
+  }
+
+  .nf__body {
+    font-family: $font-body;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: $muted;
+    margin-bottom: 2.5rem;
+  }
+
+  .nf__cta {
+    gap: 0.6rem;
+
+    svg {
+      transition: transform $transition-base;
     }
 
-    &__body {
-      font-family: $font-body;
-      color: $muted;
-      margin-bottom: 2.5rem;
+    &:hover svg {
+      transform: translateX(-4px);
     }
   }
 </style>
