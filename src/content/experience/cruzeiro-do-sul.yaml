@@ -1,0 +1,17 @@
+company: "Universidade Cruzeiro do Sul Virtual"
+position: "Bacharelado em Ciências da Computação"
+location: "Remoto"
+kind: "education"
+type: "degree"
+startDate: "2023.06"
+current: true
+description: "Cursando Ciências da Computação com foco no embasamento teórico que complementa a prática do dia a dia. A graduação aprofunda fundamentos de algoritmos, estrutura de dados, arquitetura de sistemas e matemática computacional — consolidando o raciocínio analítico aplicado a problemas reais de engenharia de software."
+achievements:
+  - "Aprofundamento em fundamentos de algoritmos, complexidade e estruturas de dados"
+  - "Estudo de arquitetura de computadores, sistemas operacionais e redes"
+  - "Desenvolvimento de capacidade analítica para modelagem e solução de problemas complexos"
+technologies:
+  - "Java"
+  - "C"
+  - "Python"
+  - "SQL"

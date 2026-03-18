@@ -2,22 +2,21 @@
 import { getCollection } from 'astro:content';
 
 const allProjects = await getCollection('projects');
-const featured = allProjects
-  .filter(p => p.data.featured)
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-const rest = allProjects
-  .filter(p => !p.data.featured)
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const projects = allProjects.sort((a, b) => {
+  // featured first, then by pubDate desc
+  if (a.data.featured && !b.data.featured) return -1;
+  if (!a.data.featured && b.data.featured) return 1;
+  return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
+});
 ---
 
 <section id="projects" class="projects section" data-theme="light" data-scroll-section data-reveal-section>
-  <!-- Floating geometric shapes -->
   <div class="projects__shape projects__shape--1" aria-hidden="true"></div>
   <div class="projects__shape projects__shape--2" aria-hidden="true"></div>
   <div class="projects__shape projects__shape--3" aria-hidden="true"></div>
-  <div class="projects__shape projects__shape--4" aria-hidden="true"></div>
+
   <div class="container">
-    <header class="projects__header" data-scroll-reveal data-reveal-item>
+    <header class="projects__header" data-reveal-item>
       <p class="badge">Portfólio</p>
       <h2 class="projects__title heading-underline">Projetos Selecionados</h2>
       <p class="projects__subtitle">
@@ -25,55 +24,91 @@ const rest = allProjects
       </p>
     </header>
 
-    <!-- Featured projects -->
-    <div class="projects__featured" data-reveal-item>
-      {featured.map((project, i) => (
-        <article
-          class={`project-feature ${i % 2 === 1 ? 'project-feature--reverse' : ''}`}
-          data-scroll-reveal
-        >
-          <div class="project-feature__visual">
-            <div class="project-feature__image-wrap">
-              {project.data.thumbnail ? (
-                <img
-                  src={project.data.thumbnail}
-                  alt={project.data.title}
-                  loading="lazy"
-                />
-              ) : (
-                <div class="project-feature__placeholder">
-                  <span>{project.data.title.charAt(0)}</span>
-                </div>
-              )}
+    <!-- Spotlight (active project) -->
+    <div class="spotlight" id="spotlight" data-reveal-item aria-live="polite">
+      <div class="spotlight__inner" id="spotlight-inner">
+
+        <!-- image side -->
+        <div class="spotlight__visual">
+          <div class="spotlight__image-wrap" id="spotlight-img-wrap">
+            <img id="spotlight-img" src="" alt="" loading="eager" />
+            <div class="spotlight__img-placeholder" id="spotlight-placeholder">
+              <span id="spotlight-initial"></span>
             </div>
           </div>
+          <!-- progress bar -->
+          <div class="spotlight__progress" aria-hidden="true">
+            <div class="spotlight__progress-bar" id="spotlight-bar"></div>
+          </div>
+        </div>
 
-          <div class="project-feature__content">
-            <p class="project-feature__meta badge">{project.data.category}</p>
-            <h3 class="project-feature__title">{project.data.title}</h3>
-            <p class="project-feature__description">{project.data.description}</p>
+        <!-- content side -->
+        <div class="spotlight__content">
+          <p class="spotlight__category badge" id="spotlight-cat"></p>
+          <h3 class="spotlight__title" id="spotlight-title"></h3>
+          <p class="spotlight__desc" id="spotlight-desc"></p>
+          <div class="spotlight__tech" id="spotlight-tech"></div>
+          <div class="spotlight__actions" id="spotlight-actions"></div>
+        </div>
 
-            <div class="project-feature__tech">
-              {project.data.tech.slice(0, 5).map(t => (
-                <span class="badge">{t}</span>
+      </div>
+    </div>
+
+    <!-- Carousel: all project cards -->
+    <div class="proj-carousel" data-reveal-item role="list" aria-label="Todos os projetos">
+      {projects.map((project, i) => (
+        <button
+          class={`proj-card ${i === 0 ? 'proj-card--active' : ''}`}
+          data-index={i}
+          data-title={project.data.title}
+          data-desc={project.data.description}
+          data-cat={project.data.category}
+          data-tech={JSON.stringify(project.data.tech)}
+          data-thumb={project.data.thumbnail}
+          data-demo={project.data.demo ?? ''}
+          data-github={project.data.github ?? ''}
+          role="listitem"
+          aria-label={`Ver ${project.data.title} em destaque`}
+          type="button"
+        >
+          <div class="proj-card__img-wrap">
+            {project.data.thumbnail ? (
+              <img
+                src={project.data.thumbnail}
+                alt={project.data.title}
+                loading="lazy"
+              />
+            ) : (
+              <div class="proj-card__placeholder">
+                <span>{project.data.title.charAt(0)}</span>
+              </div>
+            )}
+            <div class="proj-card__overlay" aria-hidden="true">
+              <span class="proj-card__spotlight-icon">⊙</span>
+            </div>
+          </div>
+          <div class="proj-card__info">
+            <p class="proj-card__title">{project.data.title}</p>
+            <div class="proj-card__tags">
+              {project.data.tags.slice(0, 2).map(tag => (
+                <span class="badge">{tag}</span>
               ))}
             </div>
-
-            <div class="project-feature__actions">
-              {(project.data.demo || project.data.github) && (
+            <div class="proj-card__btns">
+              {project.data.demo && (
                 <a
-                  href={project.data.demo || project.data.github}
-                  class="btn btn-primary"
+                  href={project.data.demo}
+                  class="btn btn-outline proj-card__btn"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Ver Projeto →
+                  Demo ↗
                 </a>
               )}
-              {project.data.demo && project.data.github && (
+              {project.data.github && (
                 <a
                   href={project.data.github}
-                  class="btn btn-outline"
+                  class="btn btn-outline proj-card__btn"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -82,48 +117,9 @@ const rest = allProjects
               )}
             </div>
           </div>
-        </article>
+        </button>
       ))}
     </div>
-
-    <!-- Other projects grid -->
-    {rest.length > 0 && (
-      <div class="projects__grid" data-reveal-item>
-        {rest.map(project => (
-          <article class="card card--light project-card" data-scroll-reveal>
-            <div class="card__image">
-              {project.data.thumbnail ? (
-                <img src={project.data.thumbnail} alt={project.data.title} loading="lazy" />
-              ) : (
-                <div class="project-card__placeholder">
-                  <span>{project.data.title.charAt(0)}</span>
-                </div>
-              )}
-            </div>
-            <div class="card__content">
-              <h3 class="card__title">{project.data.title}</h3>
-              <p class="card__description">{project.data.description}</p>
-              <div class="card__tags">
-                {project.data.tags.slice(0, 3).map(tag => (
-                  <span class="badge">{tag}</span>
-                ))}
-              </div>
-              {(project.data.demo || project.data.github) && (
-                <a
-                  href={project.data.demo || project.data.github}
-                  class="btn btn-ghost"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Ver Projeto →
-                </a>
-              )}
-            </div>
-          </article>
-        ))}
-      </div>
-    )}
-
   </div>
 </section>
 
@@ -138,45 +134,36 @@ const rest = allProjects
     &__shape {
       position: absolute;
       pointer-events: none;
-      opacity: 0.12;
     }
 
     &__shape--1 {
-      width: 120px; height: 120px;
-      border: 1.5px solid $caramel;
+      width: 320px; height: 320px;
       border-radius: 50%;
-      top: 8%; left: 3%;
-      animation: shape-float 12s ease-in-out infinite alternate;
+      border: 1px solid rgba($caramel, 0.07);
+      top: -80px; right: -80px;
+      animation: shape-float 18s ease-in-out infinite alternate;
     }
 
     &__shape--2 {
-      width: 60px; height: 60px;
-      background: rgba($sienna, 0.3);
+      width: 160px; height: 160px;
+      border: 1px solid rgba($sienna, 0.06);
       border-radius: 4px;
-      top: 20%; right: 6%;
-      animation: shape-spin 20s linear infinite;
+      bottom: 10%; left: -40px;
+      animation: shape-spin 30s linear infinite;
     }
 
     &__shape--3 {
       width: 80px; height: 80px;
-      border: 1px solid $sienna;
+      background: rgba($caramel, 0.04);
       border-radius: 50%;
-      bottom: 15%; left: 8%;
-      animation: shape-float 16s ease-in-out infinite alternate-reverse;
-    }
-
-    &__shape--4 {
-      width: 40px; height: 40px;
-      background: rgba($caramel, 0.25);
-      border-radius: 50%;
-      bottom: 30%; right: 10%;
-      animation: shape-float 9s ease-in-out infinite alternate;
+      bottom: 30%; right: 5%;
+      animation: shape-float 12s ease-in-out infinite alternate-reverse;
     }
 
     &__header {
       text-align: center;
       max-width: 560px;
-      margin: 0 auto 5rem;
+      margin: 0 auto 4rem;
 
       .badge { margin-bottom: 1rem; }
     }
@@ -197,138 +184,433 @@ const rest = allProjects
       color: $charcoal;
       line-height: 1.7;
     }
-
-    &__featured {
-      display: flex;
-      flex-direction: column;
-      gap: 6rem;
-      margin-bottom: 5rem;
-    }
-
-    &__grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 2rem;
-      margin-bottom: 3rem;
-
-      @include respond-to(md) { grid-template-columns: repeat(2, 1fr); }
-      @include respond-to(lg) { grid-template-columns: repeat(3, 1fr); }
-    }
-
-    &__cta {
-      text-align: center;
-    }
   }
 
-  .project-feature {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 3rem;
-    align-items: center;
+  /* ── Spotlight ────────────────────────────────────────────────────────── */
+  .spotlight {
+    margin-bottom: 3.5rem;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba($sienna, 0.12);
+    background: linear-gradient(135deg, $oat 0%, $cream 100%);
+    @include shadow-md;
 
-    @include respond-to(lg) {
-      grid-template-columns: 1fr 1fr;
-      gap: 5rem;
-    }
+    &__inner {
+      display: grid;
+      grid-template-columns: 1fr;
 
-    &--reverse {
       @include respond-to(lg) {
-        direction: rtl;
-
-        > * { direction: ltr; }
+        grid-template-columns: 1.1fr 1fr;
+        min-height: 420px;
       }
     }
 
-    &__visual {}
+    &__visual {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+
+      @include respond-to(lg) {
+        aspect-ratio: unset;
+      }
+    }
 
     &__image-wrap {
-      aspect-ratio: 4 / 3;
-      overflow: hidden;
-      border-radius: 4px;
-      @include shadow-md;
+      width: 100%;
+      height: 100%;
 
       img {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transition: transform $transition-slow;
+        display: block;
+        transition: transform 0.6s ease;
       }
-
-      &:hover img { transform: scale(1.04); }
     }
 
-    &__placeholder {
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, $oat 0%, $cream 100%);
-      display: flex;
+    &__img-placeholder {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba($sienna, 0.15) 0%, rgba($caramel, 0.2) 100%);
+      display: none;
       align-items: center;
       justify-content: center;
       font-family: $font-display;
-      font-size: 5rem;
+      font-size: 6rem;
       font-style: italic;
-      color: $caramel;
+      color: rgba($caramel, 0.4);
+
+      &.visible { display: flex; }
     }
 
-    &__content {}
+    &__progress {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: rgba($ink, 0.1);
+    }
 
-    &__meta {
-      margin-bottom: 1rem;
+    &__progress-bar {
+      height: 100%;
+      background: $caramel;
+      width: 0%;
+      transform-origin: left;
+    }
+
+    &__content {
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1rem;
+
+      @include respond-to(lg) {
+        padding: 3rem;
+      }
+    }
+
+    &__category {
+      align-self: flex-start;
+      margin-bottom: 0.25rem;
     }
 
     &__title {
       font-family: $font-display;
       font-weight: 600;
-      font-size: clamp(1.5rem, 3vw, 2.25rem);
+      font-size: clamp(1.5rem, 2.8vw, 2.25rem);
       color: $ink;
-      margin-bottom: 1rem;
-      line-height: 1.2;
+      line-height: 1.15;
     }
 
-    &__description {
+    &__desc {
       font-family: $font-body;
-      font-size: 1rem;
+      font-size: 0.9375rem;
       line-height: 1.75;
       color: $charcoal;
-      margin-bottom: 1.5rem;
     }
 
     &__tech {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-bottom: 2rem;
+      gap: 0.4rem;
     }
 
     &__actions {
       display: flex;
       flex-wrap: wrap;
-      gap: 1rem;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+  }
+
+  /* spotlight transition classes — toggled by JS */
+  .spotlight__inner.is-leaving {
+    animation: spot-out 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  .spotlight__inner.is-entering {
+    animation: spot-in 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  @keyframes spot-out {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(-16px); }
+  }
+
+  @keyframes spot-in {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Carousel ─────────────────────────────────────────────────────────── */
+  .proj-carousel {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+
+    @include respond-to(md) { grid-template-columns: repeat(3, 1fr); }
+    @include respond-to(lg) { grid-template-columns: repeat(5, 1fr); }
+  }
+
+  .proj-card {
+    all: unset;
+    box-sizing: border-box;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1.5px solid rgba($sienna, 0.1);
+    background: $cream;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+
+    &:hover {
+      border-color: rgba($caramel, 0.55);
+      box-shadow: 0 8px 28px rgba($sienna, 0.15), 0 0 0 1px rgba($caramel, 0.2);
+      transform: translateY(-4px);
+
+      .proj-card__img-wrap img { transform: scale(1.06); }
+      .proj-card__overlay { opacity: 1; }
+    }
+
+    &:focus-visible {
+      outline: 2px solid $caramel;
+      outline-offset: 2px;
+    }
+
+    &--active {
+      border-color: $caramel;
+      box-shadow: 0 0 0 2px rgba($caramel, 0.25), 0 6px 20px rgba($sienna, 0.15);
+
+      .proj-card__overlay { opacity: 1; background: rgba($caramel, 0.55); }
+    }
+
+    &__img-wrap {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      flex-shrink: 0;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.4s ease;
+      }
+    }
+
+    &__placeholder {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, $oat 0%, rgba($sienna, 0.1) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: $font-display;
+      font-size: 2.5rem;
+      font-style: italic;
+      color: rgba($caramel, 0.5);
+    }
+
+    &__overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba($caramel, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    &__spotlight-icon {
+      font-size: 2rem;
+      color: $cream;
+      line-height: 1;
+      filter: drop-shadow(0 2px 6px rgba($ink, 0.4));
+    }
+
+    &__info {
+      padding: 0.875rem 1rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      flex: 1;
+    }
+
+    &__title {
+      font-family: $font-sans;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: $ink;
+      line-height: 1.3;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+    }
+
+    &__btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: auto;
+      padding-top: 0.5rem;
+
+      .btn {
+        font-size: 0.6875rem;
+        padding: 0.3rem 0.65rem;
+        pointer-events: auto;
+      }
     }
   }
 
   @keyframes shape-float {
     from { transform: translate(0, 0) rotate(0deg); }
-    to   { transform: translate(15px, -20px) rotate(45deg); }
+    to   { transform: translate(20px, -25px) rotate(40deg); }
   }
 
   @keyframes shape-spin {
     from { transform: rotate(0deg); }
     to   { transform: rotate(360deg); }
   }
+</style>
 
-  .project-card {
-    &__placeholder {
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, $oat 0%, $cream 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: $font-display;
-      font-size: 3rem;
-      font-style: italic;
-      color: $caramel;
+<script>
+(() => {
+  interface ProjData {
+    index: number;
+    title: string;
+    desc: string;
+    cat: string;
+    tech: string[];
+    thumb: string;
+    demo: string;
+    github: string;
+  }
+
+  const cards   = Array.from(document.querySelectorAll<HTMLElement>('.proj-card'));
+  const inner   = document.getElementById('spotlight-inner')!;
+  const img     = document.getElementById('spotlight-img') as HTMLImageElement;
+  const imgWrap = document.getElementById('spotlight-img-wrap')!;
+  const ph      = document.getElementById('spotlight-placeholder')!;
+  const phInit  = document.getElementById('spotlight-initial')!;
+  const catEl   = document.getElementById('spotlight-cat')!;
+  const titleEl = document.getElementById('spotlight-title')!;
+  const descEl  = document.getElementById('spotlight-desc')!;
+  const techEl  = document.getElementById('spotlight-tech')!;
+  const actEl   = document.getElementById('spotlight-actions')!;
+  const bar     = document.getElementById('spotlight-bar')!;
+
+  if (!cards.length || !inner) return;
+
+  const INTERVAL = 5000; // ms between auto-advance
+  let current = 0;
+  let timer: ReturnType<typeof setInterval> | null = null;
+  let barAnim: Animation | null = null;
+
+  function getData(card: HTMLElement): ProjData {
+    return {
+      index:  parseInt(card.dataset.index ?? '0', 10),
+      title:  card.dataset.title  ?? '',
+      desc:   card.dataset.desc   ?? '',
+      cat:    card.dataset.cat    ?? '',
+      tech:   JSON.parse(card.dataset.tech ?? '[]') as string[],
+      thumb:  card.dataset.thumb  ?? '',
+      demo:   card.dataset.demo   ?? '',
+      github: card.dataset.github ?? '',
+    };
+  }
+
+  function renderSpotlight(d: ProjData, animate = true) {
+    const doRender = () => {
+      // image / placeholder
+      if (d.thumb) {
+        img.src = d.thumb;
+        img.alt = d.title;
+        img.style.display = 'block';
+        ph.classList.remove('visible');
+      } else {
+        img.style.display = 'none';
+        ph.classList.add('visible');
+        phInit.textContent = d.title.charAt(0);
+      }
+
+      catEl.textContent   = d.cat;
+      titleEl.textContent = d.title;
+      descEl.textContent  = d.desc;
+
+      // tech badges
+      techEl.innerHTML = d.tech.slice(0, 6).map(t =>
+        `<span class="badge">${t}</span>`
+      ).join('');
+
+      // action buttons
+      const btns: string[] = [];
+      if (d.demo)   btns.push(`<a href="${d.demo}" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Ver Projeto →</a>`);
+      if (d.github) btns.push(`<a href="${d.github}" class="btn btn-outline" target="_blank" rel="noopener noreferrer">GitHub</a>`);
+      actEl.innerHTML = btns.join('');
+
+      if (animate) {
+        inner.classList.remove('is-leaving');
+        inner.classList.add('is-entering');
+        inner.addEventListener('animationend', () => {
+          inner.classList.remove('is-entering');
+        }, { once: true });
+      }
+    };
+
+    if (animate) {
+      inner.classList.add('is-leaving');
+      inner.addEventListener('animationend', () => {
+        inner.classList.remove('is-leaving');
+        doRender();
+      }, { once: true });
+    } else {
+      doRender();
     }
   }
-</style>
+
+  function startBar() {
+    barAnim?.cancel();
+    bar.style.width = '0%';
+    barAnim = bar.animate([{ width: '0%' }, { width: '100%' }], {
+      duration: INTERVAL,
+      easing: 'linear',
+      fill: 'forwards',
+    });
+  }
+
+  function activateCard(idx: number, animate = true) {
+    current = idx;
+    cards.forEach((c, i) => c.classList.toggle('proj-card--active', i === idx));
+    renderSpotlight(getData(cards[idx]), animate);
+    startBar();
+  }
+
+  function advance() {
+    activateCard((current + 1) % cards.length);
+  }
+
+  function startTimer() {
+    if (timer) clearInterval(timer);
+    timer = setInterval(advance, INTERVAL);
+  }
+
+  // Initial render (no animation)
+  activateCard(0, false);
+  startTimer();
+
+  // Click on card
+  cards.forEach((card, i) => {
+    card.addEventListener('click', () => {
+      if (i === current) return;
+      activateCard(i);
+      startTimer(); // reset timer
+    });
+
+    // prevent link clicks inside card from triggering card focus
+    card.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', e => e.stopPropagation());
+    });
+  });
+
+  // Pause on spotlight hover
+  const spotlight = document.getElementById('spotlight');
+  spotlight?.addEventListener('mouseenter', () => {
+    if (timer) clearInterval(timer);
+    barAnim?.pause();
+  });
+  spotlight?.addEventListener('mouseleave', () => {
+    barAnim?.play();
+    startTimer();
+  });
+})();
+</script>

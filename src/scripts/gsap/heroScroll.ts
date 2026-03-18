@@ -215,7 +215,7 @@ export const initHeroScroll = () => {
           delay: 0.3 + i * 0.12,
           onUpdate() {
             const n = Math.round(counter.v);
-            el.textContent = `${def.prefix}${n}${def.suffix}`;
+            el.textContent = `${def.prefix} ${n}${def.suffix}`;
           },
         });
       });

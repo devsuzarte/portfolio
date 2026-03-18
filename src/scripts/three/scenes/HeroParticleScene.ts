@@ -94,7 +94,7 @@ export class HeroParticleScene {
       size:            0.05,
       vertexColors:    true,
       transparent:     true,
-      opacity:         0.9,
+      opacity:         0.28,
       sizeAttenuation: true,
       depthWrite:      false,
     });
@@ -131,7 +131,7 @@ export class HeroParticleScene {
     const lineMat = new THREE.LineBasicMaterial({
       vertexColors: true,
       transparent:  true,
-      opacity:      0.4,
+      opacity:      0.12,
       depthWrite:   false,
     });
 
@@ -161,7 +161,7 @@ export class HeroParticleScene {
       size:            0.02,
       vertexColors:    true,
       transparent:     true,
-      opacity:         0.7,
+      opacity:         0.3,
       sizeAttenuation: true,
       depthWrite:      false,
     });

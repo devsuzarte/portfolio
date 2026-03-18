@@ -23,7 +23,6 @@ const socialLinks = [
           <span class="contact__avail-dot" aria-hidden="true"></span>
           <span>Disponível para novos projetos</span>
         </div>
-        <p class="badge contact__badge">Contato</p>
         <h2 class="contact__title">
           Vamos construir<br />
           <em>algo incrível</em> juntos.
@@ -81,41 +80,78 @@ const socialLinks = [
     const cube    = document.getElementById('contact-cube') as HTMLElement | null;
     if (!section || !cube) return;
 
-    let baseX = -15;
-    let baseY = 20;
-    let curX  = baseX;
-    let curY  = baseY;
-    let tarX  = baseX;
-    let tarY  = baseY;
+    // Auto-spin speed (degrees per ms)
+    const SPIN_SPEED_Y = 0.025;  // ~1.5 deg/frame @60fps → full Y rotation ~24s
+    const SPIN_SPEED_X = 0.008;  // slow X oscillation
+
+    // Accumulated auto-rotation angles
+    let autoY = 20;
+    let autoX = -12;
+    let prevTime = 0;
+
+    // Mouse offset (lerped)
+    let mouseOffX = 0;
+    let mouseOffY = 0;
+    let targetOffX = 0;
+    let targetOffY = 0;
+    let hasMouseInSection = false;
+
     let rafId = 0;
+    let running = false;
 
     const onMove = (e: MouseEvent) => {
       const rect = section.getBoundingClientRect();
-      // Normalised [-1, 1] relative to section centre
       const nx = ((e.clientX - rect.left)  / rect.width  - 0.5) * 2;
       const ny = ((e.clientY - rect.top)   / rect.height - 0.5) * 2;
-      tarX = baseX + ny * -22;
-      tarY = baseY + nx *  28;
+      // Mouse adds up to ±30deg Y and ±20deg X on top of auto-spin
+      targetOffX = ny * -20;
+      targetOffY = nx *  30;
+      hasMouseInSection = true;
     };
 
-    const tick = () => {
-      curX += (tarX - curX) * 0.06;
-      curY += (tarY - curY) * 0.06;
-      cube.style.transform = `rotateX(${curX}deg) rotateY(${curY}deg)`;
+    const onLeave = () => {
+      targetOffX = 0;
+      targetOffY = 0;
+      hasMouseInSection = false;
+    };
+
+    const tick = (time: number) => {
+      if (!running) return;
       rafId = requestAnimationFrame(tick);
+
+      const dt = prevTime ? Math.min(time - prevTime, 50) : 16; // cap at 50ms
+      prevTime = time;
+
+      // Advance auto-rotation every frame
+      autoY += SPIN_SPEED_Y * dt;
+      // Gentle X tilt oscillation (sine wave, not linear)
+      autoX = -12 + Math.sin(time * 0.00045) * 14;
+
+      // Lerp mouse offsets
+      const lerp = hasMouseInSection ? 0.07 : 0.04;
+      mouseOffX += (targetOffX - mouseOffX) * lerp;
+      mouseOffY += (targetOffY - mouseOffY) * lerp;
+
+      const finalX = autoX + mouseOffX;
+      const finalY = autoY + mouseOffY;
+      cube.style.transform = `rotateX(${finalX}deg) rotateY(${finalY}deg)`;
     };
 
     section.addEventListener('mousemove', onMove, { passive: true });
-    section.addEventListener('mouseleave', () => { tarX = baseX; tarY = baseY; });
+    section.addEventListener('mouseleave', onLeave);
 
-    // Only run animation when section is visible
     const obs = new IntersectionObserver(entries => {
       if (entries[0].isIntersecting) {
-        rafId = requestAnimationFrame(tick);
+        if (!running) {
+          running = true;
+          prevTime = 0;
+          rafId = requestAnimationFrame(tick);
+        }
       } else {
+        running = false;
         cancelAnimationFrame(rafId);
       }
-    }, { threshold: 0.1 });
+    }, { threshold: 0.05 });
     obs.observe(section);
   })();
 </script>
@@ -330,9 +366,9 @@ const socialLinks = [
       height: 140px;
       position: relative;
       transform-style: preserve-3d;
-      transform: rotateX(-15deg) rotateY(20deg);
-      // JS drives the transform; CSS provides a gentle auto-spin fallback
-      // when no mouse interaction is happening
+      // Initial value — overwritten every frame by JS
+      transform: rotateX(-12deg) rotateY(20deg);
+      will-change: transform;
     }
 
     &__face {

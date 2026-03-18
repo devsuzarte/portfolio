@@ -1,0 +1,22 @@
+company: "Ford Enter — Front End"
+position: "Aluno e Instrutor Voluntário"
+location: "Remoto"
+kind: "education"
+type: "course"
+startDate: "2025.01"
+endDate: "2025.05"
+current: false
+description: "Curso de especialização em Front End voltado a pessoas em situação de vulnerabilidade social, com certificado pela Rede Cidadã e parceria Ford. Com o conhecimento técnico que já possuía, assumi papel ativo no ensino da turma — realizando aulas presenciais, lives públicas e mentorias individuais que impactaram colegas de várias turmas."
+achievements:
+  - "Ministrei live de Angular para o Ford Enter que alcançou mais de 1.200 visualizações no YouTube"
+  - "Recriei a API do exercício do curso para que todos os colegas pudessem consumir durante a aula"
+  - "Realizei aulas e mentorias particulares para colegas de turmas anteriores e posteriores"
+  - "Certificado Rede Cidadã — projeto de impacto social da Ford Motor Company"
+  - "Networking intenso que abriu portas para o mercado de trabalho"
+technologies:
+  - "Angular"
+  - "TypeScript"
+  - "HTML"
+  - "CSS"
+  - "Node.js"
+companyUrl: "https://www.youtube.com/watch?v=Y12POnNNpQs"

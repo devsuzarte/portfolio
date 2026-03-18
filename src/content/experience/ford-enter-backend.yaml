@@ -1,0 +1,17 @@
+company: "Ford Enter — Backend"
+position: "Aluno e Colaborador Técnico"
+location: "Remoto"
+kind: "education"
+type: "course"
+startDate: "2026.02"
+current: true
+description: "Retorno à segunda edição do Ford Enter, agora com foco em Back End. Participando como aluno para agregar novos conhecimentos e, ao mesmo tempo, contribuindo como referência técnica para a turma — repassando experiências práticas do mercado e ajudando colegas a avançar mais rápido na curva de aprendizado."
+achievements:
+  - "Ministrei aula de C# para o Ford Enter, construindo uma lanchonete orientada a objetos do zero"
+  - "Compartilhamento de experiências reais de mercado com os colegas de turma"
+  - "Aprofundamento em C# e ecossistema .NET aplicado a APIs RESTful"
+technologies:
+  - "C#"
+  - "Node.js"
+  - "SQL"
+companyUrl: "https://www.youtube.com/live/GAQGfnr--fY"

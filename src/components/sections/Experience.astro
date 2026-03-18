@@ -2,25 +2,50 @@
 import { getCollection } from 'astro:content';
 
 const experiences = await getCollection('experience');
+
+// Sort: current first, then by startDate descending
 const sorted = experiences.sort((a, b) => {
-  if (a.data.current) return -1;
-  if (b.data.current) return 1;
-  return 0;
+  if (a.data.current && !b.data.current) return -1;
+  if (!a.data.current && b.data.current) return 1;
+  return b.data.startDate.localeCompare(a.data.startDate);
 });
+
+const work      = sorted.filter(e => e.data.kind === 'work' || !e.data.kind);
+const education = sorted.filter(e => e.data.kind === 'education');
+
+const typeLabelMap: Record<string, string> = {
+  'full-time':  'Tempo integral',
+  'part-time':  'Meio período',
+  'contract':   'Contrato',
+  'freelance':  'Freelance',
+  'course':     'Curso',
+  'degree':     'Graduação',
+};
 ---
 
 <section id="experience" class="experience section" data-theme="warm" data-scroll-section data-reveal-section>
   <div class="container">
     <header class="experience__header" data-scroll-reveal data-reveal-item>
       <p class="badge">Trajetória</p>
-      <h2 class="experience__title heading-underline">Experiência Profissional</h2>
+      <h2 class="experience__title heading-underline">Experiência & Formação</h2>
     </header>
+
+    <!-- Filter tabs -->
+    <div class="experience__filters" data-reveal-item role="tablist" aria-label="Filtrar por tipo">
+      <button class="exp-filter active" data-filter="all"   role="tab" aria-selected="true">Todos</button>
+      <button class="exp-filter"        data-filter="work"  role="tab" aria-selected="false">Trabalho</button>
+      <button class="exp-filter"        data-filter="education" role="tab" aria-selected="false">Cursos & Faculdades</button>
+    </div>
 
     <div class="experience__timeline" data-reveal-item>
       {sorted.map((exp, i) => (
-        <article class="experience__item" data-scroll-reveal>
+        <article
+          class="experience__item"
+          data-kind={exp.data.kind ?? 'work'}
+          data-scroll-reveal
+        >
           <div class="experience__marker" aria-hidden="true">
-            <div class="experience__dot"></div>
+            <div class={`experience__dot ${exp.data.kind === 'education' ? 'experience__dot--edu' : ''}`}></div>
             {i < sorted.length - 1 && <div class="experience__line"></div>}
           </div>
 
@@ -29,12 +54,20 @@ const sorted = experiences.sort((a, b) => {
               <span class="experience__date">
                 {exp.data.startDate} — {exp.data.current ? 'Presente' : exp.data.endDate}
               </span>
-              <span class="badge">{exp.data.type}</span>
+              <span class="badge">{typeLabelMap[exp.data.type] ?? exp.data.type}</span>
+              {exp.data.kind === 'education' && (
+                <span class="badge badge--edu">Educação</span>
+              )}
             </div>
 
             <h3 class="experience__position">{exp.data.position}</h3>
             <p class="experience__company">
-              {exp.data.company} · {exp.data.location}
+              {exp.data.companyUrl ? (
+                <a href={exp.data.companyUrl} target="_blank" rel="noopener noreferrer" class="experience__company-link">
+                  {exp.data.company}
+                </a>
+              ) : exp.data.company}
+              {' · '}{exp.data.location}
             </p>
 
             <p class="experience__description">{exp.data.description}</p>
@@ -67,7 +100,7 @@ const sorted = experiences.sort((a, b) => {
     background: var(--bg-primary);
 
     &__header {
-      margin-bottom: 4rem;
+      margin-bottom: 2.5rem;
 
       .badge {
         margin-bottom: 1rem;
@@ -79,6 +112,13 @@ const sorted = experiences.sort((a, b) => {
       font-weight: 600;
       font-size: clamp(2rem, 4vw, 3rem);
       color: $oat;
+    }
+
+    &__filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 3.5rem;
     }
 
     &__timeline {
@@ -93,6 +133,11 @@ const sorted = experiences.sort((a, b) => {
       grid-template-columns: 2rem 1fr;
       gap: 1.5rem;
       padding-bottom: 3rem;
+      transition: opacity 0.3s ease;
+
+      &[hidden] {
+        display: none;
+      }
     }
 
     &__marker {
@@ -120,6 +165,14 @@ const sorted = experiences.sort((a, b) => {
         border-radius: 50%;
         border: 1.5px solid rgba($amber, 0.4);
         animation: dot-pulse 2.4s ease-out infinite;
+      }
+
+      &--edu {
+        background: $caramel;
+
+        &::after {
+          border-color: rgba($caramel, 0.4);
+        }
       }
     }
 
@@ -181,6 +234,15 @@ const sorted = experiences.sort((a, b) => {
       margin-bottom: 1rem;
     }
 
+    &__company-link {
+      color: $caramel;
+      text-decoration: none;
+      border-bottom: 1px solid rgba($caramel, 0.35);
+      transition: border-color $transition-base;
+
+      &:hover { border-bottom-color: $caramel; }
+    }
+
     &__description {
       font-family: $font-body;
       font-size: 0.9375rem;
@@ -217,6 +279,38 @@ const sorted = experiences.sort((a, b) => {
     }
   }
 
+  .exp-filter {
+    font-family: $font-sans;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.5rem 1.25rem;
+    border-radius: 2rem;
+    border: 1px solid rgba($caramel, 0.25);
+    background: transparent;
+    color: rgba($oat, 0.55);
+    cursor: pointer;
+    transition: all $transition-base;
+
+    &:hover {
+      border-color: rgba($caramel, 0.55);
+      color: $oat;
+    }
+
+    &.active {
+      background: rgba($caramel, 0.15);
+      border-color: $caramel;
+      color: $latte;
+    }
+  }
+
+  :global(.badge--edu) {
+    background: rgba($caramel, 0.12) !important;
+    color: $latte !important;
+    border-color: rgba($caramel, 0.3) !important;
+  }
+
   @keyframes dot-pulse {
     0%   { transform: scale(1);   opacity: 0.6; }
     70%  { transform: scale(2.2); opacity: 0; }
@@ -228,3 +322,29 @@ const sorted = experiences.sort((a, b) => {
     100% { top: 100%; }
   }
 </style>
+
+<script>
+  const filters = document.querySelectorAll<HTMLButtonElement>('.exp-filter');
+  const items   = document.querySelectorAll<HTMLElement>('.experience__item');
+
+  filters.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filters.forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+
+      const filter = btn.dataset.filter;
+      items.forEach(item => {
+        const kind = item.dataset.kind ?? 'work';
+        if (filter === 'all' || kind === filter) {
+          item.removeAttribute('hidden');
+        } else {
+          item.setAttribute('hidden', '');
+        }
+      });
+    });
+  });
+</script>

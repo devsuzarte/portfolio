@@ -22,7 +22,9 @@ const socialLinks = [
   <div class="container footer__inner">
     <!-- Brand -->
     <div class="footer__brand">
-      <span class="footer__logo">devsuzarte</span>
+      <a href="/" class="footer__logo" aria-label="devsuzarte — início">
+        <span class="footer__logo-dev">dev</span><span class="footer__logo-suzarte">suzarte</span>
+      </a>
       <p class="footer__tagline">Criando experiências web de alto padrão.</p>
       <p class="footer__built">
         Feito com <span class="footer__heart">♥</span> usando Astro + GSAP + Three.js
@@ -109,12 +111,25 @@ const socialLinks = [
     }
 
     &__logo {
-      font-family: $font-display;
-      font-weight: 600;
-      font-size: 1.5rem;
-      font-style: italic;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: baseline;
+    }
+
+    &__logo-dev {
+      font-family: $font-sans;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: $caramel;
+      letter-spacing: -0.04em;
+    }
+
+    &__logo-suzarte {
+      font-family: $font-sans;
+      font-weight: 300;
+      font-size: 1.25rem;
       color: $cream;
-      letter-spacing: -0.01em;
+      letter-spacing: 0.04em;
     }
 
     &__tagline {
