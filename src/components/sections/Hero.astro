@@ -123,8 +123,7 @@ const aiSkills = [
           </h1>
 
           <p class="hero__subtitle">
-            Do design ao deploy, entrego soluções completas priorizando o cliente<br />
-            — com IA integrada, foco em resultado e compromisso com prazos.
+            Do design ao deploy, entrego soluções completas priorizando o cliente — com IA integrada, foco em resultado e compromisso com prazos.
           </p>
 
           <div class="hero__social">
@@ -427,6 +426,11 @@ const aiSkills = [
     // opacity set by GSAP  scene 0 starts at 1, rest at 0
     pointer-events: none;
 
+    // On mobile use flex-start so padding-top clears the fixed header correctly
+    @media (max-width: #{$bp-lg - 1}) {
+      align-items: flex-start;
+    }
+
     &--0 {
       opacity: 1;
       pointer-events: auto;
@@ -440,6 +444,10 @@ const aiSkills = [
   .hero-scene__inner {
     width: 100%;
     padding-top: 5rem; // below header
+
+    @media (max-width: 479px) {
+      padding-top: 5.5rem; // extra clearance for header on tiny screens
+    }
   }
 
   /*  Scene 0: Intro  */
@@ -452,6 +460,16 @@ const aiSkills = [
     @include respond-to(lg) {
       grid-template-columns: 1fr 1fr;
       gap: 4rem;
+    }
+
+    // Full-height flex column on tiny screens — titles centered, CTA bottom
+    @media (max-width: 479px) {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      padding: 5.5rem 1rem 2rem;
+      gap: 0;
+      text-align: left;
     }
   }
 
@@ -474,6 +492,10 @@ const aiSkills = [
       height: 1px;
       background: $caramel;
     }
+
+    @media (max-width: 479px) {
+      justify-content: flex-start;
+    }
   }
 
   .hero__title {
@@ -486,7 +508,7 @@ const aiSkills = [
     display: block;
     font-family: $font-sans;
     font-weight: 300;
-    font-size: clamp(0.875rem, 1.6vw, 1.1rem);
+    font-size: clamp(1rem, 1.6vw, 1.1rem);
     letter-spacing: 0.38em;
     color: rgba($oat, 0.5);
     text-transform: uppercase;
@@ -497,7 +519,7 @@ const aiSkills = [
     display: block;
     font-family: $font-sans;
     font-weight: 900;
-    font-size: clamp(3.5rem, 9vw, 7.5rem);
+    font-size: clamp(4rem, 9vw, 7.5rem);
     line-height: 0.88;
     letter-spacing: 0.06em;
     color: $cream;
@@ -505,11 +527,17 @@ const aiSkills = [
 
   .hero__subtitle {
     font-family: $font-body;
-    font-size: clamp(0.9375rem, 1.5vw, 1.0625rem);
+    font-size: clamp(0.875rem, 1.5vw, 1.0625rem);
     line-height: 1.8;
     color: rgba($oat, 0.72);
     max-width: 440px;
     margin-bottom: 2rem;
+
+    @media (max-width: 479px) {
+      font-size: 0.875rem;
+      margin-bottom: 0;
+      max-width: 100%;
+    }
   }
 
   .hero__social {
@@ -517,6 +545,13 @@ const aiSkills = [
     flex-wrap: wrap;
     gap: 1.25rem;
     margin-bottom: 2.25rem;
+
+    @media (max-width: 479px) {
+      justify-content: center;
+      margin-top: auto;
+      padding-top: 1.5rem;
+      margin-bottom: 1.5rem; // matches gap between the two action buttons
+    }
   }
 
   .hero__social-link {
@@ -554,12 +589,35 @@ const aiSkills = [
     flex-wrap: wrap;
     gap: 1rem;
     align-items: center;
+
+    @media (max-width: 479px) {
+      flex-direction: column;
+      align-items: stretch; // buttons fill full width
+      gap: 1.5rem; // equal to margin-bottom on social → equalized spacing
+
+      a {
+        justify-content: center;
+        text-align: center;
+      }
+    }
+  }
+
+  .hero__left {
+    @media (max-width: 479px) {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
   }
 
   .hero__right {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+
+    @media (max-width: 479px) {
+      display: none;
+    }
   }
 
   .hero__terminal {
@@ -596,7 +654,11 @@ const aiSkills = [
   .hero__terminal-body {
     padding: 1.25rem 1.5rem;
     margin: 0;
-    overflow: hidden;
+    overflow-x: auto;
+
+    @media (max-width: 767px) {
+      padding: 1rem;
+    }
 
     code {
       font-family: $font-code;
@@ -689,21 +751,45 @@ const aiSkills = [
     }
   }
 
+  .hero-scene--0 {
+    @media (max-width: #{$bp-lg - 1}) {
+      overflow-y: auto;
+    }
+
+    // On tiny screens: stretch so the inner flex column can fill 100% height
+    @media (max-width: 479px) {
+      align-items: stretch;
+    }
+  }
+
   /*  Scene 1: Tech  scattered absolute layout  */
   .hero-scene--1 {
     @media (max-width: #{$bp-lg - 1}) {
       flex-direction: column;
       align-items: stretch;
       justify-content: flex-start;
-      overflow-y: auto;
+      overflow-y: auto; // scrollable like scene 2
+
+      @media (max-width: 479px) {
+        padding: 0;
+      }
     }
   }
 
   .s1-header {
     position: relative;
-    padding: 6rem 5vw 1.5rem;
+    padding: 5.5rem 2rem 0.75rem;
     z-index: 2;
-    max-width: 280px;
+    max-width: 100%;
+
+    @media (max-width: 479px) {
+      padding: 5.5rem 1rem 0.75rem;
+
+      .scene-title {
+        font-size: 1.75rem;
+        margin-bottom: 0.75rem;
+      }
+    }
 
     @include respond-to(lg) {
       position: absolute;
@@ -720,16 +806,31 @@ const aiSkills = [
     color: rgba($muted, 0.7);
     margin-top: 0.75rem;
     text-transform: uppercase;
+
+    @media (max-width: #{$bp-lg - 1}) { display: none; }
   }
 
   /*  Tech categories: scattered across full screen  */
   .tech-categories {
     position: relative;
-    padding: 1rem 5vw 2rem;
+    padding: 0.5rem 2rem 1rem;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
     pointer-events: auto;
+
+    // 2-column grid on mobile to halve height and avoid internal scroll
+    @media (max-width: #{$bp-lg - 1}) {
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      padding: 0.5rem 2rem 1.25rem;
+    }
+
+    @media (max-width: 479px) {
+      grid-template-columns: 1fr;
+      padding: 0.5rem 1rem 1rem;
+      gap: 0.75rem;
+    }
 
     @include respond-to(lg) {
       position: absolute;
@@ -740,6 +841,11 @@ const aiSkills = [
     }
   }
 
+  @keyframes cat-reveal {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
   .tech-cat {
     position: relative;
     display: flex;
@@ -748,18 +854,30 @@ const aiSkills = [
     min-width: 0;
     pointer-events: auto;
 
-    // Mobile: grid-based, no absolute positioning needed
-    &:last-child {
-      grid-column: 1 / -1;
+    @media (max-width: #{$bp-lg - 1}) {
+      gap: 0.6rem;
+    }
+
+    // Staggered CSS entrance on mobile — plays when scene fades in via GSAP
+    @media (max-width: #{$bp-lg - 1}) {
+      opacity: 0;
+      animation: cat-reveal 0.45s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+      animation-delay: calc(var(--ci, 0) * 0.1s + 0.15s);
+
+      // Infra (last) spans both columns and is centered alone in its row
+      &:last-child {
+        grid-column: 1 / -1;
+      }
     }
 
     @include respond-to(lg) {
       position: absolute;
+      opacity: 1; // reset for desktop
 
       // Each category at a unique screen position  spread to avoid overlap
-      &:nth-child(1) { top: 50vh;    right: 4vw;  }  // Design  right mid (posição original de Backend)
+      &:nth-child(1) { top: 50vh;    right: 4vw;  }  // Design  right mid
       &:nth-child(2) { top: 12vh;    right: 4vw;  }  // Frontend  upper right
-      &:nth-child(3) { top: 16vh;    right: 28vw; }  // Backend  upper centre (posição anterior de Design)
+      &:nth-child(3) { top: 16vh;    right: 28vw; }  // Backend  upper centre
       &:nth-child(4) { bottom: 14vh; left: 30vw;  }  // AI  lower centre
       &:nth-child(5) { bottom: 14vh; left: 4vw;   }  // Infra  lower left
     }
@@ -787,12 +905,20 @@ const aiSkills = [
     text-transform: uppercase;
     color: rgba($muted, 0.8);
     white-space: nowrap;
+
+    @media (max-width: #{$bp-lg - 1}) {
+      font-size: 0.8rem;
+    }
   }
 
   .tech-cat__items {
     display: flex;
     flex-direction: column;
     gap: 0.3rem;
+
+    @media (max-width: #{$bp-lg - 1}) {
+      gap: 0.5rem;
+    }
   }
 
   .s1-bg-word {
@@ -807,6 +933,10 @@ const aiSkills = [
     letter-spacing: -0.05em;
     pointer-events: none;
     line-height: 1;
+
+    @media (max-width: #{$bp-lg - 1}) {
+      display: none;
+    }
   }
 
   .tech-web {
@@ -817,6 +947,11 @@ const aiSkills = [
     pointer-events: none;
     z-index: 1;
     overflow: visible;
+
+    // Hide connection web on mobile — layout is grid-based, not scattered
+    @media (max-width: #{$bp-lg - 1}) {
+      display: none;
+    }
   }
 
   .tech-item {
@@ -837,6 +972,12 @@ const aiSkills = [
     }
 
     svg, :global(svg) { color: var(--color, $latte); opacity: 0.9; flex-shrink: 0; }
+
+    // Mobile — match AI scene item sizing
+    @media (max-width: #{$bp-lg - 1}) {
+      padding: 0.75rem 1rem;
+      gap: 0.75rem;
+    }
   }
 
   .tech-item__icon {
@@ -845,6 +986,16 @@ const aiSkills = [
     justify-content: center;
     width: 26px;
     height: 26px;
+
+    @media (max-width: #{$bp-lg - 1}) {
+      width: 34px;
+      height: 34px;
+      background: rgba($caramel, 0.08);
+      border-radius: 6px;
+      flex-shrink: 0;
+
+      :global(svg) { width: 20px !important; height: 20px !important; }
+    }
   }
 
   .tech-item__name {
@@ -853,6 +1004,10 @@ const aiSkills = [
     font-weight: 500;
     color: rgba($cream, 0.88);
     letter-spacing: 0.02em;
+
+    @media (max-width: #{$bp-lg - 1}) {
+      font-size: 0.9rem;
+    }
   }
 
   /*  Scene 2: Business metrics  scattered cards  */
@@ -862,22 +1017,28 @@ const aiSkills = [
       flex-direction: column;
       align-items: stretch;
       justify-content: flex-start;
-      padding: 6rem 5vw 2rem;
-      gap: 1rem;
+      padding: 5.5rem 2rem 2rem;
+      gap: 0.875rem;
       overflow-y: auto;
+
+      @media (max-width: 479px) {
+        padding: 5.5rem 1rem 2rem;
+      }
     }
   }
 
   .s2-header {
     position: relative;
     z-index: 2;
-    max-width: 340px;
-    margin-bottom: 1rem;
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 0.5rem;
 
     @include respond-to(lg) {
       position: absolute;
       top: 9vh;
       left: 5vw;
+      max-width: 340px;
       margin-bottom: 0;
     }
   }
@@ -888,12 +1049,17 @@ const aiSkills = [
     background: rgba($dark-roast, 0.75);
     border: 1px solid rgba($caramel, 0.18);
     border-radius: 10px;
-    padding: 1.25rem 1.5rem 1.25rem;
+    padding: 1.25rem 1.5rem;
     backdrop-filter: blur(10px);
     width: 100%;
+    box-sizing: border-box;
     transition: border-color $transition-base;
 
     &:hover { border-color: rgba($caramel, 0.4); }
+
+    @media (max-width: 479px) {
+      padding: 1rem;
+    }
 
     @include respond-to(lg) {
       position: absolute;
@@ -947,9 +1113,13 @@ const aiSkills = [
       flex-direction: column;
       align-items: stretch;
       justify-content: flex-start;
-      padding: 6rem 5vw 2rem;
-      gap: 1.5rem;
+      padding: 5.5rem 2rem 2rem;
+      gap: 1.25rem;
       overflow-y: auto;
+
+      @media (max-width: 479px) {
+        padding: 5.5rem 1rem 2rem;
+      }
     }
   }
 
@@ -957,13 +1127,25 @@ const aiSkills = [
     position: relative;
     text-align: left;
     z-index: 2;
-    max-width: 460px;
+    width: 100%;
+    max-width: 100%;
 
     @include respond-to(lg) {
       position: absolute;
       top: 9vh;
       left: 5vw;
+      max-width: 460px;
       text-align: left;
+    }
+
+    // Short laptop screens — compact title
+    @media (min-width: #{$bp-lg}) and (max-height: 720px) {
+      top: 5vh;
+
+      .scene-title {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+      }
     }
   }
 
@@ -979,6 +1161,12 @@ const aiSkills = [
       top: 28vh;
       left: 4vw;
       width: min(44%, 440px);
+    }
+
+    // Short laptop screens — move up and reduce gap
+    @media (min-width: #{$bp-lg}) and (max-height: 720px) {
+      top: 20vh;
+      gap: 0.25rem;
     }
   }
 
@@ -1010,6 +1198,12 @@ const aiSkills = [
     &:hover { border-color: rgba($caramel, 0.3); }
 
     svg, :global(svg) { color: var(--color, $latte); flex-shrink: 0; }
+
+    // Short laptop screens — compact row height
+    @media (min-width: #{$bp-lg}) and (max-height: 720px) {
+      padding: 0.5rem 0.875rem;
+      gap: 0.625rem;
+    }
   }
 
   .ai-tool__icon {
@@ -1021,6 +1215,11 @@ const aiSkills = [
     background: rgba($caramel, 0.08);
     border-radius: 6px;
     flex-shrink: 0;
+
+    @media (min-width: #{$bp-lg}) and (max-height: 720px) {
+      width: 28px;
+      height: 28px;
+    }
   }
 
   .ai-tool__text {
@@ -1053,6 +1252,11 @@ const aiSkills = [
       right: 4vw;
       width: min(44%, 420px);
     }
+
+    // Short laptop screens — move closer to top
+    @media (min-width: #{$bp-lg}) and (max-height: 720px) {
+      top: 5vh;
+    }
   }
 
   .s2-bg-word {
@@ -1078,6 +1282,10 @@ const aiSkills = [
     text-transform: uppercase;
     color: $caramel;
     margin-bottom: 1.25rem;
+
+    @media (min-width: #{$bp-lg}) and (max-height: 720px) {
+      margin-bottom: 0.5rem;
+    }
   }
 
   .ai-skills__list {
@@ -1087,6 +1295,10 @@ const aiSkills = [
     gap: 0.625rem;
 
     @include respond-to(md) { grid-template-columns: 1fr 1fr; }
+
+    @media (min-width: #{$bp-lg}) and (max-height: 720px) {
+      gap: 0.3rem;
+    }
   }
 
   .ai-skills__item {
@@ -1100,6 +1312,11 @@ const aiSkills = [
     background: rgba($dark-roast, 0.4);
     border: 1px solid rgba($caramel, 0.08);
     border-radius: 4px;
+
+    @media (min-width: #{$bp-lg}) and (max-height: 720px) {
+      padding: 0.4rem 0.75rem;
+      font-size: 0.8125rem;
+    }
   }
 
   .ai-skills__dot {

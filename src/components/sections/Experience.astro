@@ -341,6 +341,11 @@ const typeLabelMap: Record<string, string> = {
         const kind = item.dataset.kind ?? 'work';
         if (filter === 'all' || kind === filter) {
           item.removeAttribute('hidden');
+          // Force visible — GSAP scroll-reveal may not have triggered for items
+          // below the fold that were never scrolled into view
+          item.style.opacity = '1';
+          item.style.transform = 'none';
+          item.style.visibility = 'visible';
         } else {
           item.setAttribute('hidden', '');
         }

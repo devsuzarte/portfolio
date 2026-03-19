@@ -18,21 +18,6 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
         <p class="about__body" data-typewriter="1">Com mais de 4 anos no mercado, sou desenvolvedor Pleno atuando em empresas de grande porte como Ford e em projetos freelance próprios. Atuo também como professor particular de programação, o que me faz buscar sempre clareza técnica e evolução contínua.</p>
         <p class="about__body" data-typewriter="2">Programação é tanto minha profissão quanto meu hobby — me aprofundo especialmente em IA, Cloud e arquiteturas modernas. Tenho inglês intermediário-avançado, o que me permite trabalhar com documentações, equipes e clientes internacionais sem barreiras. Fora do computador, toco violão, canto e curto andar de bicicleta.</p>
       </div>
-
-      <div class="about__stats">
-        <div class="about__stat">
-          <span class="about__stat-number">4+</span>
-          <span class="about__stat-label">Anos de experiência</span>
-        </div>
-        <div class="about__stat">
-          <span class="about__stat-number">8+</span>
-          <span class="about__stat-label">Projetos entregues</span>
-        </div>
-        <div class="about__stat">
-          <span class="about__stat-number">100%</span>
-          <span class="about__stat-label">Comprometimento</span>
-        </div>
-      </div>
     </div>
 
     <div class="about__visual" data-reveal-item>
@@ -48,6 +33,25 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
           </div>
           <div class="about__photo-accent" aria-hidden="true"></div>
         </div>
+      </div>
+    </div>
+
+    <div class="about__stats" data-scroll-reveal data-reveal-item>
+      <div class="about__stat">
+        <span class="about__stat-number">4+</span>
+        <span class="about__stat-label">Anos de experiência</span>
+      </div>
+      <div class="about__stat">
+        <span class="about__stat-number">8+</span>
+        <span class="about__stat-label">Projetos entregues</span>
+      </div>
+      <div class="about__stat">
+        <span class="about__stat-number">100%</span>
+        <span class="about__stat-label">Comprometimento</span>
+      </div>
+      <div class="about__stat">
+        <span class="about__stat-number">Inglês</span>
+        <span class="about__stat-label">Intermediário / Avançado</span>
       </div>
     </div>
   </div>
@@ -144,14 +148,23 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
     &__inner {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 4rem;
+      gap: 2.5rem;
       align-items: center;
 
       @include respond-to(lg) {
         grid-template-columns: 1fr 1fr;
-        gap: 5rem;
+        grid-template-rows: auto auto;
+        grid-template-areas:
+          "text  visual"
+          "stats visual";
+        gap: 2.5rem 5rem;
+        align-items: start;
       }
     }
+
+    &__text   { @include respond-to(lg) { grid-area: text; } }
+    &__visual { @include respond-to(lg) { grid-area: visual; align-self: center; } }
+    &__stats  { @include respond-to(lg) { grid-area: stats; } }
 
     &__label {
       margin-bottom: 1.5rem;
@@ -160,7 +173,7 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
     &__title {
       font-family: $font-display;
       font-weight: 600;
-      font-size: clamp(2.25rem, 4.5vw, 3.75rem);
+      font-size: clamp(1.75rem, 4.5vw, 3.75rem);
       line-height: 1.15;
       color: $ink;
       margin-bottom: 1.75rem;
@@ -179,10 +192,12 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 
     &__body {
       font-family: $font-body;
-      font-size: 1rem;
+      font-size: clamp(0.875rem, 2vw, 1rem);
       line-height: 1.8;
       color: $charcoal;
       margin-bottom: 1.25rem;
+      word-break: break-word;
+      overflow-wrap: break-word;
     }
 
     // Cursor follows the text via CSS ::after on the active paragraph
@@ -196,11 +211,20 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
     }
 
     &__stats {
-      display: flex;
-      gap: 2.5rem;
-      margin-top: 2.5rem;
-      padding-top: 2.5rem;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem 2rem;
+      padding-top: 2rem;
       border-top: 1px solid rgba($sienna, 0.15);
+      text-align: left;
+
+      @include respond-to(lg) {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2.5rem;
+        padding-top: 0;
+        border-top: none;
+      }
     }
 
     &__stat {
@@ -215,17 +239,33 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
       font-size: 2rem;
       color: $caramel;
       line-height: 1;
+
+      // "Inglês" is text, not a number — scale down to fit the 2-col grid on mobile
+      @media (max-width: #{$bp-lg - 1}) {
+        font-size: clamp(1.5rem, 4vw, 2rem);
+        text-align: center;
+      }
     }
 
     &__stat-label {
       font-family: $font-body;
       font-size: 0.8125rem;
       color: $muted;
+
+      @media (max-width: #{$bp-lg - 1}) {
+        font-size: 0.75rem;
+        text-align: center;
+      }
     }
 
     &__visual {
       display: flex;
       justify-content: center;
+      padding: 1rem 1rem 1.5rem;
+
+      @include respond-to(lg) {
+        padding: 0;
+      }
     }
 
     &__photo-perspective {
@@ -235,10 +275,15 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 
     &__photo-frame {
       position: relative;
-      width: 360px;
-      height: 360px;
+      width: min(280px, 80vw);
+      height: min(280px, 80vw);
       animation: coin-flip 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards,
                  levitate 4s ease-in-out 1.5s infinite;
+
+      @include respond-to(sm) {
+        width: 360px;
+        height: 360px;
+      }
 
       @include respond-to(lg) {
         width: 460px;
@@ -276,13 +321,18 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 
     &__photo-accent {
       position: absolute;
-      bottom: -1.25rem;
-      right: -1.25rem;
+      bottom: -0.875rem;
+      right: -0.875rem;
       width: 100%;
       height: 100%;
       border: 1.5px solid rgba($caramel, 0.25);
       border-radius: 50%;
       z-index: -1;
+
+      @include respond-to(lg) {
+        bottom: -1.25rem;
+        right: -1.25rem;
+      }
     }
   }
 

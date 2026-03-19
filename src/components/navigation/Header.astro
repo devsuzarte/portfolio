@@ -65,40 +65,47 @@ const navLinks = [
       <span></span><span></span><span></span>
     </button>
   </nav>
-
-  <!-- Mobile menu overlay -->
-  <div class="header__mobile-menu" id="mobile-menu" aria-hidden="true">
-    <nav class="header__mobile-nav" aria-label="Menu mobile">
-      <ul class="header__mobile-links" role="list">
-        {navLinks.map(link => (
-          <li>
-            <a
-              href={link.href}
-              class="header__mobile-link"
-              data-nav-target={link.target}
-            >{link.label}</a>
-          </li>
-        ))}
-      </ul>
-      <div class="header__mobile-social">
-        <a
-          href="https://github.com/devsuzarte"
-          class="header__mobile-social-link"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="GitHub"
-        >GitHub</a>
-        <a
-          href="https://linkedin.com/in/benjamin-suzarte"
-          class="header__mobile-social-link"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="LinkedIn"
-        >LinkedIn</a>
-      </div>
-    </nav>
-  </div>
 </header>
+
+<!-- Mobile menu overlay — kept outside <header> so backdrop-filter on .scrolled
+     does not create a stacking context that confines position:fixed children -->
+<div class="header__mobile-menu" id="mobile-menu" aria-hidden="true">
+  <button class="header__mobile-close" id="menu-close" aria-label="Fechar menu">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+      <line x1="18" y1="6" x2="6" y2="18"/>
+      <line x1="6" y1="6" x2="18" y2="18"/>
+    </svg>
+  </button>
+  <nav class="header__mobile-nav" aria-label="Menu mobile">
+    <ul class="header__mobile-links" role="list">
+      {navLinks.map(link => (
+        <li>
+          <a
+            href={link.href}
+            class="header__mobile-link"
+            data-nav-target={link.target}
+          >{link.label}</a>
+        </li>
+      ))}
+    </ul>
+    <div class="header__mobile-social">
+      <a
+        href="https://github.com/devsuzarte"
+        class="header__mobile-social-link"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="GitHub"
+      >GitHub</a>
+      <a
+        href="https://linkedin.com/in/benjamin-suzarte"
+        class="header__mobile-social-link"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="LinkedIn"
+      >LinkedIn</a>
+    </div>
+  </nav>
+</div>
 
 <style lang="scss">
   @use '@/styles/tokens' as *;
@@ -212,15 +219,16 @@ const navLinks = [
       span {
         display: block;
         width: 22px;
-        height: 1px;
-        background: rgba($cream, 0.7);
+        height: 2px;
+        background: rgba($cream, 0.8);
+        border-radius: 2px;
         transition: all $transition-base;
       }
 
       &[aria-expanded="true"] {
-        span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
-        span:nth-child(2) { opacity: 0; }
-        span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+        span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
       }
     }
 
@@ -228,7 +236,7 @@ const navLinks = [
     &__mobile-menu {
       position: fixed;
       inset: 0;
-      z-index: 99;
+      z-index: 101; // above header (100)
       background: rgba($espresso, 0.97);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
@@ -245,6 +253,23 @@ const navLinks = [
       }
 
       @include respond-to(lg) { display: none; }
+    }
+
+    &__mobile-close {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.25rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: rgba($cream, 0.5);
+      padding: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color $transition-base;
+
+      &:hover { color: $cream; }
     }
 
     &__mobile-nav {
@@ -336,6 +361,9 @@ const navLinks = [
   };
 
   menuToggle?.addEventListener('click', () => toggleMenu());
+
+  const menuClose = document.getElementById('menu-close');
+  menuClose?.addEventListener('click', () => toggleMenu(false));
 
   // Close menu when a nav link is clicked
   mobileMenu?.querySelectorAll('[data-nav-target]').forEach(link => {

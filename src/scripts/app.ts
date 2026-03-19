@@ -79,9 +79,16 @@ const init = async () => {
     } catch (_) {}
   }
 
-  // ── STEP 5: Nav smooth scroll ─────────────────────────────────────────
+  // ── STEP 5: Nav with transition overlay ──────────────────────────────
   const NAV_ID_MAP: Record<string, string> = { stack: 'skills' };
   const HEADER_OFFSET = 80;
+  const navOverlay = document.getElementById('nav-overlay') as HTMLElement | null;
+
+  const navScrollTo = (el: HTMLElement) => {
+    const top = el.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET;
+    window.scrollTo({ top, behavior: 'instant' as ScrollBehavior });
+  };
+
   document.querySelectorAll<HTMLAnchorElement>('[data-nav-target]').forEach(link => {
     link.addEventListener('click', e => {
       e.preventDefault();
@@ -89,8 +96,29 @@ const init = async () => {
       const id = NAV_ID_MAP[target] ?? target;
       const el = document.getElementById(id);
       if (!el) return;
-      const top = el.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET;
-      window.scrollTo({ top, behavior: 'smooth' });
+
+      if (!navOverlay) { navScrollTo(el); return; }
+
+      // Fade in → instant jump → fade out
+      navOverlay.style.pointerEvents = 'all';
+      gsap.fromTo(navOverlay,
+        { opacity: 0 },
+        {
+          opacity: 1,
+          duration: 0.22,
+          ease: 'power2.in',
+          onComplete() {
+            navScrollTo(el);
+            gsap.to(navOverlay, {
+              opacity: 0,
+              duration: 0.38,
+              delay: 0.05,
+              ease: 'power2.out',
+              onComplete() { navOverlay.style.pointerEvents = 'none'; },
+            });
+          },
+        }
+      );
     });
   });
 

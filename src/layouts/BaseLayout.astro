@@ -52,6 +52,9 @@ const ogImageURL = Astro.site ? new URL(ogImage, Astro.site).href : ogImage;
 
 <body data-barba="wrapper">
 
+  <!-- ░░ NAV TRANSITION OVERLAY ░░ -->
+  <div id="nav-overlay" aria-hidden="true"></div>
+
   <!-- ░░ ENTRANCE LOADER ░░ -->
   <div id="entrance-loader" class="e-loader" aria-hidden="true">
     <div class="e-loader__logo">
@@ -129,5 +132,15 @@ const ogImageURL = Astro.site ? new URL(ogImage, Astro.site).href : ogImage;
     color: rgba(212, 168, 120, 0.4);
     letter-spacing: 0.1em;
     opacity: 0;
+  }
+
+  /* ── Nav transition overlay ── */
+  #nav-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 8000;
+    background: #1c0f0a;
+    opacity: 0;
+    pointer-events: none;
   }
 </style>

@@ -82,7 +82,6 @@ const socialLinks = [
 
     // Auto-spin speed (degrees per ms)
     const SPIN_SPEED_Y = 0.025;  // ~1.5 deg/frame @60fps → full Y rotation ~24s
-    const SPIN_SPEED_X = 0.008;  // slow X oscillation
 
     // Accumulated auto-rotation angles
     let autoY = 20;
@@ -275,6 +274,11 @@ const socialLinks = [
       padding-bottom: 2px;
 
       &:hover { color: $cream; border-bottom-color: $caramel; }
+
+      @media (max-width: #{$bp-lg - 1}) {
+        display: block;
+        text-align: center;
+      }
     }
 
     &__social {
@@ -282,6 +286,10 @@ const socialLinks = [
       gap: 1rem;
       flex-wrap: wrap;
       margin-bottom: 2.5rem;
+
+      @media (max-width: #{$bp-lg - 1}) {
+        flex-wrap: nowrap; // keep both side-by-side and full width
+      }
     }
 
     &__social-card {
@@ -303,6 +311,11 @@ const socialLinks = [
         color: $oat;
         background: rgba($caramel, 0.08);
       }
+
+      @media (max-width: #{$bp-lg - 1}) {
+        flex: 1;
+        justify-content: center;
+      }
     }
 
     &__social-label { font-weight: 500; }
@@ -323,6 +336,12 @@ const socialLinks = [
       position: relative;
       overflow: hidden;
       animation: btn-attention 4s ease-in-out 3s infinite;
+
+      @media (max-width: #{$bp-lg - 1}) {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+      }
 
       &::before {
         content: '';

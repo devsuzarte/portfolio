@@ -24,17 +24,13 @@ export const initHeroScroll = () => {
 
   // ── Frame store ────────────────────────────────────────────────────────────
   const frameImages: (HTMLImageElement | null)[] = new Array(TOTAL_FRAMES).fill(null);
-  let currentFrameIndex = 0;
-  let rafId: number | null = null;
 
   const pad = (n: number) => String(n + 1).padStart(3, '0');
 
   const loadFrame = (i: number) => {
     const img = new Image();
     img.src = `${frameBase}ezgif-frame-${pad(i)}.jpg`;
-    img.onload = () => {
-      frameImages[i] = img;
-    };
+    img.onload = () => { frameImages[i] = img; };
   };
 
   // Load first 60 immediately; rest staggered to avoid blocking the main thread
@@ -47,12 +43,6 @@ export const initHeroScroll = () => {
   }
 
   // ── Canvas ──────────────────────────────────────────────────────────────────
-  const setCanvasSize = () => {
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
-    drawFrame(currentFrameIndex);
-  };
-
   const drawFrame = (index: number) => {
     const img = frameImages[Math.max(0, Math.min(index, TOTAL_FRAMES - 1))];
     if (!img || img.naturalWidth === 0) return;
@@ -69,9 +59,34 @@ export const initHeroScroll = () => {
     ctx.drawImage(img, sx, sy, sw, sh, 0, 0, cw, ch);
   };
 
-  const scheduleDrawFrame = (index: number) => {
-    if (rafId !== null) cancelAnimationFrame(rafId);
-    rafId = requestAnimationFrame(() => { drawFrame(index); rafId = null; });
+  // ── Smooth frame interpolation ───────────────────────────────────────────
+  // Instead of snapping to the scroll-derived frame, we lerp displayFrame toward
+  // targetFrame every RAF tick — this produces a natural ease-to-stop feel.
+  let targetFrame  = 0;
+  let displayFrame = 0;
+  let lerpRafId: number | null = null;
+
+  const startFrameLerp = () => {
+    if (lerpRafId !== null) return; // loop already running
+    const tick = () => {
+      const diff = targetFrame - displayFrame;
+      if (Math.abs(diff) < 0.25) {
+        displayFrame = targetFrame;
+        drawFrame(Math.round(displayFrame));
+        lerpRafId = null;
+        return;
+      }
+      displayFrame += diff * 0.10; // ~10% per frame → smooth deceleration
+      drawFrame(Math.round(displayFrame));
+      lerpRafId = requestAnimationFrame(tick);
+    };
+    lerpRafId = requestAnimationFrame(tick);
+  };
+
+  const setCanvasSize = () => {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+    drawFrame(Math.round(displayFrame));
   };
 
   setCanvasSize();
@@ -108,11 +123,8 @@ export const initHeroScroll = () => {
       end:     () => `+=${heroScrollHeight}`,
       scrub:   0.6,
       onUpdate(self) {
-        const frame = Math.round(self.progress * (TOTAL_FRAMES - 1));
-        if (frame !== currentFrameIndex) {
-          currentFrameIndex = frame;
-          scheduleDrawFrame(frame);
-        }
+        targetFrame = self.progress * (TOTAL_FRAMES - 1);
+        startFrameLerp();
         updateDots(self.progress);
       },
     },
@@ -120,13 +132,20 @@ export const initHeroScroll = () => {
 
   for (let i = 0; i < totalScenes - 1; i++) {
     const tOut = i * 1 + DUR;
+    const nextScene = scenes[i + 1];
     tl.to(scenes[i],
       { opacity: 0, y: -22, duration: TRANS, pointerEvents: 'none' },
       tOut
     );
-    tl.fromTo(scenes[i + 1],
+    tl.fromTo(nextScene,
       { opacity: 0, y: 28 },
-      { opacity: 1, y: 0, duration: TRANS, pointerEvents: 'auto' },
+      {
+        opacity: 1, y: 0, duration: TRANS, pointerEvents: 'auto',
+        onStart() {
+          // Reset internal scroll so scene always enters from the top
+          if (nextScene.scrollTop > 0) nextScene.scrollTop = 0;
+        },
+      },
       tOut
     );
   }
@@ -162,9 +181,10 @@ export const initHeroScroll = () => {
         { opacity: 1, x: 0, duration: 0.8, ease: 'power3.out' }
       );
 
-      // Tech connection web — fire after stagger settles
+      // Tech connection web — desktop only (mobile uses compact grid layout)
       const drawConnections = initTechConnections(wrapper);
-      if (drawConnections) setTimeout(drawConnections, 750);
+      const isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+      if (drawConnections && !isTouch) setTimeout(drawConnections, 750);
     },
   });
 

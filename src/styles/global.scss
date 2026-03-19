@@ -122,6 +122,10 @@ img, video {
   margin: 0 auto;
   padding: 0 2rem;
 
+  @media (max-width: 479px) {
+    padding: 0 1rem;
+  }
+
   @include respond-to(lg) {
     padding: 0 3rem;
   }

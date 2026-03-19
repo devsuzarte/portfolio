@@ -12,6 +12,9 @@ import gsap from 'gsap';
 let cleanupFn: (() => void) | null = null;
 
 export const initMouseParallax = () => {
+  // Skip parallax on touch/mobile — prevents scroll interference and gyroscope jank
+  if (window.matchMedia('(hover: none) and (pointer: coarse)').matches) return;
+
   // Clean up any previous instance (e.g. after Barba navigation)
   cleanupFn?.();
 
